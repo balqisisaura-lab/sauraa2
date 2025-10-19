@@ -1,73 +1,66 @@
 import streamlit as st
+import torch
+from ultralytics import YOLO
 from PIL import Image
 import numpy as np
-import tensorflow as tf
-from ultralytics import YOLO
 
-# ==========================
-# Konfigurasi Dashboard
-# ==========================
-st.set_page_config(page_title="Dashboard AI", layout="wide")
+# ====================================
+# LOAD MODEL DENGAN FIX UNTUK PYTORCH >= 2.6
+# ====================================
+@st.cache_resource
+def load_model():
+    # Izinkan class DetectionModel untuk unpickling
+    torch.serialization.add_safe_globals([__import__('ultralytics').nn.tasks.DetectionModel])
+    
+    # Load model YOLO kamu
+    model_path = "model/Balqis Isaura_Laporan 4.pt"
+    model = YOLO(model_path)
+    return model
 
-# Judul dan Deskripsi
-st.markdown("""
-    <h1 style='text-align: center; color: #fff;'>💡 Dashboard AI - Deteksi & Klasifikasi Gambar</h1>
-    <p style='text-align: center; color: #ccc;'>Coba fitur Deteksi Objek atau Klasifikasi Gambar menggunakan model AI kamu!</p>
-""", unsafe_allow_html=True)
 
-# Pilihan fitur
-tab1, tab2 = st.tabs(["🔍 Deteksi Objek", "🧠 Klasifikasi Gambar"])
+# ====================================
+# DASHBOARD TITLE
+# ====================================
+st.title("🎯 Deteksi Objek dengan YOLO — Balqis Isaura")
+st.markdown("Upload gambar untuk mendeteksi objek menggunakan model kamu.")
 
-# ==========================
-# 1️⃣ Deteksi Objek
-# ==========================
-with tab1:
-    st.header("Deteksi Objek")
-    uploaded_file = st.file_uploader("Upload Gambar disini 🖼️", type=["jpg", "jpeg", "png"])
+# ====================================
+# LOAD MODEL
+# ====================================
+model = load_model()
 
-    if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        st.image(image, caption="Gambar diupload", use_column_width=True)
+# ====================================
+# UPLOAD GAMBAR
+# ====================================
+uploaded_file = st.file_uploader("📤 Upload gambar di sini:", type=["jpg", "jpeg", "png"])
 
-        # Load model YOLO (gunakan cache agar tidak load ulang tiap klik)
-        @st.cache_resource
-        def load_yolo():
-            return YOLO("model/Balqis Isaura_Laporan 4.pt")
-        
-        yolo_model = load_yolo()
+if uploaded_file is not None:
+    # Buka gambar
+    image = Image.open(uploaded_file).convert("RGB")
+    
+    # Tampilkan gambar asli
+    st.image(image, caption="Gambar yang diupload", use_container_width=True)
+    
+    # Tombol prediksi
+    if st.button("🚀 Jalankan Deteksi"):
+        with st.spinner("Model sedang mendeteksi..."):
+            # Jalankan prediksi
+            results = model.predict(source=np.array(image), conf=0.5, verbose=False)
+            
+            # Ambil hasil gambar
+            result_image = results[0].plot()  # gambar hasil deteksi
+            
+            # Tampilkan hasil
+            st.image(result_image, caption="Hasil Deteksi", use_container_width=True)
+            st.success("✅ Deteksi selesai!")
 
-        # Deteksi objek
-        st.write("🔎 Mendeteksi objek...")
-        results = yolo_model(image)
-        result_image = results[0].plot()  # hasil dengan bounding box
-        st.image(result_image, caption="Hasil Deteksi", use_column_width=True)
-
-# ==========================
-# 2️⃣ Klasifikasi Gambar
-# ==========================
-with tab2:
-    st.header("Klasifikasi Gambar")
-    uploaded_file2 = st.file_uploader("Upload Gambar untuk diklasifikasi", type=["jpg", "jpeg", "png"], key="clasify")
-
-    if uploaded_file2 is not None:
-        image2 = Image.open(uploaded_file2).resize((224, 224))
-        st.image(image2, caption="Gambar diupload", use_column_width=False)
-
-        # Load model klasifikasi
-        @st.cache_resource
-        def load_classifier():
-            return tf.keras.models.load_model("model/model_resnet50.keras")
-        
-        classifier = load_classifier()
-
-        # Prediksi
-        img_array = np.expand_dims(np.array(image2) / 255.0, axis=0)
-        prediction = classifier.predict(img_array)
-
-        # Kalau output 1 kelas (misal binary)
-        if prediction.shape[1] == 1:
-            kelas = "Positif" if prediction[0][0] > 0.5 else "Negatif"
-            st.success(f"Hasil klasifikasi: **{kelas}** ({prediction[0][0]:.2f})")
-        else:
-            kelas = np.argmax(prediction)
-            st.success(f"Hasil klasifikasi: Kelas **{kelas}**")
+            # (Opsional) tampilkan label dan confidence
+            boxes = results[0].boxes
+            if boxes is not None and len(boxes) > 0:
+                st.subheader("📋 Detil Deteksi:")
+                for box in boxes:
+                    label = results[0].names[int(box.cls)]
+                    conf = float(box.conf)
+                    st.write(f"- **{label}** ({conf:.2f})")
+            else:
+                st.warning("Tidak ada objek terdeteksi pada gambar ini.")

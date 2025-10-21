@@ -11,7 +11,7 @@ from ultralytics import YOLO
 @st.cache_resource
 def load_models():
     try:
-        yolo_model = YOLO("model_yolo.pt")  # Ganti dengan nama file YOLO kamu
+        yolo_model = YOLO("Balqis Isaura_Laporan 4.pt")  # Ganti dengan nama file YOLO kamu
     except Exception as e:
         yolo_model = None
         st.warning(f"⚠️ Gagal memuat model YOLO: {e}")

@@ -18,38 +18,50 @@ st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     
-    body, .stApp {
-        background-color: #ffeef5;
-        background-image: 
-            repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,192,203,0.3) 20px, rgba(255,192,203,0.3) 40px),
-            repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,192,203,0.2) 20px, rgba(255,192,203,0.2) 40px);
+    .stApp {
+        background-color: #fff5f8;
         font-family: 'Poppins', sans-serif;
         position: relative;
     }
     
-    body::before, body::after,
-    .stApp::before, .stApp::after {
+    /* Checkered corner - Top Left */
+    .stApp::before {
         content: '';
         position: fixed;
-        background: repeating-conic-gradient(#ffb3d9 0% 25%, #ffc9e3 0% 50%) 0 0/40px 40px;
+        top: -20px;
+        left: -20px;
+        width: 250px;
+        height: 250px;
+        background-image: 
+            linear-gradient(45deg, #ffcce0 25%, transparent 25%),
+            linear-gradient(-45deg, #ffcce0 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ffcce0 75%),
+            linear-gradient(-45deg, transparent 75%, #ffcce0 75%);
+        background-size: 30px 30px;
+        background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+        opacity: 0.6;
         z-index: 0;
-        pointer-events: none;
+        clip-path: path('M 0,0 L 250,0 L 250,80 Q 240,90 230,85 Q 220,80 210,85 Q 200,90 190,85 Q 180,80 170,85 Q 160,90 150,85 Q 140,80 130,85 Q 120,90 110,85 Q 100,80 90,85 Q 80,90 70,85 Q 60,80 50,85 Q 40,90 30,85 L 0,85 Z');
     }
     
-    body::before, .stApp::before {
-        top: 0;
-        left: 0;
-        width: 200px;
-        height: 200px;
-        clip-path: polygon(0 0, 100% 0, 100% 50%, 80% 55%, 60% 50%, 40% 55%, 20% 50%, 0 55%);
-    }
-    
-    body::after, .stApp::after {
-        bottom: 0;
-        right: 0;
-        width: 300px;
-        height: 300px;
-        clip-path: polygon(40% 100%, 50% 95%, 60% 100%, 70% 95%, 80% 100%, 90% 95%, 100% 100%, 100% 40%, 95% 50%, 100% 60%, 95% 70%, 100% 80%, 95% 90%, 100% 100%);
+    /* Checkered corner - Bottom Right */
+    .stApp::after {
+        content: '';
+        position: fixed;
+        bottom: -20px;
+        right: -20px;
+        width: 350px;
+        height: 350px;
+        background-image: 
+            linear-gradient(45deg, #ffd6e8 25%, transparent 25%),
+            linear-gradient(-45deg, #ffd6e8 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ffd6e8 75%),
+            linear-gradient(-45deg, transparent 75%, #ffd6e8 75%);
+        background-size: 30px 30px;
+        background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
+        opacity: 0.6;
+        z-index: 0;
+        clip-path: path('M 350,350 L 350,0 L 100,0 Q 110,10 105,20 Q 100,30 105,40 Q 110,50 105,60 Q 100,70 105,80 Q 110,90 105,100 Q 100,110 105,120 Q 110,130 105,140 L 100,350 Z');
     }
     
     h1 {
@@ -203,9 +215,10 @@ st.markdown("""
     /* Decorative Elements */
     .decoration {
         position: fixed;
-        opacity: 0.1;
+        opacity: 0.15;
         pointer-events: none;
-        z-index: 0;
+        z-index: 1;
+        color: #ff69b4;
     }
     
     .star1 { top: 10%; left: 5%; font-size: 3rem; }

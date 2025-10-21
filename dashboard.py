@@ -3,13 +3,13 @@ from ultralytics import YOLO
 import tensorflow as tf
 from PIL import Image
 import numpy as np
-import torch
-import os
-from io import StringIO
+import io
 
-# ==================== CONFIGURASI HALAMAN ====================
+# ==============================
+# 🔧 Konfigurasi Halaman
+# ==============================
 st.set_page_config(
-    page_title="Dashboard Deteksi - Balqis Isaura",
+    page_title="Dashboard Model - Balqis Isaura",
     page_icon="🎯",
     layout="wide"
 )
@@ -17,157 +17,132 @@ st.set_page_config(
 st.title("🎯 Dashboard Model - Balqis Isaura")
 st.markdown("---")
 
-# Sidebar untuk pilih model
-model_choice = st.sidebar.radio(
+# ==============================
+# 🔘 Sidebar Pilih Model
+# ==============================
+selected_model = st.sidebar.radio(
     "Pilih Model:",
-    ["PyTorch - YOLO", "TensorFlow - ResNet50"]
+    ["YOLO Object Detection", "TensorFlow Rock–Paper–Scissors"]
 )
 
-# ==================== MODEL PYTORCH YOLO ====================
-if model_choice == "PyTorch - YOLO":
-    st.header("🔥 Model PyTorch - YOLO")
+# ==============================
+# 🎯 BAGIAN 1: YOLO
+# ==============================
+if selected_model == "YOLO Object Detection":
+    st.header("🧠 Model PyTorch - YOLO")
+
+    @st.cache_resource
+    def load_yolo_model():
+        return YOLO("model/Balqis_Isaura_Laporan4.pt")
 
     try:
-        # Tanpa cache karena error unpickling di PyTorch >= 2.6
-        def load_yolo():
-            # Izinkan global class untuk safe load (fix UnpicklingError)
-            torch.serialization.add_safe_globals([__import__('ultralytics').nn.tasks.DetectionModel])
-            
-            model_path = "model/Balqis Isaura_Laporan 4.pt"
-            if not os.path.exists(model_path):
-                st.error("❌ File model YOLO tidak ditemukan.")
-                st.stop()
-            return YOLO(model_path)
-        
-        with st.spinner("🔄 Memuat model YOLO..."):
-            model = load_yolo()
-
+        yolo_model = load_yolo_model()
         st.success("✅ Model YOLO berhasil dimuat!")
-
-        # Info model di sidebar
-        with st.sidebar.expander("📊 Info Model YOLO"):
-            info_text = StringIO()
-            model.info(verbose=True)
-            st.text("Model siap digunakan untuk deteksi objek.")
-
-        # Upload gambar
-        st.markdown("### Upload Gambar untuk Deteksi Objek")
-        uploaded_file = st.file_uploader(
-            "Pilih gambar (jpg/jpeg/png)",
-            type=["jpg", "jpeg", "png"],
-            key="yolo"
-        )
-
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file).convert("RGB")
-            col1, col2 = st.columns(2)
-
-            with col1:
-                st.subheader("📷 Gambar Input")
-                st.image(image, use_column_width=True)
-
-            if st.button("🔍 Jalankan Deteksi YOLO", type="primary"):
-                with st.spinner("Mendeteksi objek..."):
-                    results = model.predict(source=np.array(image), conf=0.5, verbose=False)
-                    result_img = results[0].plot()
-
-                    with col2:
-                        st.subheader("🎯 Hasil Deteksi")
-                        st.image(result_img, use_column_width=True)
-
-                    st.subheader("📋 Detail Deteksi")
-                    boxes = results[0].boxes
-
-                    if len(boxes) > 0:
-                        for i, box in enumerate(boxes, 1):
-                            label = results[0].names[int(box.cls)]
-                            conf = float(box.conf)
-                            st.write(f"- **{i}. {label}** ({conf:.2%})")
-                    else:
-                        st.warning("⚠️ Tidak ada objek terdeteksi.")
-
     except Exception as e:
-        st.error(f"❌ Gagal memuat model YOLO.\n**Error:** {e}")
-        st.info("""
-        **Solusi yang bisa dicoba:**
-        1. Pastikan file `Balqis Isaura_Laporan 4.pt` kompatibel dengan PyTorch 2.6+
-        2. Re-export model di laptop kamu dengan perintah:
-           ```python
-           from ultralytics import YOLO
-           m = YOLO('Balqis Isaura_Laporan 4.pt')
-           m.export(format='pt')
-           ```
-        """)
+        st.error(f"❌ Gagal memuat model YOLO: {e}")
+        st.stop()
 
-# ==================== MODEL TENSORFLOW ====================
-elif model_choice == "TensorFlow - ResNet50":
-    st.header("🧠 Model TensorFlow - ResNet50")
+    # Upload gambar
+    uploaded_file = st.file_uploader("📸 Upload gambar untuk deteksi", type=["jpg", "jpeg", "png"], key="yolo")
+    if uploaded_file:
+        image = Image.open(uploaded_file)
+        col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Gambar Asli")
+            st.image(image, use_container_width=True)
+
+        if st.button("🔍 Jalankan Deteksi YOLO"):
+            with st.spinner("Mendeteksi objek..."):
+                results = yolo_model.predict(image, conf=0.2, imgsz=640)  # turunkan conf agar lebih sensitif
+                annotated_img = results[0].plot()
+
+                with col2:
+                    st.subheader("Hasil Deteksi")
+                    st.image(annotated_img, use_container_width=True)
+
+                boxes = results[0].boxes
+                st.markdown("### 📋 Detail Deteksi")
+                if len(boxes) > 0:
+                    for i, box in enumerate(boxes, start=1):
+                        cls_name = yolo_model.names[int(box.cls)]
+                        conf = float(box.conf[0])
+                        st.write(f"**{i}. {cls_name}** — Confidence: `{conf:.2%}`")
+                else:
+                    st.warning("⚠️ Tidak ada objek terdeteksi.")
+
+# ==============================
+# 🧠 BAGIAN 2: TENSORFLOW
+# ==============================
+elif selected_model == "TensorFlow Rock–Paper–Scissors":
+    st.header("🧠 Model TensorFlow - Rock Paper Scissors")
+
+    @st.cache_resource
+    def load_tf_model():
+        model = tf.keras.models.load_model("model/model_fixed.h5", compile=False)
+        return model
 
     try:
-        @st.cache_resource
-        def load_resnet():
-            model_path = "model/model_resnet50.keras"
-            if not os.path.exists(model_path):
-                st.error("❌ File model TensorFlow tidak ditemukan.")
-                st.stop()
-            return tf.keras.models.load_model(model_path, compile=False)
-
-        with st.spinner("🔄 Memuat model ResNet50..."):
-            model = load_resnet()
-
+        tf_model = load_tf_model()
         st.success("✅ Model TensorFlow berhasil dimuat!")
+    except Exception as e:
+        st.error(f"❌ Model tidak bisa dimuat: {e}")
+        st.info("""
+        💡 **Tips Perbaikan:**
+        1. Pastikan file `model_fixed.h5` ada di folder `model/`.
+        2. Pastikan model dilatih dengan 3 kelas: Rock, Paper, Scissors.
+        3. Kalau masih error, coba convert ulang:
+        ```python
+        import tensorflow as tf
+        model = tf.keras.models.load_model('model_fixed.h5', compile=False)
+        model.save('model_fixed_new.keras')
+        ```
+        """)
+        st.stop()
 
-        # Sidebar info model
-        with st.sidebar.expander("📊 Info Model ResNet"):
-            stream = StringIO()
-            model.summary(print_fn=lambda x: stream.write(x + "\n"))
-            st.text(stream.getvalue())
+    uploaded_file = st.file_uploader("📸 Upload gambar untuk prediksi", type=["jpg", "jpeg", "png"], key="tf")
 
-        # Upload gambar
-        st.markdown("### Upload Gambar untuk Prediksi")
-        uploaded_file = st.file_uploader(
-            "Pilih gambar (jpg/jpeg/png)",
-            type=["jpg", "jpeg", "png"],
-            key="tf"
-        )
+    if uploaded_file:
+        image = Image.open(uploaded_file)
+        col1, col2 = st.columns(2)
 
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            col1, col2 = st.columns(2)
+        with col1:
+            st.subheader("Gambar Input")
+            st.image(image, use_container_width=True)
 
-            with col1:
-                st.subheader("📷 Gambar Input")
-                st.image(image, use_column_width=True)
+        if st.button("🔮 Jalankan Prediksi TensorFlow"):
+            with st.spinner("Melakukan prediksi..."):
+                try:
+                    # Preprocessing
+                    img = image.resize((224, 224))
+                    img_array = np.array(img)
 
-            if st.button("🔮 Jalankan Prediksi", type="primary"):
-                with st.spinner("Melakukan prediksi..."):
-                    img_array = np.array(image.resize((224, 224)))
-
-                    # Handle grayscale atau RGBA
+                    # Convert RGBA → RGB
+                    if img_array.shape[-1] == 4:
+                        img_array = img_array[:, :, :3]
                     if len(img_array.shape) == 2:
                         img_array = np.stack([img_array] * 3, axis=-1)
-                    elif img_array.shape[-1] == 4:
-                        img_array = img_array[:, :, :3]
 
                     img_array = np.expand_dims(img_array, axis=0)
                     img_array = tf.keras.applications.resnet50.preprocess_input(img_array)
 
-                    preds = model.predict(img_array, verbose=0)
-                    pred_class = np.argmax(preds[0])
-                    confidence = preds[0][pred_class]
+                    # Prediksi
+                    preds = tf_model.predict(img_array, verbose=0)
+                    predicted_class = np.argmax(preds[0])
+                    confidence = float(np.max(preds[0]))
+
+                    class_names = ["Rock", "Paper", "Scissors"]
 
                     with col2:
                         st.subheader("🎯 Hasil Prediksi")
-                        st.metric("Kelas Prediksi", f"Class {pred_class}")
+                        st.metric("Kelas Prediksi", class_names[predicted_class])
                         st.metric("Confidence", f"{confidence:.2%}")
 
-                        with st.expander("📊 Probabilitas Lengkap"):
-                            for i, p in enumerate(preds[0]):
-                                st.progress(float(p), text=f"Class {i}: {p:.4f}")
+                        st.markdown("### 📊 Probabilitas Tiap Kelas")
+                        for i, prob in enumerate(preds[0]):
+                            st.progress(float(prob), text=f"{class_names[i]}: {prob:.4f}")
 
-    except Exception as e:
-        st.error(f"❌ Error memuat model TensorFlow:\n{e}")
+                except Exception as e:
+                    st.error(f"❌ Error saat prediksi: {e}")
 
-# ==================== FOOTER ====================
 st.markdown("---")
-st.markdown("**📌 Dibuat oleh Balqis Isaura** | Powered by Streamlit 🚀")
+st.markdown("**📌 Dibuat oleh Balqis Isaura | Powered by Streamlit 🚀**")

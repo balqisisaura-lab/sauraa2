@@ -13,59 +13,71 @@ st.set_page_config(
     layout="wide"
 )
 
-# ===================== STYLE PINK/MAGENTA THEME =====================
+# ===================== STYLE PINK THEME WITH CHECKERED CORNERS =====================
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     
-    .stApp {
-        background-color: #fff5f8;
+    /* Main Background */
+    [data-testid="stAppViewContainer"] {
+        background-color: #fff5f8 !important;
         font-family: 'Poppins', sans-serif;
-        position: relative;
     }
     
-    /* Checkered corner - Top Left */
-    .stApp::before {
+    [data-testid="stHeader"] {
+        background-color: transparent !important;
+    }
+    
+    /* Checkered Top Left Corner */
+    [data-testid="stAppViewContainer"]::before {
         content: '';
         position: fixed;
-        top: -20px;
-        left: -20px;
+        top: 0;
+        left: 0;
+        width: 180px;
+        height: 180px;
+        background-color: #ffb3d9;
+        background-image: 
+            linear-gradient(45deg, #ffc9e3 25%, transparent 25%),
+            linear-gradient(-45deg, #ffc9e3 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ffc9e3 75%),
+            linear-gradient(-45deg, transparent 75%, #ffc9e3 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        z-index: 0;
+        pointer-events: none;
+        border-bottom-right-radius: 50% 30%;
+    }
+    
+    /* Checkered Bottom Right Corner */
+    [data-testid="stAppViewContainer"]::after {
+        content: '';
+        position: fixed;
+        bottom: 0;
+        right: 0;
         width: 250px;
         height: 250px;
+        background-color: #ffcce0;
         background-image: 
-            linear-gradient(45deg, #ffcce0 25%, transparent 25%),
-            linear-gradient(-45deg, #ffcce0 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, #ffcce0 75%),
-            linear-gradient(-45deg, transparent 75%, #ffcce0 75%);
-        background-size: 30px 30px;
-        background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
-        opacity: 0.6;
+            linear-gradient(45deg, #ffd9eb 25%, transparent 25%),
+            linear-gradient(-45deg, #ffd9eb 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #ffd9eb 75%),
+            linear-gradient(-45deg, transparent 75%, #ffd9eb 75%);
+        background-size: 20px 20px;
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
         z-index: 0;
-        clip-path: path('M 0,0 L 250,0 L 250,80 Q 240,90 230,85 Q 220,80 210,85 Q 200,90 190,85 Q 180,80 170,85 Q 160,90 150,85 Q 140,80 130,85 Q 120,90 110,85 Q 100,80 90,85 Q 80,90 70,85 Q 60,80 50,85 Q 40,90 30,85 L 0,85 Z');
+        pointer-events: none;
+        border-top-left-radius: 50% 30%;
     }
     
-    /* Checkered corner - Bottom Right */
-    .stApp::after {
-        content: '';
-        position: fixed;
-        bottom: -20px;
-        right: -20px;
-        width: 350px;
-        height: 350px;
-        background-image: 
-            linear-gradient(45deg, #ffd6e8 25%, transparent 25%),
-            linear-gradient(-45deg, #ffd6e8 25%, transparent 25%),
-            linear-gradient(45deg, transparent 75%, #ffd6e8 75%),
-            linear-gradient(-45deg, transparent 75%, #ffd6e8 75%);
-        background-size: 30px 30px;
-        background-position: 0 0, 0 15px, 15px -15px, -15px 0px;
-        opacity: 0.6;
-        z-index: 0;
-        clip-path: path('M 350,350 L 350,0 L 100,0 Q 110,10 105,20 Q 100,30 105,40 Q 110,50 105,60 Q 100,70 105,80 Q 110,90 105,100 Q 100,110 105,120 Q 110,130 105,140 L 100,350 Z');
+    /* Main Content */
+    [data-testid="stAppViewContainer"] > div:first-child {
+        position: relative;
+        z-index: 1;
     }
     
     h1 {
-        color: #ff1493;
+        color: #ff1493 !important;
         text-align: center;
         font-weight: 700;
         font-size: 2.5rem;
@@ -82,12 +94,11 @@ st.markdown("""
     }
     
     /* Sidebar */
-    section[data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #ff69b4, #ff1493);
-        color: white;
+    [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #ff69b4, #ff1493) !important;
     }
     
-    section[data-testid="stSidebar"] * {
+    [data-testid="stSidebar"] * {
         color: white !important;
     }
     
@@ -100,7 +111,6 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(255, 20, 147, 0.3);
         position: relative;
         overflow: hidden;
-        z-index: 1;
     }
     
     .process-card::before {
@@ -129,6 +139,12 @@ st.markdown("""
         z-index: 1;
     }
     
+    .process-card h3 {
+        color: white !important;
+        text-align: center;
+        margin-bottom: 0;
+    }
+    
     .process-card-content {
         background: white;
         border-radius: 20px;
@@ -140,91 +156,81 @@ st.markdown("""
     }
     
     /* Buttons */
-    div.stButton > button {
-        background: linear-gradient(90deg, #ff1493, #ff69b4);
-        color: white;
-        border: none;
-        padding: 12px 30px;
-        border-radius: 25px;
-        font-weight: 600;
-        font-size: 1rem;
-        transition: all 0.3s ease;
-        box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3);
-        width: 100%;
+    .stButton > button {
+        background: linear-gradient(90deg, #ff1493, #ff69b4) !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 30px !important;
+        border-radius: 25px !important;
+        font-weight: 600 !important;
+        font-size: 1rem !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 15px rgba(255, 20, 147, 0.3) !important;
+        width: 100% !important;
     }
     
-    div.stButton > button:hover {
-        background: linear-gradient(90deg, #ff69b4, #ff1493);
-        box-shadow: 0 6px 20px rgba(255, 20, 147, 0.5);
-        transform: translateY(-2px);
+    .stButton > button:hover {
+        background: linear-gradient(90deg, #ff69b4, #ff1493) !important;
+        box-shadow: 0 6px 20px rgba(255, 20, 147, 0.5) !important;
+        transform: translateY(-2px) !important;
     }
     
     /* File Uploader */
-    div[data-testid="stFileUploader"] {
+    [data-testid="stFileUploader"] {
         background: #fff0f5;
         border: 2px dashed #ff69b4;
         border-radius: 15px;
         padding: 20px;
     }
     
-    div[data-testid="stFileUploader"] label {
+    [data-testid="stFileUploader"] label {
         color: #ff1493 !important;
         font-weight: 600;
     }
     
     /* Metrics */
-    div[data-testid="stMetricValue"] {
-        color: #ff1493;
-        font-size: 1.8rem;
-        font-weight: 700;
+    [data-testid="stMetricValue"] {
+        color: #ff1493 !important;
+        font-size: 1.8rem !important;
+        font-weight: 700 !important;
     }
     
-    div[data-testid="stMetricLabel"] {
-        color: #666;
-        font-weight: 600;
+    [data-testid="stMetricLabel"] {
+        color: #666 !important;
+        font-weight: 600 !important;
     }
     
     /* Progress Bar */
     .stProgress > div > div {
-        background: linear-gradient(90deg, #ff69b4, #ff1493);
+        background: linear-gradient(90deg, #ff69b4, #ff1493) !important;
         border-radius: 10px;
     }
     
-    /* Success/Error Messages */
-    .stSuccess {
-        background-color: #d4f4dd;
-        color: #0f5132;
-        border-left: 4px solid #0f5132;
-        border-radius: 8px;
+    /* Images */
+    [data-testid="stImage"] {
+        border-radius: 15px;
+        overflow: hidden;
     }
     
-    .stError {
-        background-color: #f8d7da;
-        color: #842029;
-        border-left: 4px solid #842029;
-        border-radius: 8px;
-    }
-    
-    .stInfo {
-        background-color: #cfe2ff;
-        color: #084298;
-        border-left: 4px solid #084298;
-        border-radius: 8px;
-    }
-    
-    /* Decorative Elements */
+    /* Decorative Floating Elements */
     .decoration {
         position: fixed;
-        opacity: 0.15;
+        opacity: 0.2;
         pointer-events: none;
         z-index: 1;
-        color: #ff69b4;
+        font-size: 2rem;
+        animation: float 3s ease-in-out infinite;
     }
     
-    .star1 { top: 10%; left: 5%; font-size: 3rem; }
-    .star2 { top: 20%; right: 10%; font-size: 2rem; }
-    .star3 { bottom: 15%; left: 8%; font-size: 2.5rem; }
-    .clip { top: 5%; right: 5%; font-size: 4rem; }
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    .star1 { top: 15%; left: 10%; color: #ffd700; }
+    .star2 { top: 25%; right: 15%; color: #ff69b4; animation-delay: 0.5s; }
+    .star3 { bottom: 20%; left: 12%; color: #ff1493; animation-delay: 1s; }
+    .heart { bottom: 25%; left: 8%; color: #ff69b4; animation-delay: 1.5s; }
     
     /* Footer */
     .footer {
@@ -238,7 +244,10 @@ st.markdown("""
         box-shadow: 0 4px 15px rgba(255, 20, 147, 0.1);
     }
     
+    /* Hide Streamlit elements */
+    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    header {visibility: hidden;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -246,8 +255,8 @@ st.markdown("""
 st.markdown("""
     <div class="decoration star1">⭐</div>
     <div class="decoration star2">✨</div>
-    <div class="decoration star3">💖</div>
-    <div class="decoration clip">📎</div>
+    <div class="decoration star3">💫</div>
+    <div class="decoration heart">💖</div>
 """, unsafe_allow_html=True)
 
 # ===================== HEADER =====================
@@ -262,7 +271,7 @@ with col1:
     st.markdown("""
         <div class="process-card">
             <h2>📸 PROCESS 1</h2>
-            <h3 style="color: white; text-align: center; margin-bottom: 0;">YOLO Object Detection</h3>
+            <h3>YOLO Object Detection</h3>
             <div class="process-card-content">
     """, unsafe_allow_html=True)
     
@@ -283,13 +292,13 @@ with col1:
 
         if uploaded_file_yolo:
             image = Image.open(uploaded_file_yolo)
-            st.image(image, caption="📷 Gambar Input", use_column_width=True)
+            st.image(image, caption="📷 Gambar Input", use_container_width=True)
 
             if st.button("🚀 Jalankan Deteksi", key="detect_btn"):
                 with st.spinner("✨ Mendeteksi objek..."):
                     results = yolo_model(image)
                     result_img = results[0].plot()
-                    st.image(result_img, caption="🎯 Hasil Deteksi", use_column_width=True)
+                    st.image(result_img, caption="🎯 Hasil Deteksi", use_container_width=True)
 
                     st.markdown("#### 📋 Detail Deteksi")
                     boxes = results[0].boxes
@@ -315,7 +324,7 @@ with col2:
     st.markdown("""
         <div class="process-card">
             <h2>🧠 PROCESS 2</h2>
-            <h3 style="color: white; text-align: center; margin-bottom: 0;">TensorFlow Classification</h3>
+            <h3>TensorFlow Classification</h3>
             <div class="process-card-content">
     """, unsafe_allow_html=True)
     
@@ -346,7 +355,7 @@ with col2:
 
         if uploaded_file_tf:
             image = Image.open(uploaded_file_tf)
-            st.image(image, caption="📷 Gambar Input", use_column_width=True)
+            st.image(image, caption="📷 Gambar Input", use_container_width=True)
 
             if st.button("🔮 Prediksi Gambar", key="predict_btn"):
                 with st.spinner("✨ Melakukan prediksi..."):

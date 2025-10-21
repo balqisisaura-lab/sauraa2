@@ -1,130 +1,85 @@
 import streamlit as st
-from PIL import Image
-import numpy as np
-import tensorflow as tf
 from ultralytics import YOLO
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+import numpy as np
+from PIL import Image
 import cv2
-import io
+import os
 
-st.set_page_config(page_title="Dashboard Model - Balqis Isaura", layout="wide")
+# ==========================
+# Konfigurasi Dashboard
+# ==========================
+st.set_page_config(page_title="Dashboard Model - Balqis Isaura", page_icon="🎯", layout="centered")
 
 st.title("🎯 Dashboard Model - Balqis Isaura")
+st.caption("🪄 Upload gambar untuk deteksi / klasifikasi:")
 
-st.write("📤 Upload gambar untuk deteksi / klasifikasi:")
-
-# ============================================
-# BAGIAN UPLOAD GAMBAR
-# ============================================
-uploaded_file = st.file_uploader("Drag and drop file here", type=["jpg", "jpeg", "png"], label_visibility="collapsed")
-
-# ============================================
-# PILIH MODEL
-# ============================================
-st.sidebar.title("Pilih Model:")
-model_type = st.sidebar.radio("",
-    ["PyTorch - YOLO", "TensorFlow - RockPaperScissors"],
-    label_visibility="collapsed"
-)
-
-# ============================================
-# FUNGSI LOAD MODEL
-# ============================================
+# ==========================
+# Load Models
+# ==========================
 @st.cache_resource
-def load_yolo_model():
+def load_models():
     try:
-        model = YOLO("model/Balqis Isaura_Laporan 4.pt")
-        return model
+        yolo_model = YOLO("model/Balqis_Isaura.pt")
     except Exception as e:
-        st.error(f"❌ Gagal memuat model YOLO: {e}")
-        return None
+        st.error(f"⚠️ Gagal memuat model YOLO: {e}")
+        yolo_model = None
 
-
-@st.cache_resource
-def load_resnet_model():
     try:
-        model = tf.keras.models.load_model("model_resnet50.keras")
-
-        # pastikan model punya input layer
-        if not hasattr(model, "input_shape"):
-            model.build((None, 224, 224, 3))
-        return model
-
+        classifier = tf.keras.models.load_model("model/model_resnet50.keras")
     except Exception as e:
-        try:
-            # 🔧 fallback: buat ulang model dengan input layer
-            base_model = tf.keras.models.load_model("model_resnet50.keras", compile=False)
-            inputs = tf.keras.Input(shape=(224, 224, 3))
-            x = tf.keras.layers.Resizing(224, 224)(inputs)
-            x = tf.keras.layers.Rescaling(1./255)(x)
-            x = base_model(x, training=False)
-            outputs = tf.keras.layers.Softmax()(x)
-            fixed_model = tf.keras.Model(inputs, outputs)
-            return fixed_model
-        except Exception as e2:
-            st.error(f"❌ Gagal memuat model TensorFlow: {e2}")
-            return None
+        st.error(f"⚠️ Gagal memuat model TensorFlow: {e}")
+        classifier = None
 
-# ============================================
-# FUNGSI YOLO DETEKSI
-# ============================================
-def run_yolo_detection(image):
-    model = load_yolo_model()
-    if model is None:
-        return None
+    return yolo_model, classifier
 
-    results = model(image)
-    result_img = results[0].plot()
+yolo_model, classifier = load_models()
 
-    st.image(result_img, caption="Hasil Deteksi YOLO", use_container_width=True)
+# ==========================
+# Upload Gambar
+# ==========================
+uploaded_file = st.file_uploader("📤 Upload gambar di sini", type=["jpg", "png", "jpeg"])
 
-    if len(results[0].boxes) == 0:
-        st.warning("⚠️ Tidak ada objek terdeteksi.")
-    else:
-        st.success("✅ Objek berhasil terdeteksi!")
-        for box in results[0].boxes:
-            st.write({
-                "Kelas": int(box.cls[0]),
-                "Confidence": float(box.conf[0])
-            })
-
-# ============================================
-# FUNGSI KLASIFIKASI TENSORFLOW
-# ============================================
-def run_rps_classification(image):
-    model = load_resnet_model()
-    if model is None:
-        return None
-
-    img = image.resize((224, 224))
-    img_array = np.array(img) / 255.0
-    img_array = np.expand_dims(img_array, axis=0)
-
-    preds = model.predict(img_array)
-    if preds.ndim == 1:
-        preds = np.expand_dims(preds, axis=0)
-
-    class_names = ["Rock", "Paper", "Scissors"]
-    predicted_class = class_names[np.argmax(preds)]
-    confidence = np.max(preds)
-
-    st.image(image, caption=f"Gambar Input", use_container_width=True)
-    st.markdown(f"### 🧠 Prediksi: **{predicted_class}** ({confidence:.2f} confidence)")
-
-# ============================================
-# BAGIAN UTAMA
-# ============================================
+# ==========================
+# Deteksi & Klasifikasi
+# ==========================
 if uploaded_file is not None:
-    image = Image.open(uploaded_file).convert("RGB")
+    img = Image.open(uploaded_file)
+    st.image(img, caption="📸 Gambar yang diunggah", use_container_width=True)
 
-    st.divider()
+    # Convert ke format yang bisa dibaca OpenCV
+    img_array = np.array(img)
 
-    if model_type == "PyTorch - YOLO":
-        st.subheader("📦 Model Deteksi Objek YOLO")
-        run_yolo_detection(image)
+    st.subheader("📍 Pilih jenis prediksi:")
+    mode = st.radio("Mode Prediksi", ["Deteksi Objek (YOLO)", "Klasifikasi (ResNet50)"], horizontal=True)
 
-    elif model_type == "TensorFlow - RockPaperScissors":
-        st.subheader("🧠 Model Klasifikasi Rock-Paper-Scissors")
-        run_rps_classification(image)
-else:
-    st.info("📂 Upload gambar terlebih dahulu untuk mulai deteksi atau klasifikasi.")
+    if st.button("🚀 Jalankan Model"):
+        with st.spinner("⏳ Sedang memproses..."):
+            if mode == "Deteksi Objek (YOLO)":
+                if yolo_model:
+                    try:
+                        results = yolo_model(img_array)
+                        res_plotted = results[0].plot()
+                        st.image(res_plotted, caption="📦 Hasil Deteksi Objek", use_container_width=True)
+                    except Exception as e:
+                        st.error(f"❌ Terjadi kesalahan saat deteksi: {e}")
+                else:
+                    st.warning("⚠️ Model YOLO belum dimuat dengan benar.")
 
+            elif mode == "Klasifikasi (ResNet50)":
+                if classifier:
+                    try:
+                        img_resized = img.resize((224, 224))
+                        x = image.img_to_array(img_resized)
+                        x = np.expand_dims(x, axis=0)
+                        x = x / 255.0
+
+                        pred = classifier.predict(x)
+                        kelas = np.argmax(pred, axis=1)[0]
+
+                        st.success(f"✅ Hasil klasifikasi: **Kelas {kelas}**")
+                    except Exception as e:
+                        st.error(f"❌ Terjadi kesalahan saat klasifikasi: {e}")
+                else:
+                    st.warning("⚠️ Model klasifikasi belum dimuat dengan benar.")

@@ -33,7 +33,7 @@ if selected_model == "YOLO Object Detection":
 
     @st.cache_resource
     def load_yolo_model():
-        return YOLO("model/Balqis_Isaura_Laporan4.pt")
+        return YOLO("model/Balqis_Isaura_Laporan 4.pt")
 
     try:
         yolo_model = load_yolo_model()

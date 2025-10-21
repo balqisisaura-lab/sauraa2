@@ -63,7 +63,7 @@ st.markdown("---")
 @st.cache_resource
 def load_model():
     try:
-        model = tf.keras.models.load_model("/content/model_resnet50.keras", compile=False)
+        model = tf.keras.models.load_model("model/model_resnet50.keras", compile=False)
         st.success("✅ Model berhasil dimuat!")
         return model
     except Exception as e:

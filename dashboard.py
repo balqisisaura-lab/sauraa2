@@ -19,8 +19,37 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
     
     body, .stApp {
-        background: linear-gradient(135deg, #f5f0ff 0%, #ffe0f0 50%, #fff5e6 100%);
+        background-color: #ffeef5;
+        background-image: 
+            repeating-linear-gradient(45deg, transparent, transparent 20px, rgba(255,192,203,0.3) 20px, rgba(255,192,203,0.3) 40px),
+            repeating-linear-gradient(-45deg, transparent, transparent 20px, rgba(255,192,203,0.2) 20px, rgba(255,192,203,0.2) 40px);
         font-family: 'Poppins', sans-serif;
+        position: relative;
+    }
+    
+    body::before, body::after,
+    .stApp::before, .stApp::after {
+        content: '';
+        position: fixed;
+        background: repeating-conic-gradient(#ffb3d9 0% 25%, #ffc9e3 0% 50%) 0 0/40px 40px;
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    body::before, .stApp::before {
+        top: 0;
+        left: 0;
+        width: 200px;
+        height: 200px;
+        clip-path: polygon(0 0, 100% 0, 100% 50%, 80% 55%, 60% 50%, 40% 55%, 20% 50%, 0 55%);
+    }
+    
+    body::after, .stApp::after {
+        bottom: 0;
+        right: 0;
+        width: 300px;
+        height: 300px;
+        clip-path: polygon(40% 100%, 50% 95%, 60% 100%, 70% 95%, 80% 100%, 90% 95%, 100% 100%, 100% 40%, 95% 50%, 100% 60%, 95% 70%, 100% 80%, 95% 90%, 100% 100%);
     }
     
     h1 {
@@ -59,6 +88,7 @@ st.markdown("""
         box-shadow: 0 8px 20px rgba(255, 20, 147, 0.3);
         position: relative;
         overflow: hidden;
+        z-index: 1;
     }
     
     .process-card::before {

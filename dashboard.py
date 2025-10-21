@@ -21,7 +21,7 @@ st.caption("🪄 Upload gambar untuk deteksi / klasifikasi:")
 @st.cache_resource
 def load_models():
     try:
-        yolo_model = YOLO("model/Balqis_Isaura.pt")
+        yolo_model = YOLO("model/Balqis Isaura_Laporan 4.pt")
     except Exception as e:
         st.error(f"⚠️ Gagal memuat model YOLO: {e}")
         yolo_model = None

@@ -261,7 +261,7 @@ st.markdown("""
 
 # ===================== HEADER =====================
 st.markdown("# ✨ DASHBOARD MODEL ✨")
-st.markdown('<p class="subtitle">GROUP PROJECT PRESENTATION - BALQIS ISAURA</p>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">DETEKSI DAN KLASIFIKASIKAN GAMBAR MU DISINI! - BALQIS ISAURA</p>', unsafe_allow_html=True)
 
 # ===================== DUA KOLOM =====================
 col1, col2 = st.columns(2, gap="medium")

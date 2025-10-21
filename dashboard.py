@@ -9,36 +9,59 @@ import os
 # ==============================
 # Konfigurasi Halaman
 # ==============================
-st.set_page_config(page_title="Dashboard Model - Balqis Isaura", layout="wide")
+st.set_page_config(page_title="AI Dashboard - Balqis Isaura", layout="wide")
+
+st.markdown("""
+    <style>
+    .main {
+        background-color: #0e1117;
+        color: white;
+    }
+    .stButton>button {
+        background-color: #2e8bff;
+        color: white;
+        border-radius: 10px;
+        padding: 0.6em 1.2em;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    .stButton>button:hover {
+        background-color: #1c60b3;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+st.title("🤖 AI Dashboard - Balqis Isaura")
+st.markdown("### Pilih antara deteksi objek (YOLO) atau klasifikasi gambar (ResNet50)")
 
 # ==============================
-# Fungsi untuk memuat model
+# Fungsi untuk Memuat Model
 # ==============================
 @st.cache_resource
 def load_models():
     yolo_model = None
     classifier = None
-    
-    # Load YOLO model (.pt)
+
+    # Load YOLO
     try:
         if os.path.exists("model/Balqis Isaura_Laporan 4.pt"):
             yolo_model = YOLO("model/Balqis Isaura_Laporan 4.pt")
-            st.success("✅ Model YOLO berhasil dimuat")
+            st.sidebar.success("✅ YOLO model loaded")
         else:
-            st.error("❌ File YOLO tidak ditemukan di folder model/")
+            st.sidebar.error("❌ YOLO model not found in /model/")
     except Exception as e:
-        st.error(f"❌ Gagal memuat model YOLO: {e}")
-    
-    # Load TensorFlow model (.keras)
+        st.sidebar.error(f"⚠️ YOLO load error: {e}")
+
+    # Load TensorFlow Model (.keras)
     try:
         if os.path.exists("model/model_resnet50.keras"):
-            classifier = tf.keras.models.load_model("model/model_resnet50.keras")
-            st.success("✅ Model TensorFlow berhasil dimuat")
+            classifier = tf.keras.models.load_model("model/model_resnet50.keras", compile=False)
+            st.sidebar.success("✅ ResNet50 model loaded")
         else:
-            st.error("❌ File model_resnet50.keras tidak ditemukan di folder model/")
+            st.sidebar.error("❌ ResNet50 model not found in /model/")
     except Exception as e:
-        st.error(f"❌ Gagal memuat model TensorFlow: {e}")
-    
+        st.sidebar.error(f"⚠️ TensorFlow load error: {e}")
+
     return yolo_model, classifier
 
 # ==============================
@@ -46,15 +69,23 @@ def load_models():
 # ==============================
 def classify_image_tf(model, img):
     img_resized = img.resize((224, 224))
-    img_array = image.img_to_array(img_resized)
-    img_array = np.expand_dims(img_array, axis=0)
-    img_array /= 255.0
-    
+    img_array = image.img_to_array(img_resized).astype("float32") / 255.0
+
+    # Pastikan input berbentuk (1, 224, 224, 3)
+    if img_array.ndim == 3:
+        img_array = np.expand_dims(img_array, axis=0)
+    elif img_array.ndim == 4 and img_array.shape[0] != 1:
+        img_array = img_array[:1]
+
+    st.write("🧩 Shape input ke model:", img_array.shape)  # debug info
+
+    # Prediksi
     predictions = model.predict(img_array)
+    st.write("📊 Shape output model:", predictions.shape)
+
     class_labels = ['Rock', 'Paper', 'Scissors']
     class_index = np.argmax(predictions[0])
     confidence = np.max(predictions[0])
-    
     return class_labels[class_index], confidence
 
 # ==============================
@@ -65,109 +96,69 @@ def detect_yolo(model, img):
     return results
 
 # ==============================
-# Dashboard Header
+# Sidebar Navigasi
 # ==============================
-st.title("🎯 Dashboard Model - Balqis Isaura")
-st.markdown("### 📤 Upload gambar untuk deteksi / klasifikasi:")
+st.sidebar.header("⚙️ Model Options")
+yolo_model, classifier = load_models()
+model_choice = st.sidebar.radio(
+    "Pilih model yang ingin digunakan:",
+    ["YOLO - Mask Detection", "TensorFlow - Rock Paper Scissors"]
+)
+
+st.sidebar.markdown("---")
+st.sidebar.info("📎 Pastikan file model tersimpan di folder `model/`")
 
 # ==============================
-# Debug Info (Optional)
-# ==============================
-with st.expander("🔍 Debug Info - Cek File"):
-    st.write("Current Directory:", os.getcwd())
-    if os.path.exists("model"):
-        st.write("Files in model folder:", os.listdir("model"))
-    else:
-        st.error("Folder 'model' tidak ditemukan!")
-
-# ==============================
-# Upload File
+# Upload Gambar
 # ==============================
 uploaded_file = st.file_uploader(
-    "Upload file gambar",
-    type=["jpg", "jpeg", "png"],
-    help="Limit 200MB per file • JPG, JPEG, PNG"
+    "📤 Upload gambar (JPG, JPEG, PNG)",
+    type=["jpg", "jpeg", "png"]
 )
 
 # ==============================
-# Load Model
-# ==============================
-yolo_model, classifier = load_models()
-
-# ==============================
-# Pilihan Model
-# ==============================
-st.markdown("---")
-st.subheader("Pilih Model:")
-model_choice = st.radio(
-    "Pilih Model:",
-    ["YOLO - Mask Detection", "TensorFlow - Rock Paper Scissors"],
-    horizontal=True
-)
-
-# ==============================
-# Proses Gambar
+# Proses Deteksi / Klasifikasi
 # ==============================
 if uploaded_file:
-    st.markdown("---")
-    img = Image.open(uploaded_file)
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.image(img, caption="Gambar yang diupload", use_container_width=True)
-    
-    with col2:
-        if model_choice == "YOLO - Mask Detection":
-            st.subheader("🧠 Hasil Deteksi YOLO")
-            
-            if yolo_model is not None:
-                with st.spinner("Memproses deteksi..."):
-                    results = detect_yolo(yolo_model, img)
-                    result_img = results[0].plot()
-                    st.image(result_img, caption="Hasil Deteksi", use_container_width=True)
-                    
-                    # Tampilkan informasi deteksi
-                    detections = results[0].boxes
-                    if len(detections) > 0:
-                        st.success(f"✅ Terdeteksi {len(detections)} objek")
-                    else:
-                        st.info("ℹ️ Tidak ada objek yang terdeteksi")
-            else:
-                st.error("❌ Model YOLO tidak tersedia. Pastikan file model ada di folder model/")
-        
-        elif model_choice == "TensorFlow - Rock Paper Scissors":
-            st.subheader("✋ Hasil Klasifikasi ResNet50")
-            
-            if classifier is not None:
-                with st.spinner("Memproses klasifikasi..."):
-                    label, confidence = classify_image_tf(classifier, img)
-                    
-                    # Tampilkan hasil
+    img = Image.open(uploaded_file).convert("RGB")
+    st.image(img, caption="Gambar yang diupload", use_container_width=True)
+
+    if model_choice == "YOLO - Mask Detection":
+        st.subheader("🧠 Hasil Deteksi YOLO")
+
+        if yolo_model is not None:
+            with st.spinner("Sedang mendeteksi objek..."):
+                results = detect_yolo(yolo_model, img)
+                result_img = results[0].plot()
+                st.image(result_img, caption="Hasil Deteksi", use_container_width=True)
+
+                detections = results[0].boxes
+                if len(detections) > 0:
+                    st.success(f"✅ {len(detections)} objek terdeteksi")
+                else:
+                    st.info("ℹ️ Tidak ada objek terdeteksi.")
+        else:
+            st.error("❌ Model YOLO belum dimuat atau bermasalah.")
+
+    elif model_choice == "TensorFlow - Rock Paper Scissors":
+        st.subheader("✋ Hasil Klasifikasi ResNet50")
+
+        if classifier is not None:
+            with st.spinner("Sedang mengklasifikasi gambar..."):
+                label, confidence = classify_image_tf(classifier, img)
+                if label:
                     st.success(f"**Prediksi:** {label}")
                     st.metric("Confidence", f"{confidence*100:.2f}%")
-                    
-                    # Progress bar untuk confidence
                     st.progress(confidence)
-            else:
-                st.error("❌ Model TensorFlow tidak tersedia. Pastikan file model ada di folder model/")
-
+                else:
+                    st.error("⚠️ Terjadi kesalahan saat prediksi.")
+        else:
+            st.error("❌ Model TensorFlow belum dimuat atau bermasalah.")
 else:
-    st.info("📷 Silakan upload gambar terlebih dahulu untuk mulai deteksi atau klasifikasi.")
-    
-    # Contoh gambar
-    st.markdown("---")
-    st.markdown("### 📋 Panduan Penggunaan:")
-    st.markdown("""
-    1. Upload gambar menggunakan tombol di atas
-    2. Pilih model yang ingin digunakan:
-       - **YOLO**: Untuk deteksi masker wajah
-       - **TensorFlow**: Untuk klasifikasi Rock-Paper-Scissors
-    3. Lihat hasil prediksi di sebelah kanan
-    """)
+    st.info("📸 Silakan upload gambar terlebih dahulu.")
 
 # ==============================
 # Footer
 # ==============================
 st.markdown("---")
-st.markdown("Made with ❤️ by Balqis Isaura")
+st.markdown("<center>✨ Made with ❤️ by <b>Balqis Isaura</b> ✨</center>", unsafe_allow_html=True)

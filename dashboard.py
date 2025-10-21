@@ -27,7 +27,7 @@ def load_yolo_model():
 @st.cache_resource
 def load_resnet_model():
     try:
-        model = tf.keras.models.load_model("model/model_resne50.keras")  # ganti dengan model kamu
+        model = tf.keras.models.load_model("model/model_resnet50.keras")  # ganti dengan model kamu
         return model
     except Exception as e:
         st.error(f"❌ Gagal memuat model TensorFlow: {e}")

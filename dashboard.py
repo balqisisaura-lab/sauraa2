@@ -15,7 +15,7 @@ def load_models():
 
     # Load YOLO model (.pt)
     try:
-        yolo_model = YOLO("model/Balqis Isaura_Laporan4.pt")  # path disesuaikan
+        yolo_model = YOLO("model/Balqis Isaura_Laporan 4.pt")  # path disesuaikan
     except Exception as e:
         st.warning(f"⚠️ Gagal memuat model YOLO: {e}")
     

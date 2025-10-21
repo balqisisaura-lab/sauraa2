@@ -18,7 +18,7 @@ st.title("🎯 Dashboard Model - Balqis Isaura")
 @st.cache_resource
 def load_yolo_model():
     try:
-        model = YOLO("model/mask_detection.pt")  # ganti dengan path YOLO kamu
+        model = YOLO("model/Balqis Isaura_Laporan 4.pt")  # ganti dengan path YOLO kamu
         return model
     except Exception as e:
         st.error(f"❌ Gagal memuat model YOLO: {e}")
@@ -27,7 +27,7 @@ def load_yolo_model():
 @st.cache_resource
 def load_resnet_model():
     try:
-        model = tf.keras.models.load_model("model/rps_classifier.h5")  # ganti dengan model kamu
+        model = tf.keras.models.load_model("model/model_resne50.keras")  # ganti dengan model kamu
         return model
     except Exception as e:
         st.error(f"❌ Gagal memuat model TensorFlow: {e}")

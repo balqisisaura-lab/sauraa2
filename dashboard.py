@@ -270,4 +270,4 @@ st.markdown("""
 <div style="text-align:center; padding:20px; color:#666; font-weight:600;">
 💙 Dibuat oleh <strong style="color:#7C4DFF;">Balqis Isaura</strong> | Powered by Streamlit
 </div>
-""", unsafe_allow_html=True), trus kasih sintaks lengkap yg udah diubah ke aku
+""", unsafe_allow_html=True)

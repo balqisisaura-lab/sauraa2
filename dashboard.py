@@ -185,6 +185,10 @@ if 'last_yolo_uploader' not in st.session_state:
 if 'last_classify_uploader' not in st.session_state:
     st.session_state['last_classify_uploader'] = None
 
+# State untuk navigasi
+if 'current_page' not in st.session_state:
+    st.session_state['current_page'] = 'home'
+
 # ========================== UTILITY FUNCTIONS (Load Models) ==========================
 @st.cache_resource
 def load_yolo_model(path):
@@ -206,23 +210,52 @@ def load_classification_model(path):
 
 # ========================== KONTROL STATE SAAT BERPINDAH TAB ==========================
 def clear_inactive_results(current_tab_index):
-    if current_tab_index != 1 and st.session_state.get('detection_result_img') is not None:
+    if current_tab_index != 'mask' and st.session_state.get('detection_result_img') is not None:
         st.session_state['detection_result_img'] = None
 
-    if current_tab_index != 2:
+    if current_tab_index != 'gesture':
         if st.session_state.get('classification_final_result') is not None:
             st.session_state['classification_final_result'] = None
         if st.session_state.get('classification_image_input') is not None:
             st.session_state['classification_image_input'] = None
 
-# ========================== HORIZONTAL NAVIGATION (Tabs at Top) ==========================
-tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎯 Rekomendasi", "📞 Kontak", "ℹ Tentang"])
+# ========================== NAVIGATION MENU ==========================
+# Sidebar untuk navigasi
+with st.sidebar:
+    st.markdown("<h2 style='text-align: center; color: #00d4ff;'>📱 Menu</h2>", unsafe_allow_html=True)
+    st.markdown("---")
+    
+    if st.button("🏠 Beranda", use_container_width=True):
+        st.session_state['current_page'] = 'home'
+        st.rerun()
+    
+    if st.button("😷 Deteksi Masker", use_container_width=True):
+        st.session_state['current_page'] = 'mask'
+        st.rerun()
+    
+    if st.button("✊✋✌ Klasifikasi Gesture", use_container_width=True):
+        st.session_state['current_page'] = 'gesture'
+        st.rerun()
+    
+    if st.button("🎯 Rekomendasi", use_container_width=True):
+        st.session_state['current_page'] = 'recommendation'
+        st.rerun()
+    
+    if st.button("📞 Kontak", use_container_width=True):
+        st.session_state['current_page'] = 'contact'
+        st.rerun()
+    
+    if st.button("ℹ Tentang", use_container_width=True):
+        st.session_state['current_page'] = 'about'
+        st.rerun()
 
-# ========================== MAIN CONTENT BASED ON TABS ==========================
+# ========================== MAIN CONTENT BASED ON CURRENT PAGE ==========================
+
+current_page = st.session_state.get('current_page', 'home')
 
 # ----------------- BERANDA -----------------
-with tabs[0]:
-    clear_inactive_results(0)
+if current_page == 'home':
+    clear_inactive_results('home')
     st.markdown("<h2 class='section-title'>Selamat Datang di AI Vision</h2>", unsafe_allow_html=True)
     
     st.markdown("""
@@ -240,40 +273,39 @@ with tabs[0]:
 
     st.markdown("<h3 style='text-align: center; color: #00d4ff; font-family: Orbitron, sans-serif; font-size: 2rem; margin-bottom: 1.5rem;'>Fitur Utama</h3>", unsafe_allow_html=True)
     
-    col_feat1, col_feat2, col_feat3 = st.columns(3)
+    col_feat1, col_feat2 = st.columns(2)
     
     with col_feat1:
         st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 3rem;'>😷</p>
-            <span style='font-weight: bold; color: #00d4ff;'>Deteksi Masker</span>
-            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Deteksi apakah seseorang memakai masker atau tidak menggunakan <span style='font-weight: bold;'>YOLO</span>.</p>
+        <div class='menu-item' style='min-height: 250px;'>
+            <p style='font-size: 4rem; margin-bottom: 1rem;'>😷</p>
+            <span style='font-weight: bold; color: #00d4ff; font-size: 1.5rem;'>Deteksi Masker</span>
+            <p style='font-size: 1rem; margin-top: 1rem; line-height: 1.6;'>Deteksi apakah seseorang memakai masker atau tidak menggunakan <span style='font-weight: bold;'>YOLO</span>.</p>
         </div>
         """, unsafe_allow_html=True)
+        
+        if st.button("🚀 Mulai Deteksi Masker", use_container_width=True, type="primary"):
+            st.session_state['current_page'] = 'mask'
+            st.rerun()
 
     with col_feat2:
         st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 3rem;'>✊✋✌</p>
-            <span style='font-weight: bold; color: #00d4ff;'>Klasifikasi Gesture</span>
-            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Identifikasi gesture tangan: Rock, Paper, atau Scissors dengan akurasi tinggi.</p>
+        <div class='menu-item' style='min-height: 250px;'>
+            <p style='font-size: 4rem; margin-bottom: 1rem;'>✊✋✌</p>
+            <span style='font-weight: bold; color: #00d4ff; font-size: 1.5rem;'>Klasifikasi Gesture</span>
+            <p style='font-size: 1rem; margin-top: 1rem; line-height: 1.6;'>Identifikasi gesture tangan: Rock, Paper, atau Scissors dengan akurasi tinggi.</p>
         </div>
         """, unsafe_allow_html=True)
+        
+        if st.button("🎯 Mulai Klasifikasi Gesture", use_container_width=True, type="primary"):
+            st.session_state['current_page'] = 'gesture'
+            st.rerun()
 
-    with col_feat3:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 3rem;'>🎯</p>
-            <span style='font-weight: bold; color: #00d4ff;'>Rekomendasi Cerdas</span>
-            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Dapatkan saran berdasarkan hasil klasifikasi gesture Anda.</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    st.markdown("<br>", unsafe_allow_html=True)
 
 # ----------------- DETEKSI MASKER -----------------
-with tabs[1]:
-    clear_inactive_results(1)
+elif current_page == 'mask':
+    clear_inactive_results('mask')
     st.markdown("<h2 class='section-title'>Deteksi Masker Wajah 😷</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
@@ -319,8 +351,8 @@ with tabs[1]:
         st.warning(f"⚠️ Model YOLO tidak dapat dimuat dari '{YOLO_MODEL_PATH}'.")
 
 # ----------------- KLASIFIKASI GESTURE -----------------
-with tabs[2]:
-    clear_inactive_results(2)
+elif current_page == 'gesture':
+    clear_inactive_results('gesture')
     st.markdown("<h2 class='section-title'>Klasifikasi Gesture Tangan ✊✋✌</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
@@ -419,8 +451,8 @@ with tabs[2]:
         st.warning(f"⚠️ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
 # ----------------- REKOMENDASI -----------------
-with tabs[3]:
-    clear_inactive_results(3)
+elif current_page == 'recommendation':
+    clear_inactive_results('recommendation')
     st.markdown("<h2 class='section-title'>Rekomendasi Berdasarkan Gesture 🎯</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Rekomendasi ini didasarkan pada hasil klasifikasi gesture Anda.</p>", unsafe_allow_html=True)
     
@@ -502,8 +534,8 @@ with tabs[3]:
         """, unsafe_allow_html=True)
 
 # ----------------- KONTAK -----------------
-with tabs[4]:
-    clear_inactive_results(4)
+elif current_page == 'contact':
+    clear_inactive_results('contact')
     st.markdown("<h2 class='section-title'>Hubungi Kami 📞</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
@@ -518,8 +550,8 @@ with tabs[4]:
     """, unsafe_allow_html=True)
 
 # ----------------- TENTANG -----------------
-with tabs[5]:
-    clear_inactive_results(5)
+elif current_page == 'about':
+    clear_inactive_results('about')
     st.markdown("<h2 class='section-title'>Tentang AI Vision ℹ</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>

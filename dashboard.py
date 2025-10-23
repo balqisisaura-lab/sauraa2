@@ -1,4 +1,8 @@
-import streamlit as st
+/* Warna teks yang jelas */
+        body, p, span, div, label, h1, h2, h3, h4, h5, h6 {
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+        }import streamlit as st
 from ultralytics import YOLO
 import tensorflow as tf
 from PIL import Image
@@ -18,54 +22,21 @@ st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-        /* === Background Dasar === */
-        .stApp {
+        /* Background dengan animasi */
+        body {
             background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            position: relative;
+            animation: gradient-animation 15s ease infinite;
+            background-size: 400% 400%;
         }
         
-        /* === Animated Wave Background Layer === */
-        .stApp::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.2) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(255, 0, 255, 0.15) 0%, transparent 50%);
-            animation: wave-animation 20s ease-in-out infinite;
-            z-index: 0;
-            pointer-events: none;
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         
-        @keyframes wave-animation {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-5%, -5%) rotate(10deg); }
-            50% { transform: translate(-10%, 5%) rotate(-10deg); }
-            75% { transform: translate(-5%, -10%) rotate(5deg); }
-        }
-
-        /* === Konten utama harus di atas animasi === */
-        .main > div {
-            position: relative;
-            z-index: 1;
-        }
-        
-        [data-testid="stHeader"] {
+        .stApp {
             background: transparent;
-        }
-
-        body, .stApp {
-            color: #e0e0e0;
-            font-family: 'Rajdhani', sans-serif;
-        }
-
-        /* Text warna yang benar */
-        h1, h2, h3, h4, h5, h6, p, span, div, label {
-            color: #e0e0e0 !important;
         }
 
         .main-title {

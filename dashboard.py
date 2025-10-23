@@ -454,7 +454,7 @@ with col_header3:
 
 st.markdown("<h1 class='main-title'>AI VISION</h1>", unsafe_allow_html=True)
 st.markdown("<p class='subtitle'>Deteksi Masker Wajah & Klasifikasi Gesture Tangan dengan Kecerdasan Buatan</p>", unsafe_allow_html=True)
-st.markdown("---")ecerdasan Buatan</p>", unsafe_allow_html=True)
+st.markdown("---")Kecerdasan Buatan</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ========================== INITIALIZE SESSION STATE ==========================

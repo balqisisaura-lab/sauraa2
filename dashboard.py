@@ -696,7 +696,6 @@ with tabs[4]:
     """, unsafe_allow_html=True)
 
 # ----------------- TENTANG -----------------
-with tabs[5]:
     clear_inactive_results(5)
     st.markdown("<h2 class='section-title'>Tentang AI Vision ℹ</h2>", unsafe_allow_html=True)
     st.markdown("""

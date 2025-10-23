@@ -509,10 +509,15 @@ with tabs[4]:
     <div class='card'>
         <p style='font-size: 1.2rem; text-align: center;'>Punya pertanyaan atau feedback? Hubungi tim kami!</p>
         <div style='margin-top: 1.5rem;'>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Jl. AI Technology No. 42, Tech City</p>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-VISION</p>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📧 Email:</span> <a href='mailto:contact@aivision.ai' style='color: #00d4ff !important; text-decoration: none;'>contact@aivision.ai</a></p>
-            <p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online</p>
+            <p>🤖 Ada error? Jangan khawatir. AI kami juga sering bingung sama dirinya sendiri 😅<br>
+Kirim pesan ke kami sebelum komputer kamu ikut stres!</p>
+<p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Jl. AI Technology No. 42, Tech City</p>
+<p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-VISION — kalau nggak diangkat, mungkin lagi reboot.</p>
+<p><span style='font-weight: bold; color: #00d4ff;'>📧 Email:</span> 
+   <a href='mailto:contact@aivision.ai' style='color: #00d4ff !important; text-decoration: none;'>contact@aivision.ai</a> 
+   — dijamin dibaca, walau kadang AI-nya baper 😆</p>
+<p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online — karena ngoding itu gak kenal waktu.</p>
+
         </div>
     </div>
     """, unsafe_allow_html=True)

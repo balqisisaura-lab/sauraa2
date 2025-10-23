@@ -534,7 +534,7 @@ with tabs[5]:
             <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
         </ul>
-        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balgis Isaura</span></p>
+        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
             <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
         </div>

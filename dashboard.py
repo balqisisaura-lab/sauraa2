@@ -687,9 +687,9 @@ with tabs[4]:
     <div class='card'>
         <p style='font-size: 1.2rem; text-align: center;'>Punya pertanyaan atau feedback? Hubungi tim kami!</p>
         <div style='margin-top: 1.5rem;'>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Jl. AI Technology No. 42, Tech City</p>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-VISION</p>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📧 Email:</span> <a href='mailto:contact@aivision.ai' style='color: #00d4ff !important; text-decoration: none;'>contact@aivision.ai</a></p>
+            <p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Bandung, Banda Aceh Ujung</p>
+            <p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-Saura</p>
+            <p><span style='font-weight: bold; color: #00d4ff;'>📧 Email:</span> <a href='mailto:balqisisaura@gmail.com' style='color: #00d4ff !important; text-decoration: none;'>contact@aivision.ai</a></p>
             <p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online</p>
         </div>
     </div>

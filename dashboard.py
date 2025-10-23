@@ -345,30 +345,28 @@ with tabs[2]:
             if uploaded_file_class:
                 image_pil = Image.open(uploaded_file_class)
                 
-                # Resize sesuai input model Anda (biasanya 150x150 atau 224x224 untuk RPS)
-                image_class_resized = image_pil.resize((150, 150))
+                # Convert ke grayscale karena model mungkin dilatih dengan grayscale
+                image_gray = image_pil.convert('L')
+                
+                # Resize ke 96x96 (karena 9216 = 96 * 96)
+                image_class_resized = image_gray.resize((96, 96))
                 
                 st.session_state['classification_image_input'] = image_class_resized
-                st.image(st.session_state['classification_image_input'], caption="Gambar Input (150x150)", use_container_width=True)
+                st.image(st.session_state['classification_image_input'], caption="Gambar Input (96x96 Grayscale)", use_container_width=True)
 
                 if st.button("🎯 Klasifikasikan Gesture", type="primary", key="classify_btn"):
                     with st.spinner("⏳ Mengklasifikasikan gesture dengan AI..."):
                         try:
                             img_array = np.array(image_class_resized)
                             
-                            # Konversi grayscale ke RGB jika perlu
-                            if img_array.ndim == 2:
-                                img_array = np.stack((img_array,)*3, axis=-1)
-                            
-                            # Hapus alpha channel jika ada
-                            if img_array.shape[2] == 4:
-                                img_array = img_array[:,:,:3]
-                            
                             # Normalisasi pixel values ke [0, 1]
                             img_array = img_array / 255.0
                             
-                            # Expand dimensions untuk batch
-                            preprocessed_img = np.expand_dims(img_array, axis=0)
+                            # Flatten array menjadi 1D (9216 elements = 96*96)
+                            img_flattened = img_array.flatten()
+                            
+                            # Expand dimensions untuk batch (1, 9216)
+                            preprocessed_img = np.expand_dims(img_flattened, axis=0)
                             
                             # Prediksi
                             predictions = classification_model.predict(preprocessed_img)

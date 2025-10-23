@@ -511,15 +511,14 @@ with tabs[4]:
         <div style='margin-top: 1.5rem;'>
             <p>🤖 Ada error? Jangan khawatir. AI kami juga sering bingung sama dirinya sendiri 😅<br>
 Kirim pesan ke kami sebelum komputer kamu ikut stres!</p>
-<p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Jl. AI Technology No. 42, Tech City</p>
+<p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> USA No. 18</p>
 <p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-VISION — kalau nggak diangkat, mungkin lagi reboot.</p>
 <p><span style='font-weight: bold; color: #00d4ff;'>📧 Email:</span> 
    <a href='mailto:contact@aivision.ai' style='color: #00d4ff !important; text-decoration: none;'>contact@aivision.ai</a> 
-   — dijamin dibaca, walau kadang AI-nya baper 😆</p>
-<p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online — karena ngoding itu gak kenal waktu.</p>
+   — dijamin dibaca, kalau kesambung internet</p>
+<p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online — tapi jangan spam.</p>
 
-        </div>
-    </div>
+      
     """, unsafe_allow_html=True)
 
 # ----------------- TENTANG -----------------

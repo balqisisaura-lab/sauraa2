@@ -161,6 +161,25 @@ st.markdown("""
             color: #78909c !important;
             font-size: 0.9rem;
         }
+        
+        /* Animasi Blink untuk Success */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .success-blink {
+            animation: blink 0.8s ease-in-out 3;
+            padding: 1rem;
+            border-radius: 10px;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
+            border: 2px solid #00d4ff;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00ffaa !important;
+            margin-top: 1rem;
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -306,7 +325,7 @@ with tabs[1]:
                             result_img_rgb = Image.fromarray(result_img[..., ::-1])
                             
                             st.session_state['detection_result_img'] = result_img_rgb
-                            st.success("✅ Deteksi berhasil!")
+                            st.markdown("<div class='success-blink'>✅ DETEKSI BERHASIL!</div>", unsafe_allow_html=True)
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
@@ -381,8 +400,8 @@ with tabs[2]:
                             st.session_state['classification_final_result'] = final_result
                             st.session_state['classification'] = final_result.lower()
                             
-                            # Notifikasi sukses
-                            st.success("✨ Klasifikasi berhasil!")
+                            # Notifikasi sukses dengan animasi blink
+                            st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)
                             
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
@@ -534,4 +553,4 @@ with tabs[5]:
 
 # ========================== FOOTER ==========================
 st.markdown("---")
-st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balqis Isaura.</p>", unsafe_allow_html=True)
+st.markdown("<p class='footer'>© 2025 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balqis Isaura.</p>", unsafe_allow_html=True)

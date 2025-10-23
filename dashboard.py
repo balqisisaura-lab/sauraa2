@@ -5,6 +5,7 @@ from PIL import Image
 import numpy as np
 import os 
 from io import BytesIO
+import base64
 
 # ========================== CONFIG PAGE ==========================
 st.set_page_config(
@@ -12,6 +13,33 @@ st.set_page_config(
     page_icon="🤖",
     layout="wide"
 )
+
+# ========================== SOUND EFFECTS FUNCTION ==========================
+def autoplay_audio(file_path: str):
+    """Fungsi untuk auto-play audio"""
+    try:
+        with open(file_path, "rb") as f:
+            data = f.read()
+            b64 = base64.b64encode(data).decode()
+            md = f"""
+                <audio autoplay="true">
+                <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+                </audio>
+                """
+            st.markdown(md, unsafe_allow_html=True)
+    except:
+        pass  # Jika file tidak ada, skip
+
+def create_sound_button(sound_name, emoji, label):
+    """Membuat tombol sound effect"""
+    col1, col2 = st.columns([1, 4])
+    with col1:
+        st.markdown(f"<p style='font-size: 2rem; text-align: center;'>{emoji}</p>", unsafe_allow_html=True)
+    with col2:
+        if st.button(label, key=f"sound_{sound_name}"):
+            # Coba mainkan sound jika file ada di folder sounds/
+            autoplay_audio(f"sounds/{sound_name}.mp3")
+            st.success(f"🔊 Playing: {label}")
 
 # ========================== CUSTOM STYLE ==========================
 st.markdown("""
@@ -174,19 +202,19 @@ st.markdown("""
             background-color: rgba(0, 212, 255, 0.1);
         }
         
-        .recommendation-alert {
+        .for-you-alert {
             padding: 1.5rem;
-            border: 3px solid #ffd700; 
+            border: 3px solid #ff00ff; 
             border-radius: 15px;
-            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); 
+            background: linear-gradient(45deg, rgba(255, 0, 255, 0.1), rgba(138, 43, 226, 0.1)); 
             text-align: center;
             margin-top: 1.5rem;
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 0, 255, 0.3);
         }
 
-        .recommendation-alert p {
+        .for-you-alert p {
             margin: 0;
-            color: #ffd700 !important; 
+            color: #ff00ff !important; 
             font-size: 1.25rem;
             font-weight: 600;
         }
@@ -215,6 +243,20 @@ st.markdown("""
             font-weight: bold;
             color: #00ffaa !important;
             margin-top: 1rem;
+        }
+
+        .sound-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
+            border: 2px solid rgba(138, 43, 226, 0.5);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+
+        .sound-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
         }
     </style>
 """, unsafe_allow_html=True)
@@ -271,7 +313,7 @@ def clear_inactive_results(current_tab_index):
             st.session_state['classification_image_input'] = None
 
 # ========================== HORIZONTAL NAVIGATION (Tabs at Top - CENTERED) ==========================
-tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎯 Rekomendasi", "📞 Kontak", "ℹ Tentang"])
+tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎵 Untuk Kamu", "📞 Kontak", "ℹ Tentang"])
 
 # ========================== MAIN CONTENT BASED ON TABS ==========================
 
@@ -318,9 +360,9 @@ with tabs[0]:
     with col_feat3:
         st.markdown("""
         <div class='menu-item'>
-            <p style='font-size: 3rem;'>🎯</p>
-            <span style='font-weight: bold; color: #00d4ff;'>Rekomendasi Cerdas</span>
-            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Dapatkan saran berdasarkan hasil klasifikasi gesture Anda.</p>
+            <p style='font-size: 3rem;'>🎵</p>
+            <span style='font-weight: bold; color: #00d4ff;'>Sound Effects</span>
+            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Nikmati koleksi sound effects dan musik berdasarkan gesture Anda.</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -362,6 +404,9 @@ with tabs[1]:
                             
                             st.session_state['detection_result_img'] = result_img_rgb
                             st.markdown("<div class='success-blink'>✅ DETEKSI BERHASIL!</div>", unsafe_allow_html=True)
+                            
+                            # Play success sound
+                            autoplay_audio("sounds/success.mp3")
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
@@ -439,6 +484,9 @@ with tabs[2]:
                             # Notifikasi sukses dengan animasi blink
                             st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)
                             
+                            # Play classification sound
+                            autoplay_audio("sounds/classify.mp3")
+                            
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
@@ -468,88 +516,157 @@ with tabs[2]:
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
-# ----------------- REKOMENDASI -----------------
+# ----------------- UNTUK KAMU (dengan Sound Effects) -----------------
 with tabs[3]:
     clear_inactive_results(3)
-    st.markdown("<h2 class='section-title'>Rekomendasi Berdasarkan Gesture 🎯</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Rekomendasi ini didasarkan pada hasil klasifikasi gesture Anda.</p>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-title'>🎵 Untuk Kamu - Sound Effects & Music</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Nikmati koleksi sound effects dan musik yang dipersonalisasi berdasarkan gesture Anda!</p>", unsafe_allow_html=True)
     
-    recommendations = {
+    current_classification = st.session_state.get('classification', 'none')
+    
+    # Data sound effects berdasarkan gesture
+    sound_collections = {
         'rock': {
-            'title': '✊ ROCK - Kekuatan & Ketegasan',
-            'items': [
-                {'nama': 'Action Games', 'deskripsi': 'Game penuh aksi dan tantangan yang membutuhkan ketegasan.', 'kategori': 'Gaming'},
-                {'nama': 'Strength Training', 'deskripsi': 'Program latihan kekuatan untuk membangun otot.', 'kategori': 'Fitness'}
+            'title': '✊ ROCK - Sound Power',
+            'theme': 'Energik & Kuat',
+            'color': '#ff4444',
+            'sounds': [
+                {'name': 'rock_guitar', 'emoji': '🎸', 'label': 'Electric Guitar Riff'},
+                {'name': 'drums_heavy', 'emoji': '🥁', 'label': 'Heavy Drums Beat'},
+                {'name': 'bass_drop', 'emoji': '🔊', 'label': 'Bass Drop'},
+                {'name': 'crowd_cheer', 'emoji': '👏', 'label': 'Crowd Cheering'}
             ]
         },
         'paper': {
-            'title': '✋ PAPER - Fleksibilitas & Kreativitas',
-            'items': [
-                {'nama': 'Creative Writing', 'deskripsi': 'Kursus menulis kreatif untuk mengembangkan imajinasi.', 'kategori': 'Education'},
-                {'nama': 'Digital Art', 'deskripsi': 'Belajar seni digital dan desain grafis.', 'kategori': 'Art'}
+            'title': '✋ PAPER - Smooth Sounds',
+            'theme': 'Lembut & Kreatif',
+            'color': '#44ff44',
+            'sounds': [
+                {'name': 'piano_melody', 'emoji': '🎹', 'label': 'Piano Melody'},
+                {'name': 'wind_chimes', 'emoji': '🎐', 'label': 'Wind Chimes'},
+                {'name': 'acoustic', 'emoji': '🎻', 'label': 'Acoustic Strings'},
+                {'name': 'nature_ambient', 'emoji': '🌿', 'label': 'Nature Ambient'}
             ]
         },
         'scissors': {
-            'title': '✌ SCISSORS - Ketepatan & Strategi',
-            'items': [
-                {'nama': 'Strategy Games', 'deskripsi': 'Game strategi yang melatih pemikiran taktis.', 'kategori': 'Gaming'},
-                {'nama': 'Chess Lessons', 'deskripsi': 'Pelajari strategi catur dari master.', 'kategori': 'Education'}
+            'title': '✌ SCISSORS - Sharp Beats',
+            'theme': 'Tajam & Presisi',
+            'color': '#ffaa00',
+            'sounds': [
+                {'name': 'synth_lead', 'emoji': '🎛️', 'label': 'Synth Lead'},
+                {'name': 'electronic_beat', 'emoji': '⚡', 'label': 'Electronic Beat'},
+                {'name': 'laser_sound', 'emoji': '🔫', 'label': 'Laser Effect'},
+                {'name': 'digital_beep', 'emoji': '📟', 'label': 'Digital Beeps'}
             ]
         }
     }
     
-    col_rec1, col_rec2 = st.columns(2)
-    
-    current_classification = st.session_state.get('classification', 'none')
-    
-    if current_classification in recommendations:
-        rec_data = recommendations[current_classification]
+    if current_classification in sound_collections:
+        collection = sound_collections[current_classification]
         
         st.markdown(f"""
-        <div class='card' style='background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); border-color: #00d4ff;'>
-            <p style='font-size: 1.8rem; text-align: center; color: #00d4ff; font-weight: bold;'>{rec_data['title']}</p>
-            <p style='font-size: 1.1rem; text-align: center;'>Berdasarkan gesture Anda, kami merekomendasikan:</p>
+        <div class='card' style='background: linear-gradient(45deg, rgba({collection['color'][1:3]}, {collection['color'][3:5]}, {collection['color'][5:7]}, 0.2), rgba(138, 43, 226, 0.2)); border-color: {collection['color']};'>
+            <p style='font-size: 2rem; text-align: center; color: {collection['color']}; font-weight: bold;'>{collection['title']}</p>
+            <p style='font-size: 1.2rem; text-align: center; font-style: italic;'>Tema: {collection['theme']}</p>
         </div>
         """, unsafe_allow_html=True)
         
-        with col_rec1:
-            st.markdown("### 🎮 Rekomendasi Utama")
-            for item in rec_data['items']:
+        st.markdown("### 🎧 Koleksi Sound Effects")
+        
+        col_sound1, col_sound2 = st.columns(2)
+        
+        for idx, sound in enumerate(collection['sounds']):
+            with col_sound1 if idx % 2 == 0 else col_sound2:
+                st.markdown(f"""
+                <div class='sound-card'>
+                    <p style='font-size: 2rem; text-align: center; margin: 0;'>{sound['emoji']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                if st.button(f"▶️ {sound['label']}", key=f"play_{sound['name']}_{current_classification}"):
+                    autoplay_audio(f"sounds/{sound['name']}.mp3")
+                    st.success(f"🔊 Now Playing: {sound['label']}")
+        
+        st.markdown("---")
+        
+        # Playlist Rekomendasi
+        st.markdown("### 🎶 Playlist Rekomendasi")
+        
+        playlists = {
+            'rock': [
+                "Rock Anthems - High Energy Mix",
+                "Metal Madness - Headbanging Collection",
+                "Power Chords - Guitar Heroes"
+            ],
+            'paper': [
+                "Chill Vibes - Relaxation Mix",
+                "Creative Flow - Focus Music",
+                "Ambient Dreams - Peaceful Sounds"
+            ],
+            'scissors': [
+                "Electronic Dance - EDM Hits",
+                "Future Bass - Modern Beats",
+                "Synthwave - Retro Future"
+            ]
+        }
+        
+        if current_classification in playlists:
+            for playlist in playlists[current_classification]:
                 st.markdown(f"""
                 <div class='menu-item'>
-                    <span style='font-weight: bold; color: #00d4ff;'>{item['nama']}</span>
-                    <br>
-                    <span style='font-size: 0.85rem; color: #ffd700;'>[{item['kategori']}]</span>
-                    <br>
-                    <span style='font-size: 0.9rem;'>{item['deskripsi']}</span>
+                    <span style='font-size: 1.1rem;'>🎵 {playlist}</span>
                 </div>
                 """, unsafe_allow_html=True)
         
-        with col_rec2:
-            st.markdown("### 💡 Tips & Saran")
-            tips = {
-                'rock': ['Fokus pada kekuatan mental', 'Bangun ketahanan', 'Latih konsistensi'],
-                'paper': ['Eksplorasi ide baru', 'Berpikir out of the box', 'Fleksibel dalam pendekatan'],
-                'scissors': ['Rencanakan strategi', 'Analisa sebelum bertindak', 'Fokus pada detail']
-            }
-            
-            for tip in tips.get(current_classification, []):
-                st.markdown(f"""
-                <div class='menu-item'>
-                    <span style='font-size: 1rem;'>💡 {tip}</span>
-                </div>
-                """, unsafe_allow_html=True)
+        # Fun Facts
+        st.markdown("---")
+        st.markdown("### 💡 Fun Fact")
+        
+        fun_facts = {
+            'rock': "Musik rock dapat meningkatkan motivasi dan energi hingga 40% saat berolahraga!",
+            'paper': "Musik ambient dan piano dapat meningkatkan kreativitas dan produktivitas kerja.",
+            'scissors': "Beat elektronik dengan tempo cepat dapat meningkatkan fokus dan konsentrasi."
+        }
+        
+        st.info(f"🎵 {fun_facts.get(current_classification, 'Musik memiliki kekuatan luar biasa!')}")
         
     else:
         st.markdown("""
-        <div class='recommendation-alert'>
+        <div class='for-you-alert'>
             <p>
-                <span style='font-size: 2rem;'>✊✋✌</span>
+                <span style='font-size: 2rem;'>🎵</span>
                 <br>
-                <span style='font-weight: bold;'>Silakan lakukan Klasifikasi Gesture terlebih dahulu</span> untuk mendapatkan rekomendasi personal.
+                <span style='font-weight: bold;'>Lakukan Klasifikasi Gesture terlebih dahulu</span>
+                <br>
+                untuk mendapatkan koleksi sound effects yang dipersonalisasi untukmu!
             </p>
         </div>
         """, unsafe_allow_html=True)
+        
+        # General Sound Effects
+        st.markdown("---")
+        st.markdown("### 🎵 Sound Effects Umum")
+        
+        general_sounds = [
+            {'name': 'click', 'emoji': '🖱️', 'label': 'Click Sound'},
+            {'name': 'notification', 'emoji': '🔔', 'label': 'Notification Bell'},
+            {'name': 'success', 'emoji': '✅', 'label': 'Success Sound'},
+            {'name': 'error', 'emoji': '❌', 'label': 'Error Buzz'}
+        ]
+        
+        col_gen1, col_gen2 = st.columns(2)
+        
+        for idx, sound in enumerate(general_sounds):
+            with col_gen1 if idx % 2 == 0 else col_gen2:
+                st.markdown(f"""
+                <div class='sound-card'>
+                    <p style='font-size: 2rem; text-align: center; margin: 0;'>{sound['emoji']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+                
+                if st.button(f"▶️ {sound['label']}", key=f"general_{sound['name']}"):
+                    autoplay_audio(f"sounds/{sound['name']}.mp3")
+                    st.success(f"🔊 Now Playing: {sound['label']}")
 
 # ----------------- KONTAK -----------------
 with tabs[4]:
@@ -579,10 +696,11 @@ with tabs[5]:
             <li><span style='font-weight: bold; color: #00d4ff;'>YOLO (You Only Look Once):</span> Untuk deteksi masker wajah secara real-time</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
+            <li><span style='font-weight: bold; color: #00d4ff;'>Sound Effects:</span> Audio personalisasi berdasarkan gesture</li>
         </ul>
         <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
-            <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
+            <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning #SoundEffects</p>
         </div>
     </div>
     """, unsafe_allow_html=True)

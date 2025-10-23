@@ -18,53 +18,44 @@ st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-        /* === Animated Wave Background === */
+        /* === Background Dasar === */
         .stApp {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             position: relative;
-            overflow: hidden;
         }
         
+        /* === Animated Wave Background Layer === */
         .stApp::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            z-index: -2;
-        }
-        
-        .stApp::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
+            top: -50%;
+            left: -50%;
             width: 200%;
             height: 200%;
             background-image: 
-                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
-            animation: wave-animation 15s ease-in-out infinite;
-            z-index: -1;
+                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 255, 0.15) 0%, transparent 50%);
+            animation: wave-animation 20s ease-in-out infinite;
+            z-index: 0;
+            pointer-events: none;
         }
         
         @keyframes wave-animation {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-5%, -5%) rotate(5deg); }
-            50% { transform: translate(-10%, 5%) rotate(-5deg); }
-            75% { transform: translate(-5%, -10%) rotate(3deg); }
+            25% { transform: translate(-5%, -5%) rotate(10deg); }
+            50% { transform: translate(-10%, 5%) rotate(-10deg); }
+            75% { transform: translate(-5%, -10%) rotate(5deg); }
         }
 
-        /* === Efek Transisi Fade-In === */
-        .main {
-            animation: fadeInAnimation ease 0.5s; 
+        /* === Konten utama harus di atas animasi === */
+        .main > div {
+            position: relative;
+            z-index: 1;
         }
-
-        @keyframes fadeInAnimation {
-            0% { opacity: 0; transform: translateY(20px); }
-            100% { opacity: 1; transform: translateY(0); }
+        
+        [data-testid="stHeader"] {
+            background: transparent;
         }
 
         body, .stApp {
@@ -72,7 +63,8 @@ st.markdown("""
             font-family: 'Rajdhani', sans-serif;
         }
 
-        * {
+        /* Text warna yang benar */
+        h1, h2, h3, h4, h5, h6, p, span, div, label {
             color: #e0e0e0 !important;
         }
 

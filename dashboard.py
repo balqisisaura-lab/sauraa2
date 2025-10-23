@@ -26,30 +26,79 @@ def autoplay_audio_url(audio_url: str):
 
 # Dictionary untuk menyimpan URL audio
 AUDIO_URLS = {
-    # Rock Sounds
-    'rock_guitar': 'https://cdn.pixabay.com/audio/2022/03/10/audio_88ef456c0d.mp3',
-    'drums_heavy': 'https://cdn.pixabay.com/audio/2022/11/25/audio_24797e0017.mp3',
-    'bass_drop': 'https://cdn.pixabay.com/audio/2022/03/24/audio_c3c6d6c54a.mp3',
-    'crowd_cheer': 'https://cdn.pixabay.com/audio/2022/03/15/audio_01d4dd815c.mp3',
-    
-    # Paper Sounds
-    'piano_melody': 'https://cdn.pixabay.com/audio/2022/03/23/audio_426608073c.mp3',
-    'wind_chimes': 'https://cdn.pixabay.com/audio/2022/03/10/audio_72319372e4.mp3',
-    'acoustic': 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
-    'nature_ambient': 'https://cdn.pixabay.com/audio/2022/03/09/audio_62860e3805.mp3',
-    
-    # Scissors Sounds
-    'synth_lead': 'https://cdn.pixabay.com/audio/2022/10/25/audio_25d2bbf561.mp3',
-    'electronic_beat': 'https://cdn.pixabay.com/audio/2022/08/02/audio_4d49fe079e.mp3',
-    'laser_sound': 'https://cdn.pixabay.com/audio/2022/03/24/audio_d1718ab41b.mp3',
-    'digital_beep': 'https://cdn.pixabay.com/audio/2022/03/10/audio_d2117ba3bc.mp3',
-    
-    # General Sounds
+    # Sound effects untuk deteksi & klasifikasi
     'success': 'https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3',
     'classify': 'https://cdn.pixabay.com/audio/2022/03/24/audio_21144ab1f3.mp3',
-    'click': 'https://cdn.pixabay.com/audio/2022/03/15/audio_c2c92793d7.mp3',
-    'notification': 'https://cdn.pixabay.com/audio/2022/03/12/audio_22a1b0cfc2.mp3',
-    'error': 'https://cdn.pixabay.com/audio/2022/03/15/audio_c84758c1e5.mp3'
+    'rock_detect': 'https://cdn.pixabay.com/audio/2022/03/10/audio_88ef456c0d.mp3',  # Rock sound
+    'paper_detect': 'https://cdn.pixabay.com/audio/2022/03/23/audio_426608073c.mp3',  # Paper sound
+    'scissors_detect': 'https://cdn.pixabay.com/audio/2022/10/25/audio_25d2bbf561.mp3',  # Scissors sound
+}
+
+# Dictionary untuk rekomendasi lagu berdasarkan gesture
+MUSIC_RECOMMENDATIONS = {
+    'rock': {
+        'genre': 'Rock & Metal',
+        'color': '#ff4444',
+        'emoji': '✊',
+        'songs': [
+            {'title': 'Bohemian Rhapsody', 'artist': 'Queen', 'year': '1975'},
+            {'title': 'Stairway to Heaven', 'artist': 'Led Zeppelin', 'year': '1971'},
+            {'title': 'Sweet Child O\' Mine', 'artist': 'Guns N\' Roses', 'year': '1987'},
+            {'title': 'Smells Like Teen Spirit', 'artist': 'Nirvana', 'year': '1991'},
+            {'title': 'Enter Sandman', 'artist': 'Metallica', 'year': '1991'},
+            {'title': 'Highway to Hell', 'artist': 'AC/DC', 'year': '1979'},
+            {'title': 'Paranoid', 'artist': 'Black Sabbath', 'year': '1970'},
+            {'title': 'Back in Black', 'artist': 'AC/DC', 'year': '1980'},
+        ],
+        'playlists': [
+            '🎸 Rock Classics - Timeless Anthems',
+            '⚡ Metal Madness - Heavy Hits',
+            '🔥 Hard Rock Heroes - Power Collection',
+            '🎵 90s Rock Revival - Grunge & Alternative'
+        ]
+    },
+    'paper': {
+        'genre': 'Jazz & Classical',
+        'color': '#44ff44',
+        'emoji': '✋',
+        'songs': [
+            {'title': 'Take Five', 'artist': 'Dave Brubeck', 'year': '1959'},
+            {'title': 'Autumn Leaves', 'artist': 'Bill Evans', 'year': '1959'},
+            {'title': 'Clair de Lune', 'artist': 'Claude Debussy', 'year': '1905'},
+            {'title': 'The Girl from Ipanema', 'artist': 'Stan Getz', 'year': '1964'},
+            {'title': 'My Funny Valentine', 'artist': 'Chet Baker', 'year': '1954'},
+            {'title': 'Four Seasons - Spring', 'artist': 'Vivaldi', 'year': '1725'},
+            {'title': 'Fly Me to the Moon', 'artist': 'Frank Sinatra', 'year': '1964'},
+            {'title': 'Blue in Green', 'artist': 'Miles Davis', 'year': '1959'},
+        ],
+        'playlists': [
+            '🎹 Jazz Essentials - Smooth & Sophisticated',
+            '🎻 Classical Masterpieces - Timeless Beauty',
+            '🎺 Chill Jazz - Coffee Shop Vibes',
+            '🎼 Piano & Strings - Peaceful Melodies'
+        ]
+    },
+    'scissors': {
+        'genre': 'Electronic & Pop',
+        'color': '#ffaa00',
+        'emoji': '✌',
+        'songs': [
+            {'title': 'Titanium', 'artist': 'David Guetta ft. Sia', 'year': '2011'},
+            {'title': 'Levels', 'artist': 'Avicii', 'year': '2011'},
+            {'title': 'Strobe', 'artist': 'Deadmau5', 'year': '2009'},
+            {'title': 'Animals', 'artist': 'Martin Garrix', 'year': '2013'},
+            {'title': 'Blinding Lights', 'artist': 'The Weeknd', 'year': '2019'},
+            {'title': 'One More Time', 'artist': 'Daft Punk', 'year': '2000'},
+            {'title': 'Wake Me Up', 'artist': 'Avicii', 'year': '2013'},
+            {'title': 'Midnight City', 'artist': 'M83', 'year': '2011'},
+        ],
+        'playlists': [
+            '⚡ EDM Bangers - Festival Anthems',
+            '🎛️ Electronic Dreams - Synthwave Mix',
+            '💫 Pop Hits - Chart Toppers',
+            '🌟 Future Bass - Modern Beats'
+        ]
+    }
 }
 
 # ========================== CUSTOM STYLE ==========================
@@ -178,6 +227,18 @@ st.markdown("""
             margin-bottom: 2rem;
             border: 2px solid rgba(0, 212, 255, 0.3);
             backdrop-filter: blur(10px);
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .menu-item {
@@ -211,6 +272,7 @@ st.markdown("""
         .stFileUploader > div:first-child > div:first-child:hover {
             border: 3px dashed #00ffff;
             background-color: rgba(0, 212, 255, 0.1);
+            transform: scale(1.02);
         }
         
         .for-you-alert {
@@ -221,6 +283,12 @@ st.markdown("""
             text-align: center;
             margin-top: 1.5rem;
             box-shadow: 0 4px 12px rgba(255, 0, 255, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
         }
 
         .for-you-alert p {
@@ -256,18 +324,48 @@ st.markdown("""
             margin-top: 1rem;
         }
 
-        .sound-card {
-            background: linear-gradient(135deg, rgba(138, 43, 226, 0.2), rgba(75, 0, 130, 0.2));
-            border: 2px solid rgba(138, 43, 226, 0.5);
+        .song-card {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(138, 43, 226, 0.1));
+            border: 2px solid rgba(0, 212, 255, 0.3);
             border-radius: 15px;
-            padding: 1.5rem;
-            margin: 1rem 0;
+            padding: 1.2rem;
+            margin: 0.8rem 0;
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-10px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .song-card:hover {
+            transform: translateX(10px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+            border-color: #00d4ff;
+        }
+
+        .playlist-card {
+            background: linear-gradient(135deg, rgba(138, 43, 226, 0.15), rgba(75, 0, 130, 0.15));
+            border: 2px solid rgba(138, 43, 226, 0.4);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 0.6rem 0;
             transition: all 0.3s ease;
         }
 
-        .sound-card:hover {
-            transform: translateX(10px);
-            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.4);
+        .playlist-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.5);
+        }
+
+        /* Animasi untuk gambar */
+        .stImage {
+            transition: transform 0.3s ease;
+        }
+
+        .stImage:hover {
+            transform: scale(1.02);
         }
     </style>
 """, unsafe_allow_html=True)
@@ -372,8 +470,8 @@ with tabs[0]:
         st.markdown("""
         <div class='menu-item'>
             <p style='font-size: 3rem;'>🎵</p>
-            <span style='font-weight: bold; color: #00d4ff;'>Sound Effects</span>
-            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Nikmati koleksi sound effects dan musik berdasarkan gesture Anda.</p>
+            <span style='font-weight: bold; color: #00d4ff;'>Music Recommendations</span>
+            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Dapatkan rekomendasi musik yang dipersonalisasi berdasarkan gesture Anda.</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -495,8 +593,14 @@ with tabs[2]:
                             # Notifikasi sukses dengan animasi blink
                             st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)
                             
-                            # Play classification sound
-                            autoplay_audio_url(AUDIO_URLS['classify'])
+                            # Play sound sesuai gesture yang terdeteksi
+                            gesture_lower = final_result.lower()
+                            if gesture_lower == 'rock':
+                                autoplay_audio_url(AUDIO_URLS['rock_detect'])
+                            elif gesture_lower == 'paper':
+                                autoplay_audio_url(AUDIO_URLS['paper_detect'])
+                            elif gesture_lower == 'scissors':
+                                autoplay_audio_url(AUDIO_URLS['scissors_detect'])
                             
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
@@ -521,125 +625,112 @@ with tabs[2]:
                 st.markdown("---")
                 st.markdown(f"<p style='font-size: 3rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
                 st.markdown(f"<p style='font-size: 2rem; text-align: center; font-weight: bold; color: #00d4ff;'>{final_result}</p>", unsafe_allow_html=True)
+                
+                # Tampilkan info musik yang akan direkomendasikan
+                gesture_lower = final_result.lower()
+                if gesture_lower in MUSIC_RECOMMENDATIONS:
+                    music_genre = MUSIC_RECOMMENDATIONS[gesture_lower]['genre']
+                    st.markdown("---")
+                    st.info(f"🎵 Cek tab 'Untuk Kamu' untuk rekomendasi musik **{music_genre}**!")
             else:
                 st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold;'>HASIL KLASIFIKASI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
 
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
-# ----------------- UNTUK KAMU (dengan Sound Effects) -----------------
+# ----------------- UNTUK KAMU (Music Recommendations) -----------------
 with tabs[3]:
     clear_inactive_results(3)
-    st.markdown("<h2 class='section-title'>🎵 Untuk Kamu - Sound Effects & Music</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Nikmati koleksi sound effects dan musik yang dipersonalisasi berdasarkan gesture Anda!</p>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-title'>🎵 Untuk Kamu - Music Recommendations</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Dapatkan rekomendasi musik yang dipersonalisasi berdasarkan gesture Anda!</p>", unsafe_allow_html=True)
     
     current_classification = st.session_state.get('classification', 'none')
     
-    # Data sound effects berdasarkan gesture
-    sound_collections = {
-        'rock': {
-            'title': '✊ ROCK - Sound Power',
-            'theme': 'Energik & Kuat',
-            'color': '#ff4444',
-            'sounds': [
-                {'name': 'rock_guitar', 'emoji': '🎸', 'label': 'Electric Guitar Riff'},
-                {'name': 'drums_heavy', 'emoji': '🥁', 'label': 'Heavy Drums Beat'},
-                {'name': 'bass_drop', 'emoji': '🔊', 'label': 'Bass Drop'},
-                {'name': 'crowd_cheer', 'emoji': '👏', 'label': 'Crowd Cheering'}
-            ]
-        },
-        'paper': {
-            'title': '✋ PAPER - Smooth Sounds',
-            'theme': 'Lembut & Kreatif',
-            'color': '#44ff44',
-            'sounds': [
-                {'name': 'piano_melody', 'emoji': '🎹', 'label': 'Piano Melody'},
-                {'name': 'wind_chimes', 'emoji': '🎐', 'label': 'Wind Chimes'},
-                {'name': 'acoustic', 'emoji': '🎻', 'label': 'Acoustic Strings'},
-                {'name': 'nature_ambient', 'emoji': '🌿', 'label': 'Nature Ambient'}
-            ]
-        },
-        'scissors': {
-            'title': '✌ SCISSORS - Sharp Beats',
-            'theme': 'Tajam & Presisi',
-            'color': '#ffaa00',
-            'sounds': [
-                {'name': 'synth_lead', 'emoji': '🎛️', 'label': 'Synth Lead'},
-                {'name': 'electronic_beat', 'emoji': '⚡', 'label': 'Electronic Beat'},
-                {'name': 'laser_sound', 'emoji': '🔫', 'label': 'Laser Effect'},
-                {'name': 'digital_beep', 'emoji': '📟', 'label': 'Digital Beeps'}
-            ]
-        }
-    }
-    
-    if current_classification in sound_collections:
-        collection = sound_collections[current_classification]
+    if current_classification in MUSIC_RECOMMENDATIONS:
+        music_data = MUSIC_RECOMMENDATIONS[current_classification]
         
+        # Header dengan genre
         st.markdown(f"""
-        <div class='card' style='background: linear-gradient(45deg, rgba({collection['color'][1:3]}, {collection['color'][3:5]}, {collection['color'][5:7]}, 0.2), rgba(138, 43, 226, 0.2)); border-color: {collection['color']};'>
-            <p style='font-size: 2rem; text-align: center; color: {collection['color']}; font-weight: bold;'>{collection['title']}</p>
-            <p style='font-size: 1.2rem; text-align: center; font-style: italic;'>Tema: {collection['theme']}</p>
+        <div class='card' style='background: linear-gradient(45deg, rgba({int(music_data['color'][1:3], 16)}, {int(music_data['color'][3:5], 16)}, {int(music_data['color'][5:7], 16)}, 0.2), rgba(138, 43, 226, 0.2)); border-color: {music_data['color']};'>
+            <p style='font-size: 3rem; text-align: center;'>{music_data['emoji']}</p>
+            <p style='font-size: 2rem; text-align: center; color: {music_data['color']}; font-weight: bold;'>{music_data['genre']}</p>
+            <p style='font-size: 1.2rem; text-align: center; font-style: italic;'>Rekomendasi Spesial untuk Gesture <span style='font-weight: bold; color: {music_data['color']};'>{current_classification.upper()}</span></p>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("### 🎧 Koleksi Sound Effects")
-        
-        col_sound1, col_sound2 = st.columns(2)
-        
-        for idx, sound in enumerate(collection['sounds']):
-            with col_sound1 if idx % 2 == 0 else col_sound2:
-                st.markdown(f"""
-                <div class='sound-card'>
-                    <p style='font-size: 2rem; text-align: center; margin: 0;'>{sound['emoji']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                if st.button(f"▶️ {sound['label']}", key=f"play_{sound['name']}_{current_classification}"):
-                    autoplay_audio_url(AUDIO_URLS[sound['name']])
-                    st.success(f"🔊 Now Playing: {sound['label']}")
-        
         st.markdown("---")
         
-        # Playlist Rekomendasi
-        st.markdown("### 🎶 Playlist Rekomendasi")
+        # Section: Top Recommended Songs
+        st.markdown("### 🎧 Top Recommended Songs")
+        st.markdown("<p style='text-align: center; font-size: 0.9rem; color: #b0bec5;'>Lagu-lagu pilihan yang cocok dengan vibe gesture Anda</p>", unsafe_allow_html=True)
         
-        playlists = {
-            'rock': [
-                "Rock Anthems - High Energy Mix",
-                "Metal Madness - Headbanging Collection",
-                "Power Chords - Guitar Heroes"
-            ],
-            'paper': [
-                "Chill Vibes - Relaxation Mix",
-                "Creative Flow - Focus Music",
-                "Ambient Dreams - Peaceful Sounds"
-            ],
-            'scissors': [
-                "Electronic Dance - EDM Hits",
-                "Future Bass - Modern Beats",
-                "Synthwave - Retro Future"
-            ]
-        }
+        col_song1, col_song2 = st.columns(2)
         
-        if current_classification in playlists:
-            for playlist in playlists[current_classification]:
+        for idx, song in enumerate(music_data['songs']):
+            with col_song1 if idx % 2 == 0 else col_song2:
                 st.markdown(f"""
-                <div class='menu-item'>
-                    <span style='font-size: 1.1rem;'>🎵 {playlist}</span>
+                <div class='song-card'>
+                    <p style='font-size: 1.3rem; font-weight: bold; margin: 0; color: {music_data['color']};'>
+                        {idx + 1}. {song['title']}
+                    </p>
+                    <p style='font-size: 1rem; margin: 0.3rem 0 0 0; color: #b0bec5;'>
+                        🎤 {song['artist']} • {song['year']}
+                    </p>
                 </div>
                 """, unsafe_allow_html=True)
         
-        # Fun Facts
         st.markdown("---")
-        st.markdown("### 💡 Fun Fact")
+        
+        # Section: Curated Playlists
+        st.markdown("### 🎶 Curated Playlists")
+        st.markdown("<p style='text-align: center; font-size: 0.9rem; color: #b0bec5;'>Playlist yang dikurasi khusus untuk Anda</p>", unsafe_allow_html=True)
+        
+        col_playlist1, col_playlist2 = st.columns(2)
+        
+        for idx, playlist in enumerate(music_data['playlists']):
+            with col_playlist1 if idx % 2 == 0 else col_playlist2:
+                st.markdown(f"""
+                <div class='playlist-card'>
+                    <p style='font-size: 1.1rem; font-weight: 600; margin: 0;'>
+                        {playlist}
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+        
+        st.markdown("---")
+        
+        # Fun Facts Section
+        st.markdown("### 💡 Did You Know?")
         
         fun_facts = {
-            'rock': "Musik rock dapat meningkatkan motivasi dan energi hingga 40% saat berolahraga!",
-            'paper': "Musik ambient dan piano dapat meningkatkan kreativitas dan produktivitas kerja.",
-            'scissors': "Beat elektronik dengan tempo cepat dapat meningkatkan fokus dan konsentrasi."
+            'rock': "🎸 Rock music meningkatkan motivasi dan energi hingga 40% saat berolahraga! Genre ini sempurna untuk workout dan aktivitas intens.",
+            'paper': "🎹 Jazz dan Classical music dapat meningkatkan kreativitas hingga 50% dan membantu konsentrasi saat bekerja atau belajar.",
+            'scissors': "⚡ Electronic music dengan beat teratur dapat meningkatkan fokus dan produktivitas. Perfect untuk coding atau creative work!"
         }
         
-        st.info(f"🎵 {fun_facts.get(current_classification, 'Musik memiliki kekuatan luar biasa!')}")
+        st.markdown(f"""
+        <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(138, 43, 226, 0.1));'>
+            <p style='font-size: 1.1rem; text-align: center;'>{fun_facts.get(current_classification, 'Musik memiliki kekuatan luar biasa!')}</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        # Mood Meter
+        st.markdown("---")
+        st.markdown("### 🎭 Mood Meter")
+        
+        mood_descriptions = {
+            'rock': "Energetic, Powerful, Rebellious 🔥",
+            'paper': "Calm, Sophisticated, Creative 🌊",
+            'scissors': "Sharp, Modern, Futuristic ⚡"
+        }
+        
+        st.markdown(f"""
+        <div style='text-align: center; padding: 1.5rem; background: rgba(30, 50, 60, 0.6); border-radius: 15px; border: 2px solid {music_data['color']};'>
+            <p style='font-size: 1.5rem; font-weight: bold; color: {music_data['color']};'>
+                Current Mood: {mood_descriptions.get(current_classification, 'Unknown')}
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
         
     else:
         st.markdown("""
@@ -649,39 +740,49 @@ with tabs[3]:
                 <br>
                 <span style='font-weight: bold;'>Lakukan Klasifikasi Gesture terlebih dahulu</span>
                 <br>
-                untuk mendapatkan koleksi sound effects yang dipersonalisasi untukmu!
+                untuk mendapatkan rekomendasi musik yang dipersonalisasi untukmu!
             </p>
         </div>
         """, unsafe_allow_html=True)
         
-        # General Sound Effects
         st.markdown("---")
-        st.markdown("### 🎵 Sound Effects Umum")
+        st.markdown("### 🎵 Preview Genres")
+        st.markdown("<p style='text-align: center;'>Lihat preview genre musik yang tersedia</p>", unsafe_allow_html=True)
         
-        general_sounds = [
-            {'name': 'click', 'emoji': '🖱️', 'label': 'Click Sound'},
-            {'name': 'notification', 'emoji': '🔔', 'label': 'Notification Bell'},
-            {'name': 'success', 'emoji': '✅', 'label': 'Success Sound'},
-            {'name': 'error', 'emoji': '❌', 'label': 'Error Buzz'}
-        ]
+        col_preview1, col_preview2, col_preview3 = st.columns(3)
         
-        col_gen1, col_gen2 = st.columns(2)
+        with col_preview1:
+            st.markdown("""
+            <div class='menu-item'>
+                <p style='font-size: 2.5rem;'>✊</p>
+                <span style='font-weight: bold; color: #ff4444;'>Rock & Metal</span>
+                <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Energetic & Powerful</p>
+            </div>
+            """, unsafe_allow_html=True)
         
-        for idx, sound in enumerate(general_sounds):
-            with col_gen1 if idx % 2 == 0 else col_gen2:
-                st.markdown(f"""
-                <div class='sound-card'>
-                    <p style='font-size: 2rem; text-align: center; margin: 0;'>{sound['emoji']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-                
-                if st.button(f"▶️ {sound['label']}", key=f"general_{sound['name']}"):
-                    autoplay_audio_url(AUDIO_URLS[sound['name']])
-                    st.success(f"🔊 Now Playing: {sound['label']}")
+        with col_preview2:
+            st.markdown("""
+            <div class='menu-item'>
+                <p style='font-size: 2.5rem;'>✋</p>
+                <span style='font-weight: bold; color: #44ff44;'>Jazz & Classical</span>
+                <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Smooth & Sophisticated</p>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        with col_preview3:
+            st.markdown("""
+            <div class='menu-item'>
+                <p style='font-size: 2.5rem;'>✌</p>
+                <span style='font-weight: bold; color: #ffaa00;'>Electronic & Pop</span>
+                <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Sharp & Modern</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-# ----------------- KONTAK -----------------
+# ----------------- TENTANG -----------------
 with tabs[4]:
     clear_inactive_results(4)
+    
+    # Kontak Section
     st.markdown("<h2 class='section-title'>Hubungi Kami 📞</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
@@ -694,9 +795,10 @@ with tabs[4]:
         </div>
     </div>
     """, unsafe_allow_html=True)
-
-# ----------------- TENTANG -----------------
-    clear_inactive_results(5)
+    
+    st.markdown("---")
+    
+    # Tentang Section
     st.markdown("<h2 class='section-title'>Tentang AI Vision ℹ</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
@@ -706,11 +808,11 @@ with tabs[4]:
             <li><span style='font-weight: bold; color: #00d4ff;'>YOLO (You Only Look Once):</span> Untuk deteksi masker wajah secara real-time</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
-            <li><span style='font-weight: bold; color: #00d4ff;'>Sound Effects:</span> Audio personalisasi berdasarkan gesture</li>
+            <li><span style='font-weight: bold; color: #00d4ff;'>Music Recommendation:</span> Sistem rekomendasi musik berdasarkan gesture</li>
         </ul>
         <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
-            <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning #SoundEffects</p>
+            <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning #MusicRecommendation</p>
         </div>
     </div>
     """, unsafe_allow_html=True)

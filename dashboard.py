@@ -612,13 +612,17 @@ with tabs[3]:
                                 # Prediksi gesture player
                                 img_array = np.array(image_resized) / 255.0
                                 preprocessed_img = np.expand_dims(img_array, axis=0)
-                                predictions = game_model.predict(preprocessed_img)
+                                predictions = game_model.predict(preprocessed_img, verbose=0)
                                 class_names = ['Rock', 'Paper', 'Scissors']
                                 predicted_class_idx = np.argmax(predictions[0])
                                 player_gesture = class_names[predicted_class_idx]
                                 
                                 # AI random pilih gesture
                                 ai_gesture = np.random.choice(class_names)
+                                
+                                # SIMPAN DULU gesture player dan AI
+                                st.session_state['game_player_gesture'] = player_gesture
+                                st.session_state['game_ai_gesture'] = ai_gesture
                                 
                                 # Tentukan pemenang
                                 if player_gesture == ai_gesture:
@@ -640,8 +644,6 @@ with tabs[3]:
                                     result_icon = "😢"
                                 
                                 # Simpan hasil
-                                st.session_state['game_player_gesture'] = player_gesture
-                                st.session_state['game_ai_gesture'] = ai_gesture
                                 st.session_state['game_result'] = {
                                     'text': result,
                                     'color': result_color,
@@ -665,6 +667,9 @@ with tabs[3]:
                                     setTimeout(() => container.remove(), 4000);
                                 </script>
                                 """, unsafe_allow_html=True)
+                                
+                                # Notifikasi sukses
+                                st.success(f"✅ Player: **{player_gesture}** | AI: **{ai_gesture}** | Hasil: **{result}**")
                                 
                                 st.rerun()
                                 

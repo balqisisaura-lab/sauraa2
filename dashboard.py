@@ -597,7 +597,8 @@ with tabs[4]:
     st.markdown("<h2 class='section-title'>Hubungi Kami 📞</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
-        <p style='font-size: 1.2rem; text-align: center;'>Punya pertanyaan atau feedback? Hubungi tim kami!</p>
+        <p style='font-size: 1.2rem; text-align: center;'>🤖 Ada error? Jangan khawatir. AI kami juga sering bingung sama dirinya sendiri 😅<br>
+Kirim pesan ke kami sebelum komputer kamu ikut stres!</p>
         <div style='margin-top: 1.5rem;'>
             <p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Jl. AI Technology No. 42, Tech City</p>
             <p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-VISION</p>

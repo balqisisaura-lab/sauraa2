@@ -324,7 +324,7 @@ def clear_inactive_results(current_tab_index):
             st.session_state['classification_image_input'] = None
 
 # ========================== HORIZONTAL NAVIGATION (Tabs at Top - CENTERED) ==========================
-tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎵 Untuk Kamu", "📞 Kontak", "ℹ Tentang"])
+tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎵 Untuk Kamu", "ℹ Tentang"])
 
 # ========================== MAIN CONTENT BASED ON TABS ==========================
 

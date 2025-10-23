@@ -306,7 +306,7 @@ with tabs[1]:
                             result_img_rgb = Image.fromarray(result_img[..., ::-1])
                             
                             st.session_state['detection_result_img'] = result_img_rgb
-                            st.success("✅ Deteksi berhasil! Hasil telah ditampilkan.")
+                            st.success("✅ Deteksi berhasil!")
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
@@ -381,13 +381,8 @@ with tabs[2]:
                             st.session_state['classification_final_result'] = final_result
                             st.session_state['classification'] = final_result.lower()
                             
-                            # Efek visual
-                            if final_result == 'Rock':
-                                st.balloons()
-                            elif final_result == 'Paper':
-                                st.snow()
-                            else:
-                                st.balloons()
+                            # Notifikasi sukses
+                            st.success("✨ Klasifikasi berhasil!")
                             
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
@@ -407,7 +402,7 @@ with tabs[2]:
                 
                 icon = gesture_icons.get(final_result, '🤖')
                 
-                st.success(f"{icon} Gesture terdeteksi: *{final_result}*")
+                st.success(f"{icon} Gesture terdeteksi: **{final_result}**")
                 
                 st.markdown("---")
                 st.markdown(f"<p style='font-size: 3rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
@@ -539,4 +534,4 @@ with tabs[5]:
 
 # ========================== FOOTER ==========================
 st.markdown("---")
-st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balgis Isaura.</p>", unsafe_allow_html=True)
+st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balqis Isaura.</p>", unsafe_allow_html=True)

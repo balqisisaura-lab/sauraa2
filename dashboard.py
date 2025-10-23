@@ -485,7 +485,7 @@ with tabs[2]:
                 
                 icon = gesture_icons.get(final_result, '🤖')
                 
-                st.success(f"{icon} Gesture terdeteksi: *{final_result}*")
+                st.success(f"{icon} Gesture terdeteksi: **{final_result}**")
                 
                 st.markdown("---")
                 st.markdown(f"<p style='font-size: 3rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
@@ -520,7 +520,7 @@ with tabs[3]:
     """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    st.info("💡 *Tips:* Mainkan langsung di jendela game di atas! Klik pilihan Rock, Paper, atau Scissors untuk bermain.")
+    st.info("💡 **Tips:** Mainkan langsung di jendela game di atas! Klik pilihan Rock, Paper, atau Scissors untuk bermain.")
 
 # ----------------- REKOMENDASI -----------------
 with tabs[4]:

@@ -618,63 +618,52 @@ with tabs[3]:
                                 player_gesture = class_names[predicted_class_idx]
                                 
                                 # AI random pilih gesture
-                                ai_gesture = np.random.choice(class_names)
-                                
-                                # SIMPAN DULU gesture player dan AI
-                                st.session_state['game_player_gesture'] = player_gesture
-                                st.session_state['game_ai_gesture'] = ai_gesture
+                                import random
+                                ai_gesture = random.choice(class_names)
                                 
                                 # Tentukan pemenang
                                 if player_gesture == ai_gesture:
-                                    result = "SERI 🤝"
+                                    result_text = "SERI 🤝"
                                     st.session_state['game_score_draw'] += 1
                                     result_color = "#ffd700"
                                     result_icon = "🤝"
                                 elif (player_gesture == "Rock" and ai_gesture == "Scissors") or \
                                      (player_gesture == "Paper" and ai_gesture == "Rock") or \
                                      (player_gesture == "Scissors" and ai_gesture == "Paper"):
-                                    result = "KAMU MENANG! 🎉"
+                                    result_text = "KAMU MENANG! 🎉"
                                     st.session_state['game_score_win'] += 1
                                     result_color = "#00ff88"
                                     result_icon = "🎉"
                                 else:
-                                    result = "AI MENANG! 🤖"
+                                    result_text = "AI MENANG! 🤖"
                                     st.session_state['game_score_lose'] += 1
                                     result_color = "#ff5252"
                                     result_icon = "😢"
                                 
-                                # Simpan hasil
+                                # SIMPAN semua state sekaligus
+                                st.session_state['game_player_gesture'] = player_gesture
+                                st.session_state['game_ai_gesture'] = ai_gesture
                                 st.session_state['game_result'] = {
-                                    'text': result,
+                                    'text': result_text,
                                     'color': result_color,
                                     'icon': result_icon
                                 }
                                 
-                                # Animasi Glowing Orbs
-                                st.markdown("""
-                                <div class='orbs-container' id='orbs-game'></div>
-                                <script>
-                                    const container = document.getElementById('orbs-game');
-                                    for(let i = 0; i < 30; i++) {
-                                        const orb = document.createElement('div');
-                                        orb.className = 'orb';
-                                        orb.style.left = Math.random() * 100 + '%';
-                                        orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
-                                        orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                                        orb.style.animationDelay = (Math.random() * 0.5) + 's';
-                                        container.appendChild(orb);
-                                    }
-                                    setTimeout(() => container.remove(), 4000);
-                                </script>
-                                """, unsafe_allow_html=True)
+                                # Tampilkan info langsung (sebelum rerun)
+                                st.success(f"✅ Player: **{player_gesture}** vs AI: **{ai_gesture}** → {result_text}")
+                                st.balloons()
                                 
-                                # Notifikasi sukses
-                                st.success(f"✅ Player: **{player_gesture}** | AI: **{ai_gesture}** | Hasil: **{result}**")
+                                # Delay sedikit supaya state ter-save
+                                import time
+                                time.sleep(0.3)
                                 
+                                # Rerun untuk refresh tampilan
                                 st.rerun()
                                 
                             except Exception as e:
                                 st.error(f"❌ Terjadi kesalahan: {e}")
+                                import traceback
+                                st.code(traceback.format_exc())
             else:
                 st.markdown("""
                 <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column;'>

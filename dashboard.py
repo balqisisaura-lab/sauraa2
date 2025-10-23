@@ -180,6 +180,45 @@ st.markdown("""
             color: #00ffaa !important;
             margin-top: 1rem;
         }
+        
+        /* Animasi Glowing Orbs */
+        .orbs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 145, 234, 0.4));
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
+            animation: fall linear forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fall {
+            0% {
+                opacity: 0;
+                transform: translateY(-100px) scale(0);
+            }
+            10% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0.5);
+            }
+        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -325,6 +364,25 @@ with tabs[1]:
                             result_img_rgb = Image.fromarray(result_img[..., ::-1])
                             
                             st.session_state['detection_result_img'] = result_img_rgb
+                            
+                            # Animasi Glowing Orbs
+                            st.markdown("""
+                            <div class='orbs-container' id='orbs-detection'></div>
+                            <script>
+                                const container = document.getElementById('orbs-detection');
+                                for(let i = 0; i < 25; i++) {
+                                    const orb = document.createElement('div');
+                                    orb.className = 'orb';
+                                    orb.style.left = Math.random() * 100 + '%';
+                                    orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
+                                    orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                                    orb.style.animationDelay = (Math.random() * 0.5) + 's';
+                                    container.appendChild(orb);
+                                }
+                                setTimeout(() => container.remove(), 4000);
+                            </script>
+                            """, unsafe_allow_html=True)
+                            
                             st.markdown("<div class='success-blink'>✅ DETEKSI BERHASIL!</div>", unsafe_allow_html=True)
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
@@ -399,6 +457,24 @@ with tabs[2]:
                             # Simpan ke session state
                             st.session_state['classification_final_result'] = final_result
                             st.session_state['classification'] = final_result.lower()
+                            
+                            # Animasi Glowing Orbs
+                            st.markdown("""
+                            <div class='orbs-container' id='orbs-classification'></div>
+                            <script>
+                                const container = document.getElementById('orbs-classification');
+                                for(let i = 0; i < 25; i++) {
+                                    const orb = document.createElement('div');
+                                    orb.className = 'orb';
+                                    orb.style.left = Math.random() * 100 + '%';
+                                    orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
+                                    orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                                    orb.style.animationDelay = (Math.random() * 0.5) + 's';
+                                    container.appendChild(orb);
+                                }
+                                setTimeout(() => container.remove(), 4000);
+                            </script>
+                            """, unsafe_allow_html=True)
                             
                             # Notifikasi sukses dengan animasi blink
                             st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)

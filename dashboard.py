@@ -345,14 +345,14 @@ with tabs[2]:
             if uploaded_file_class:
                 image_pil = Image.open(uploaded_file_class)
                 
-                # Convert ke grayscale karena model mungkin dilatih dengan grayscale
-                image_gray = image_pil.convert('L')
+                # Convert ke RGB (3 channel)
+                image_rgb = image_pil.convert('RGB')
                 
-                # Resize ke 96x96 (karena 9216 = 96 * 96)
-                image_class_resized = image_gray.resize((96, 96))
+                # Resize ke 128x128 sesuai yang diharapkan model
+                image_class_resized = image_rgb.resize((128, 128))
                 
                 st.session_state['classification_image_input'] = image_class_resized
-                st.image(st.session_state['classification_image_input'], caption="Gambar Input (96x96 Grayscale)", use_container_width=True)
+                st.image(st.session_state['classification_image_input'], caption="Gambar Input (128x128 RGB)", use_container_width=True)
 
                 if st.button("🎯 Klasifikasikan Gesture", type="primary", key="classify_btn"):
                     with st.spinner("⏳ Mengklasifikasikan gesture dengan AI..."):
@@ -362,11 +362,8 @@ with tabs[2]:
                             # Normalisasi pixel values ke [0, 1]
                             img_array = img_array / 255.0
                             
-                            # Flatten array menjadi 1D (9216 elements = 96*96)
-                            img_flattened = img_array.flatten()
-                            
-                            # Expand dimensions untuk batch (1, 9216)
-                            preprocessed_img = np.expand_dims(img_flattened, axis=0)
+                            # Expand dimensions untuk batch (1, 128, 128, 3)
+                            preprocessed_img = np.expand_dims(img_array, axis=0)
                             
                             # Prediksi
                             predictions = classification_model.predict(preprocessed_img)

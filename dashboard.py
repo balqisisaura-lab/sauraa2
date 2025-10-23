@@ -703,9 +703,13 @@ with tabs[3]:
         
         with col_game_ai:
             st.markdown("### 🤖 AI")
-            if st.session_state.get('game_ai_gesture'):
+            
+            # Cek apakah ada gesture AI
+            ai_gesture = st.session_state.get('game_ai_gesture')
+            
+            if ai_gesture:
+                # Jika ada gesture AI, tampilkan
                 gesture_icons = {'Rock': '✊', 'Paper': '✋', 'Scissors': '✌'}
-                ai_gesture = st.session_state['game_ai_gesture']
                 icon = gesture_icons.get(ai_gesture, '🤖')
                 
                 st.markdown(f"""
@@ -716,6 +720,7 @@ with tabs[3]:
                 </div>
                 """, unsafe_allow_html=True)
             else:
+                # Jika belum ada gesture AI
                 st.markdown("""
                 <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); border: 2px solid rgba(0, 212, 255, 0.3); min-height: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem;'>
                     <p style='font-size: 5rem; margin: 0; line-height: 1;'>❓</p>
@@ -725,6 +730,13 @@ with tabs[3]:
                 """, unsafe_allow_html=True)
         
         st.markdown("---")
+        
+        # DEBUG INFO (Bisa dihapus nanti)
+        with st.expander("🔍 Debug Info"):
+            st.write("**Session State:**")
+            st.write(f"- game_player_gesture: {st.session_state.get('game_player_gesture')}")
+            st.write(f"- game_ai_gesture: {st.session_state.get('game_ai_gesture')}")
+            st.write(f"- game_result: {st.session_state.get('game_result')}")
         
         # Action Buttons
         col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 1])

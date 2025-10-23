@@ -14,224 +14,447 @@ st.set_page_config(
 )
 
 # ========================== CUSTOM STYLE ==========================
-st.markdown("""
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
+# Pilih tema berdasarkan session state
+if st.session_state['theme_mode'] == 'dark':
+    # TEMA DARK (Original)
+    st.markdown("""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-        /* === Efek Transisi Fade-In Global === */
-        .stApp {
-            animation: fadeInAnimation ease 0.4s; 
-            animation-iteration-count: 1;
-            animation-fill-mode: forwards;
-        }
+            .stApp {
+                animation: fadeInAnimation ease 0.4s; 
+                animation-iteration-count: 1;
+                animation-fill-mode: forwards;
+            }
 
-        @keyframes fadeInAnimation {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
+            @keyframes fadeInAnimation {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
+            }
 
-        body, .stApp {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-            color: #e0e0e0;
-            font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
-        }
+            body, .stApp {
+                background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+                color: #e0e0e0;
+                font-family: 'Rajdhani', sans-serif;
+                overflow-x: hidden;
+            }
 
-        * {
-            color: #e0e0e0 !important;
-        }
+            * {
+                color: #e0e0e0 !important;
+            }
 
-        .main-title {
-            text-align: center;
-            font-size: 5rem; 
-            font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
-            color: #00d4ff !important;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); 
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-            animation: glow 2s ease-in-out infinite alternate;
-            letter-spacing: 8px; 
-        }
-        
-        @keyframes glow {
-            from { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); }
-            to { text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8); }
-        }
-        
-        .subtitle {
-            text-align: center;
-            color: #b0bec5 !important;
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
-            font-style: italic;
-        }
-        
-        .section-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: #00d4ff !important;
-            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
-            margin-top: 2rem;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .stButton > button {
-            background: linear-gradient(45deg, #00d4ff, #0091ea);
-            color: #fff !important;
-            border-radius: 25px !important;
-            font-weight: 600 !important;
-            padding: 1rem 2rem !important;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-            transition: all 0.4s ease;
-            font-size: 1.1rem;
-            border: none;
-            font-family: 'Orbitron', sans-serif;
-        }
-        
-        .stButton > button:hover {
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
-            transform: translateY(-2px);
-        }
-        
-        .card {
-            background: rgba(30, 50, 60, 0.8);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
-            margin-bottom: 2rem;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-            backdrop-filter: blur(10px);
-        }
-        
-        .menu-item {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
-            border-radius: 15px;
-            padding: 1.5rem;
-            margin: 0.5rem 0;
-            text-align: center;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            font-size: 1rem;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-        }
-        
-        .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-        }
-        
-        /* CUSTOM CSS FILE UPLOADER */
-        .stFileUploader > div:first-child > div:first-child {
-            background-color: rgba(30, 50, 60, 0.6);
-            border: 3px dashed #00d4ff; 
-            border-radius: 20px; 
-            padding: 2rem 1.5rem; 
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); 
-            transition: all 0.3s ease;
-        }
-        
-        .stFileUploader > div:first-child > div:first-child:hover {
-            border: 3px dashed #00ffff;
-            background-color: rgba(0, 212, 255, 0.1);
-        }
-        
-        .recommendation-alert {
-            padding: 1.5rem;
-            border: 3px solid #ffd700; 
-            border-radius: 15px;
-            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); 
-            text-align: center;
-            margin-top: 1.5rem;
-            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-        }
+            .main-title {
+                text-align: center;
+                font-size: 5rem; 
+                font-weight: 900;
+                font-family: 'Orbitron', sans-serif;
+                color: #00d4ff !important;
+                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); 
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+                animation: glow 2s ease-in-out infinite alternate;
+                letter-spacing: 8px; 
+            }
+            
+            @keyframes glow {
+                from { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); }
+                to { text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8); }
+            }
+            
+            .subtitle {
+                text-align: center;
+                color: #b0bec5 !important;
+                font-size: 1.5rem;
+                margin-bottom: 2rem;
+                font-style: italic;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: #00d4ff !important;
+                text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+                margin-top: 2rem;
+                text-align: center;
+                font-family: 'Orbitron', sans-serif;
+            }
+            
+            .stButton > button {
+                background: linear-gradient(45deg, #00d4ff, #0091ea);
+                color: #fff !important;
+                border-radius: 25px !important;
+                font-weight: 600 !important;
+                padding: 1rem 2rem !important;
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+                transition: all 0.4s ease;
+                font-size: 1.1rem;
+                border: none;
+                font-family: 'Orbitron', sans-serif;
+            }
+            
+            .stButton > button:hover {
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+                transform: translateY(-2px);
+            }
+            
+            .card {
+                background: rgba(30, 50, 60, 0.8);
+                border-radius: 20px;
+                padding: 2rem;
+                box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+                margin-bottom: 2rem;
+                border: 2px solid rgba(0, 212, 255, 0.3);
+                backdrop-filter: blur(10px);
+            }
+            
+            .menu-item {
+                background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
+                border-radius: 15px;
+                padding: 1.5rem;
+                margin: 0.5rem 0;
+                text-align: center;
+                font-weight: 600;
+                box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                font-size: 1rem;
+                border: 1px solid rgba(0, 212, 255, 0.3);
+            }
+            
+            .menu-item:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+            }
+            
+            .stFileUploader > div:first-child > div:first-child {
+                background-color: rgba(30, 50, 60, 0.6);
+                border: 3px dashed #00d4ff; 
+                border-radius: 20px; 
+                padding: 2rem 1.5rem; 
+                box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); 
+                transition: all 0.3s ease;
+            }
+            
+            .stFileUploader > div:first-child > div:first-child:hover {
+                border: 3px dashed #00ffff;
+                background-color: rgba(0, 212, 255, 0.1);
+            }
+            
+            .recommendation-alert {
+                padding: 1.5rem;
+                border: 3px solid #ffd700; 
+                border-radius: 15px;
+                background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); 
+                text-align: center;
+                margin-top: 1.5rem;
+                box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            }
 
-        .recommendation-alert p {
-            margin: 0;
-            color: #ffd700 !important; 
-            font-size: 1.25rem;
-            font-weight: 600;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            color: #78909c !important;
-            font-size: 0.9rem;
-        }
-        
-        /* Animasi Blink untuk Success */
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
-        .success-blink {
-            animation: blink 0.8s ease-in-out 3;
-            padding: 1rem;
-            border-radius: 10px;
-            background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
-            border: 2px solid #00d4ff;
-            text-align: center;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #00ffaa !important;
-            margin-top: 1rem;
-        }
-        
-        /* Animasi Glowing Orbs */
-        .orbs-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
-        }
-        
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 145, 234, 0.4));
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
-            animation: fall linear forwards;
-            opacity: 0;
-        }
-        
-        @keyframes fall {
-            0% {
+            .recommendation-alert p {
+                margin: 0;
+                color: #ffd700 !important; 
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+            
+            .footer {
+                text-align: center;
+                padding: 2rem;
+                color: #78909c !important;
+                font-size: 0.9rem;
+            }
+            
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.3; }
+            }
+            
+            .success-blink {
+                animation: blink 0.8s ease-in-out 3;
+                padding: 1rem;
+                border-radius: 10px;
+                background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
+                border: 2px solid #00d4ff;
+                text-align: center;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #00ffaa !important;
+                margin-top: 1rem;
+            }
+            
+            .orbs-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 9999;
+                overflow: hidden;
+            }
+            
+            .orb {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 145, 234, 0.4));
+                box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
+                animation: fall linear forwards;
                 opacity: 0;
-                transform: translateY(-100px) scale(0);
             }
-            10% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
+            
+            @keyframes fall {
+                0% {
+                    opacity: 0;
+                    transform: translateY(-100px) scale(0);
+                }
+                10% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(100vh) scale(0.5);
+                }
             }
-            90% {
-                opacity: 1;
+            
+            .game-iframe {
+                border: 3px solid rgba(0, 212, 255, 0.5);
+                border-radius: 20px;
+                box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
             }
-            100% {
+        </style>
+    """, unsafe_allow_html=True)
+else:
+    # TEMA LIGHT (Pink)
+    st.markdown("""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
+
+            .stApp {
+                animation: fadeInAnimation ease 0.4s; 
+                animation-iteration-count: 1;
+                animation-fill-mode: forwards;
+            }
+
+            @keyframes fadeInAnimation {
+                0% { opacity: 0; }
+                100% { opacity: 1; }
+            }
+
+            body, .stApp {
+                background: linear-gradient(135deg, #ffd1dc 0%, #ffb3d9 50%, #ff69b4 100%);
+                color: #4a0e4e;
+                font-family: 'Rajdhani', sans-serif;
+                overflow-x: hidden;
+            }
+
+            * {
+                color: #4a0e4e !important;
+            }
+
+            .main-title {
+                text-align: center;
+                font-size: 5rem; 
+                font-weight: 900;
+                font-family: 'Orbitron', sans-serif;
+                color: #ff1493 !important;
+                text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.6); 
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+                animation: glowPink 2s ease-in-out infinite alternate;
+                letter-spacing: 8px; 
+            }
+            
+            @keyframes glowPink {
+                from { text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.6); }
+                to { text-shadow: 0 0 30px rgba(255, 20, 147, 1), 0 0 60px rgba(255, 20, 147, 0.8); }
+            }
+            
+            .subtitle {
+                text-align: center;
+                color: #8b008b !important;
+                font-size: 1.5rem;
+                margin-bottom: 2rem;
+                font-style: italic;
+            }
+            
+            .section-title {
+                font-size: 2.5rem;
+                font-weight: 700;
+                color: #ff1493 !important;
+                text-shadow: 0 0 10px rgba(255, 20, 147, 0.6);
+                margin-top: 2rem;
+                text-align: center;
+                font-family: 'Orbitron', sans-serif;
+            }
+            
+            .stButton > button {
+                background: linear-gradient(45deg, #ff1493, #ff69b4);
+                color: #fff !important;
+                border-radius: 25px !important;
+                font-weight: 600 !important;
+                padding: 1rem 2rem !important;
+                box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
+                transition: all 0.4s ease;
+                font-size: 1.1rem;
+                border: none;
+                font-family: 'Orbitron', sans-serif;
+            }
+            
+            .stButton > button:hover {
+                box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
+                transform: translateY(-2px);
+            }
+            
+            .card {
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 20px;
+                padding: 2rem;
+                box-shadow: 0 8px 32px rgba(255, 20, 147, 0.2);
+                margin-bottom: 2rem;
+                border: 2px solid rgba(255, 20, 147, 0.3);
+                backdrop-filter: blur(10px);
+            }
+            
+            .menu-item {
+                background: linear-gradient(135deg, rgba(255, 20, 147, 0.1), rgba(255, 105, 180, 0.1));
+                border-radius: 15px;
+                padding: 1.5rem;
+                margin: 0.5rem 0;
+                text-align: center;
+                font-weight: 600;
+                box-shadow: 0 4px 15px rgba(255, 20, 147, 0.2);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                font-size: 1rem;
+                border: 1px solid rgba(255, 20, 147, 0.3);
+            }
+            
+            .menu-item:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
+            }
+            
+            .stFileUploader > div:first-child > div:first-child {
+                background-color: rgba(255, 255, 255, 0.6);
+                border: 3px dashed #ff1493; 
+                border-radius: 20px; 
+                padding: 2rem 1.5rem; 
+                box-shadow: 0 4px 15px rgba(255, 20, 147, 0.2); 
+                transition: all 0.3s ease;
+            }
+            
+            .stFileUploader > div:first-child > div:first-child:hover {
+                border: 3px dashed #ff69b4;
+                background-color: rgba(255, 20, 147, 0.1);
+            }
+            
+            .recommendation-alert {
+                padding: 1.5rem;
+                border: 3px solid #ff1493; 
+                border-radius: 15px;
+                background: linear-gradient(45deg, rgba(255, 20, 147, 0.1), rgba(255, 105, 180, 0.1)); 
+                text-align: center;
+                margin-top: 1.5rem;
+                box-shadow: 0 4px 12px rgba(255, 20, 147, 0.3);
+            }
+
+            .recommendation-alert p {
+                margin: 0;
+                color: #ff1493 !important; 
+                font-size: 1.25rem;
+                font-weight: 600;
+            }
+            
+            .footer {
+                text-align: center;
+                padding: 2rem;
+                color: #8b008b !important;
+                font-size: 0.9rem;
+            }
+            
+            @keyframes blink {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.3; }
+            }
+            
+            .success-blink {
+                animation: blink 0.8s ease-in-out 3;
+                padding: 1rem;
+                border-radius: 10px;
+                background: linear-gradient(45deg, rgba(255, 20, 147, 0.2), rgba(255, 105, 180, 0.2));
+                border: 2px solid #ff1493;
+                text-align: center;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #ff1493 !important;
+                margin-top: 1rem;
+            }
+            
+            .orbs-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 9999;
+                overflow: hidden;
+            }
+            
+            .orb {
+                position: absolute;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255, 20, 147, 0.8), rgba(255, 105, 180, 0.4));
+                box-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.5);
+                animation: fall linear forwards;
                 opacity: 0;
-                transform: translateY(100vh) scale(0.5);
             }
-        }
-        
-        /* Style untuk iframe */
-        .game-iframe {
-            border: 3px solid rgba(0, 212, 255, 0.5);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
-        }
-    </style>
-""", unsafe_allow_html=True)
+            
+            @keyframes fall {
+                0% {
+                    opacity: 0;
+                    transform: translateY(-100px) scale(0);
+                }
+                10% {
+                    opacity: 1;
+                    transform: translateY(0) scale(1);
+                }
+                90% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 0;
+                    transform: translateY(100vh) scale(0.5);
+                }
+            }
+            
+            .game-iframe {
+                border: 3px solid rgba(255, 20, 147, 0.5);
+                border-radius: 20px;
+                box-shadow: 0 8px 32px rgba(255, 20, 147, 0.3);
+            }
+        </style>
+    """, unsafe_allow_html=True)
 
 # ========================== HEADER ==========================
+# Theme Toggle Button
+col_header1, col_header2, col_header3 = st.columns([1, 3, 1])
+
+with col_header3:
+    if st.session_state['theme_mode'] == 'dark':
+        if st.button("🌸 Light Mode", key="theme_toggle", use_container_width=True):
+            st.session_state['theme_mode'] = 'light'
+            st.rerun()
+    else:
+        if st.button("🌙 Dark Mode", key="theme_toggle", use_container_width=True):
+            st.session_state['theme_mode'] = 'dark'
+            st.rerun()
+
 st.markdown("<h1 class='main-title'>AI VISION</h1>", unsafe_allow_html=True)
 st.markdown("<p class='subtitle'>Deteksi Masker Wajah & Klasifikasi Gesture Tangan dengan Kecerdasan Buatan</p>", unsafe_allow_html=True)
+st.markdown("---")ecerdasan Buatan</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ========================== INITIALIZE SESSION STATE ==========================
@@ -249,6 +472,10 @@ if 'last_yolo_uploader' not in st.session_state:
     st.session_state['last_yolo_uploader'] = None
 if 'last_classify_uploader' not in st.session_state:
     st.session_state['last_classify_uploader'] = None
+
+# Dark/Light Mode State
+if 'theme_mode' not in st.session_state:
+    st.session_state['theme_mode'] = 'dark'  # default dark
 
 # ========================== UTILITY FUNCTIONS (Load Models) ==========================
 @st.cache_resource

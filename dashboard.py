@@ -584,4 +584,24 @@ with tabs[4]:
 
 # ----------------- TENTANG -----------------
 with tabs[5]:
-    clear_inactive_results(
+    clear_inactive_results(5)
+    st.markdown("<h2 class='section-title'>Tentang AI Vision ℹ</h2>", unsafe_allow_html=True)
+    st.markdown("""
+    <div class='card'>
+        <p style='font-size: 1.3rem;'>AI Vision adalah platform Computer Vision yang menggabungkan teknologi <span style='font-weight: bold; color: #00d4ff;'>Object Detection</span> dan <span style='font-weight: bold; color: #00d4ff;'>Image Classification</span>.</p>
+        <p style='margin-top: 1rem;'>Teknologi yang digunakan:</p>
+        <ul>
+            <li><span style='font-weight: bold; color: #00d4ff;'>YOLO (You Only Look Once):</span> Untuk deteksi masker wajah secara real-time</li>
+            <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
+            <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
+        </ul>
+        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balgis Isaura</span></p>
+        <div style='text-align: center; margin-top: 2rem;'>
+            <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+# ========================== FOOTER ==========================
+st.markdown("---")
+st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balgis Isaura.</p>", unsafe_allow_html=True)

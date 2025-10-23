@@ -77,6 +77,42 @@ st.markdown("""
             font-family: 'Orbitron', sans-serif;
         }
         
+        /* CENTERED TABS NAVIGATION */
+        .stTabs [data-baseweb="tab-list"] {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            background: rgba(30, 50, 60, 0.5);
+            padding: 1rem;
+            border-radius: 20px;
+            margin: 2rem auto;
+            max-width: 90%;
+        }
+        
+        .stTabs [data-baseweb="tab"] {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
+            border-radius: 15px;
+            padding: 1rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .stTabs [data-baseweb="tab"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+            border-color: #00d4ff;
+        }
+        
+        .stTabs [aria-selected="true"] {
+            background: linear-gradient(45deg, #00d4ff, #0091ea) !important;
+            border-color: #00d4ff !important;
+            box-shadow: 0 0 25px rgba(0, 212, 255, 0.6) !important;
+        }
+        
         .stButton > button {
             background: linear-gradient(45deg, #00d4ff, #0091ea);
             color: #fff !important;
@@ -180,45 +216,6 @@ st.markdown("""
             color: #00ffaa !important;
             margin-top: 1rem;
         }
-        
-        /* Animasi Glowing Orbs */
-        .orbs-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 9999;
-            overflow: hidden;
-        }
-        
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 145, 234, 0.4));
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
-            animation: fall linear forwards;
-            opacity: 0;
-        }
-        
-        @keyframes fall {
-            0% {
-                opacity: 0;
-                transform: translateY(-100px) scale(0);
-            }
-            10% {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(100vh) scale(0.5);
-            }
-        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -273,7 +270,7 @@ def clear_inactive_results(current_tab_index):
         if st.session_state.get('classification_image_input') is not None:
             st.session_state['classification_image_input'] = None
 
-# ========================== HORIZONTAL NAVIGATION (Tabs at Top) ==========================
+# ========================== HORIZONTAL NAVIGATION (Tabs at Top - CENTERED) ==========================
 tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎯 Rekomendasi", "📞 Kontak", "ℹ Tentang"])
 
 # ========================== MAIN CONTENT BASED ON TABS ==========================
@@ -583,7 +580,7 @@ with tabs[5]:
             <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
         </ul>
-        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balgis Isaura</span></p>
+        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
             <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
         </div>

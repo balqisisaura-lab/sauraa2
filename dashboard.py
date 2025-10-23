@@ -704,16 +704,18 @@ with tabs[3]:
                 icon = gesture_icons.get(ai_gesture, '🤖')
                 
                 st.markdown(f"""
-                <div class='card' style='background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 23, 68, 0.2)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem;'>
-                    <p style='font-size: 5rem; margin: 0;'>{icon}</p>
-                    <p style='font-size: 1.8rem; margin: 1rem 0 0 0; color: #ff5252 !important; font-weight: bold;'>{ai_gesture}</p>
+                <div class='card' style='background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 23, 68, 0.2)); border: 2px solid rgba(255, 82, 82, 0.5); min-height: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem;'>
+                    <p style='font-size: 6rem; margin: 0; line-height: 1;'>{icon}</p>
+                    <p style='font-size: 2rem; margin: 1.5rem 0 0 0; color: #ff5252 !important; font-weight: bold; text-transform: uppercase;'>{ai_gesture}</p>
+                    <p style='font-size: 1rem; margin: 0.5rem 0 0 0; color: #ff8888 !important;'>AI Choice</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown("""
-                <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
-                    <p style='font-size: 4rem; margin: 0;'>❓</p>
-                    <p style='font-size: 1.2rem; margin: 1rem 0 0 0;'>Menunggu...</p>
+                <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); border: 2px solid rgba(0, 212, 255, 0.3); min-height: 280px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem;'>
+                    <p style='font-size: 5rem; margin: 0; line-height: 1;'>❓</p>
+                    <p style='font-size: 1.4rem; margin: 1.5rem 0 0 0; color: #00d4ff !important; font-weight: 600;'>Waiting...</p>
+                    <p style='font-size: 1rem; margin: 0.5rem 0 0 0; color: #78909c !important;'>Upload gesture & klik MAIN!</p>
                 </div>
                 """, unsafe_allow_html=True)
         

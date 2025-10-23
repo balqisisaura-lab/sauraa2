@@ -8,33 +8,68 @@ from io import BytesIO
 
 # ========================== CONFIG PAGE ==========================
 st.set_page_config(
-    page_title="AI Vision - Mask Detection & Hand Gesture",
+    page_title="AI Vision - Balqis Isaura",
     page_icon="🤖",
     layout="wide"
 )
 
-# ========================== CUSTOM STYLE ==========================
+# ========================== CUSTOM STYLE WITH ANIMATED BACKGROUND ==========================
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-        /* === Efek Transisi Fade-In Global === */
+        /* === Animated Wave Background === */
         .stApp {
-            animation: fadeInAnimation ease 0.4s; 
-            animation-iteration-count: 1;
-            animation-fill-mode: forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .stApp::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            z-index: -2;
+        }
+        
+        .stApp::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(138, 43, 226, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 50%);
+            animation: wave-animation 15s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes wave-animation {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-5%, -5%) rotate(5deg); }
+            50% { transform: translate(-10%, 5%) rotate(-5deg); }
+            75% { transform: translate(-5%, -10%) rotate(3deg); }
+        }
+
+        /* === Efek Transisi Fade-In === */
+        .main {
+            animation: fadeInAnimation ease 0.5s; 
         }
 
         @keyframes fadeInAnimation {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         body, .stApp {
-            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
-            overflow-x: hidden;
         }
 
         * {
@@ -47,7 +82,7 @@ st.markdown("""
             font-weight: 900;
             font-family: 'Orbitron', sans-serif;
             color: #00d4ff !important;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); 
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6), 0 0 60px rgba(138, 43, 226, 0.4); 
             margin-top: 1rem;
             margin-bottom: 0.5rem;
             animation: glow 2s ease-in-out infinite alternate;
@@ -55,8 +90,12 @@ st.markdown("""
         }
         
         @keyframes glow {
-            from { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); }
-            to { text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8); }
+            from { 
+                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6), 0 0 60px rgba(138, 43, 226, 0.4); 
+            }
+            to { 
+                text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8), 0 0 90px rgba(138, 43, 226, 0.6); 
+            }
         }
         
         .subtitle {
@@ -78,7 +117,8 @@ st.markdown("""
         }
         
         .stButton > button {
-            background: linear-gradient(45deg, #00d4ff, #0091ea);
+            background: linear-gradient(45deg, #00d4ff, #8a2be2, #ff00ff);
+            background-size: 200% 200%;
             color: #fff !important;
             border-radius: 25px !important;
             font-weight: 600 !important;
@@ -88,25 +128,37 @@ st.markdown("""
             font-size: 1.1rem;
             border: none;
             font-family: 'Orbitron', sans-serif;
+            animation: gradient-shift 3s ease infinite;
+        }
+        
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
         
         .stButton > button:hover {
-            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
-            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8), 0 0 50px rgba(138, 43, 226, 0.6);
+            transform: translateY(-2px) scale(1.02);
         }
         
         .card {
-            background: rgba(30, 50, 60, 0.8);
+            background: rgba(30, 50, 60, 0.7);
             border-radius: 20px;
             padding: 2rem;
             box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
             margin-bottom: 2rem;
             border: 2px solid rgba(0, 212, 255, 0.3);
             backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            border-color: rgba(138, 43, 226, 0.5);
+            box-shadow: 0 12px 40px rgba(138, 43, 226, 0.3);
         }
         
         .menu-item {
-            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(138, 43, 226, 0.1));
             border-radius: 15px;
             padding: 1.5rem;
             margin: 0.5rem 0;
@@ -116,11 +168,13 @@ st.markdown("""
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             font-size: 1rem;
             border: 1px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(5px);
         }
         
         .menu-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 6px 25px rgba(138, 43, 226, 0.4);
+            border-color: rgba(138, 43, 226, 0.5);
         }
         
         /* CUSTOM CSS FILE UPLOADER */
@@ -131,11 +185,13 @@ st.markdown("""
             padding: 2rem 1.5rem; 
             box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); 
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
         
         .stFileUploader > div:first-child > div:first-child:hover {
-            border: 3px dashed #00ffff;
-            background-color: rgba(0, 212, 255, 0.1);
+            border: 3px dashed #8a2be2;
+            background-color: rgba(138, 43, 226, 0.1);
+            box-shadow: 0 6px 20px rgba(138, 43, 226, 0.3);
         }
         
         .recommendation-alert {
@@ -146,6 +202,7 @@ st.markdown("""
             text-align: center;
             margin-top: 1.5rem;
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(10px);
         }
 
         .recommendation-alert p {
@@ -160,6 +217,23 @@ st.markdown("""
             padding: 2rem;
             color: #78909c !important;
             font-size: 0.9rem;
+        }
+        
+        /* Sidebar styling */
+        [data-testid="stSidebar"] {
+            background: linear-gradient(180deg, rgba(15, 32, 39, 0.95) 0%, rgba(32, 58, 67, 0.95) 100%);
+            backdrop-filter: blur(10px);
+        }
+        
+        [data-testid="stSidebar"] .stButton > button {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            margin-bottom: 0.5rem;
+        }
+        
+        [data-testid="stSidebar"] .stButton > button:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: #00d4ff;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -208,7 +282,7 @@ def load_classification_model(path):
         st.error(f"Gagal memuat model Klasifikasi H5 dari '{path}'. Error: {e}")
         return None
 
-# ========================== KONTROL STATE SAAT BERPINDAH TAB ==========================
+# ========================== KONTROL STATE SAAT BERPINDAH HALAMAN ==========================
 def clear_inactive_results(current_tab_index):
     if current_tab_index != 'mask' and st.session_state.get('detection_result_img') is not None:
         st.session_state['detection_result_img'] = None
@@ -220,9 +294,8 @@ def clear_inactive_results(current_tab_index):
             st.session_state['classification_image_input'] = None
 
 # ========================== NAVIGATION MENU ==========================
-# Sidebar untuk navigasi
 with st.sidebar:
-    st.markdown("<h2 style='text-align: center; color: #00d4ff;'>📱 Menu</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #00d4ff;'>📱 Menu Navigasi</h2>", unsafe_allow_html=True)
     st.markdown("---")
     
     if st.button("🏠 Beranda", use_container_width=True):
@@ -250,7 +323,6 @@ with st.sidebar:
         st.rerun()
 
 # ========================== MAIN CONTENT BASED ON CURRENT PAGE ==========================
-
 current_page = st.session_state.get('current_page', 'home')
 
 # ----------------- BERANDA -----------------
@@ -259,7 +331,7 @@ if current_page == 'home':
     st.markdown("<h2 class='section-title'>Selamat Datang di AI Vision</h2>", unsafe_allow_html=True)
     
     st.markdown("""
-    <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); border-color: #00d4ff;'>
+    <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(138, 43, 226, 0.15)); border-color: #00d4ff;'>
         <p style='font-size: 1.4rem; text-align: center;'>
             Platform <span style='font-weight: bold; color: #00d4ff;'>Computer Vision</span> berbasis AI untuk deteksi masker wajah dan pengenalan gesture tangan.
         </p>
@@ -271,33 +343,33 @@ if current_page == 'home':
     
     st.markdown("---")
 
-    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-family: Orbitron, sans-serif; font-size: 2rem; margin-bottom: 1.5rem;'>Fitur Utama</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-family: Orbitron, sans-serif; font-size: 2rem; margin-bottom: 2rem;'>Fitur Utama</h3>", unsafe_allow_html=True)
     
     col_feat1, col_feat2 = st.columns(2)
     
     with col_feat1:
         st.markdown("""
-        <div class='menu-item' style='min-height: 250px;'>
-            <p style='font-size: 4rem; margin-bottom: 1rem;'>😷</p>
-            <span style='font-weight: bold; color: #00d4ff; font-size: 1.5rem;'>Deteksi Masker</span>
-            <p style='font-size: 1rem; margin-top: 1rem; line-height: 1.6;'>Deteksi apakah seseorang memakai masker atau tidak menggunakan <span style='font-weight: bold;'>YOLO</span>.</p>
+        <div class='menu-item' style='min-height: 280px; padding: 2.5rem;'>
+            <p style='font-size: 5rem; margin-bottom: 1rem;'>😷</p>
+            <span style='font-weight: bold; color: #00d4ff; font-size: 1.8rem;'>Deteksi Masker</span>
+            <p style='font-size: 1.05rem; margin-top: 1.2rem; line-height: 1.7;'>Deteksi apakah seseorang memakai masker atau tidak menggunakan <span style='font-weight: bold; color: #8a2be2;'>YOLO</span>.</p>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("🚀 Mulai Deteksi Masker", use_container_width=True, type="primary"):
+        if st.button("🚀 Mulai Deteksi Masker", use_container_width=True, type="primary", key="btn_mask"):
             st.session_state['current_page'] = 'mask'
             st.rerun()
 
     with col_feat2:
         st.markdown("""
-        <div class='menu-item' style='min-height: 250px;'>
-            <p style='font-size: 4rem; margin-bottom: 1rem;'>✊✋✌</p>
-            <span style='font-weight: bold; color: #00d4ff; font-size: 1.5rem;'>Klasifikasi Gesture</span>
-            <p style='font-size: 1rem; margin-top: 1rem; line-height: 1.6;'>Identifikasi gesture tangan: Rock, Paper, atau Scissors dengan akurasi tinggi.</p>
+        <div class='menu-item' style='min-height: 280px; padding: 2.5rem;'>
+            <p style='font-size: 5rem; margin-bottom: 1rem;'>✊✋✌</p>
+            <span style='font-weight: bold; color: #00d4ff; font-size: 1.8rem;'>Klasifikasi Gesture</span>
+            <p style='font-size: 1.05rem; margin-top: 1.2rem; line-height: 1.7;'>Identifikasi gesture tangan: Rock, Paper, atau Scissors dengan akurasi tinggi.</p>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("🎯 Mulai Klasifikasi Gesture", use_container_width=True, type="primary"):
+        if st.button("🎯 Mulai Klasifikasi Gesture", use_container_width=True, type="primary", key="btn_gesture"):
             st.session_state['current_page'] = 'gesture'
             st.rerun()
 
@@ -330,7 +402,7 @@ elif current_page == 'mask':
                 image = Image.open(uploaded_file_deteksi)
                 st.image(image, caption="Gambar Input", use_container_width=True)
 
-                if st.button("🔍 Deteksi Masker", type="primary", key="detect_obj"):
+                if st.button("🔍 Deteksi Masker Sekarang", type="primary", key="detect_obj"):
                     with st.spinner("⏳ Memproses deteksi masker dengan YOLO..."):
                         try:
                             results = yolo_model(image)
@@ -346,7 +418,7 @@ elif current_page == 'mask':
             if st.session_state.get('detection_result_img') is not None:
                 st.image(st.session_state['detection_result_img'], caption="Hasil Deteksi YOLO", use_container_width=True)
             else:
-                st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold;'>HASIL DETEKSI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
+                st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold; backdrop-filter: blur(5px); background: rgba(0, 212, 255, 0.05);'>HASIL DETEKSI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
     else:
         st.warning(f"⚠️ Model YOLO tidak dapat dimuat dari '{YOLO_MODEL_PATH}'.")
 
@@ -356,7 +428,7 @@ elif current_page == 'gesture':
     st.markdown("<h2 class='section-title'>Klasifikasi Gesture Tangan ✊✋✌</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
-        <p>Upload gambar gesture tangan Anda! Model AI akan mengklasifikasikan apakah itu <span style='font-weight: bold; color: #00d4ff;'>Rock</span>, <span style='font-weight: bold; color: #00d4ff;'>Paper</span>, atau <span style='font-weight: bold; color: #00d4ff;'>Scissors</span>.</p>
+        <p>Upload gambar gesture tangan Anda! Model AI akan mengklasifikasikan apakah itu <span style='font-weight: bold; color: #00d4ff;'>Rock</span>, <span style='font-weight: bold; color: #8a2be2;'>Paper</span>, atau <span style='font-weight: bold; color: #ff00ff;'>Scissors</span>.</p>
     </div>
     """, unsafe_allow_html=True)
     
@@ -386,7 +458,7 @@ elif current_page == 'gesture':
                 st.session_state['classification_image_input'] = image_class_resized
                 st.image(st.session_state['classification_image_input'], caption="Gambar Input (128x128 RGB)", use_container_width=True)
 
-                if st.button("🎯 Klasifikasikan Gesture", type="primary", key="classify_btn"):
+                if st.button("🎯 Klasifikasikan Gesture Sekarang", type="primary", key="classify_btn"):
                     with st.spinner("⏳ Mengklasifikasikan gesture dengan AI..."):
                         try:
                             img_array = np.array(image_class_resized)
@@ -437,15 +509,22 @@ elif current_page == 'gesture':
                     'Scissors': '✌'
                 }
                 
+                gesture_colors = {
+                    'Rock': '#00d4ff',
+                    'Paper': '#8a2be2',
+                    'Scissors': '#ff00ff'
+                }
+                
                 icon = gesture_icons.get(final_result, '🤖')
+                color = gesture_colors.get(final_result, '#00d4ff')
                 
                 st.success(f"{icon} Gesture terdeteksi: **{final_result}**")
                 
                 st.markdown("---")
-                st.markdown(f"<p style='font-size: 3rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
-                st.markdown(f"<p style='font-size: 2rem; text-align: center; font-weight: bold; color: #00d4ff;'>{final_result}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='font-size: 4rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
+                st.markdown(f"<p style='font-size: 2.5rem; text-align: center; font-weight: bold; color: {color};'>{final_result}</p>", unsafe_allow_html=True)
             else:
-                st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold;'>HASIL KLASIFIKASI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
+                st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold; backdrop-filter: blur(5px); background: rgba(0, 212, 255, 0.05);'>HASIL KLASIFIKASI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
 
     else:
         st.warning(f"⚠️ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
@@ -459,6 +538,7 @@ elif current_page == 'recommendation':
     recommendations = {
         'rock': {
             'title': '✊ ROCK - Kekuatan & Ketegasan',
+            'color': '#00d4ff',
             'items': [
                 {'nama': 'Action Games', 'deskripsi': 'Game penuh aksi dan tantangan yang membutuhkan ketegasan.', 'kategori': 'Gaming'},
                 {'nama': 'Strength Training', 'deskripsi': 'Program latihan kekuatan untuk membangun otot.', 'kategori': 'Fitness'}
@@ -466,6 +546,7 @@ elif current_page == 'recommendation':
         },
         'paper': {
             'title': '✋ PAPER - Fleksibilitas & Kreativitas',
+            'color': '#8a2be2',
             'items': [
                 {'nama': 'Creative Writing', 'deskripsi': 'Kursus menulis kreatif untuk mengembangkan imajinasi.', 'kategori': 'Education'},
                 {'nama': 'Digital Art', 'deskripsi': 'Belajar seni digital dan desain grafis.', 'kategori': 'Art'}
@@ -473,6 +554,7 @@ elif current_page == 'recommendation':
         },
         'scissors': {
             'title': '✌ SCISSORS - Ketepatan & Strategi',
+            'color': '#ff00ff',
             'items': [
                 {'nama': 'Strategy Games', 'deskripsi': 'Game strategi yang melatih pemikiran taktis.', 'kategori': 'Gaming'},
                 {'nama': 'Chess Lessons', 'deskripsi': 'Pelajari strategi catur dari master.', 'kategori': 'Education'}
@@ -488,8 +570,8 @@ elif current_page == 'recommendation':
         rec_data = recommendations[current_classification]
         
         st.markdown(f"""
-        <div class='card' style='background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); border-color: #00d4ff;'>
-            <p style='font-size: 1.8rem; text-align: center; color: #00d4ff; font-weight: bold;'>{rec_data['title']}</p>
+        <div class='card' style='background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(138, 43, 226, 0.2)); border-color: {rec_data['color']};'>
+            <p style='font-size: 1.8rem; text-align: center; color: {rec_data['color']}; font-weight: bold;'>{rec_data['title']}</p>
             <p style='font-size: 1.1rem; text-align: center;'>Berdasarkan gesture Anda, kami merekomendasikan:</p>
         </div>
         """, unsafe_allow_html=True)
@@ -499,7 +581,7 @@ elif current_page == 'recommendation':
             for item in rec_data['items']:
                 st.markdown(f"""
                 <div class='menu-item'>
-                    <span style='font-weight: bold; color: #00d4ff;'>{item['nama']}</span>
+                    <span style='font-weight: bold; color: {rec_data['color']};'>{item['nama']}</span>
                     <br>
                     <span style='font-size: 0.85rem; color: #ffd700;'>[{item['kategori']}]</span>
                     <br>
@@ -555,20 +637,20 @@ elif current_page == 'about':
     st.markdown("<h2 class='section-title'>Tentang AI Vision ℹ</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
-        <p style='font-size: 1.3rem;'>AI Vision adalah platform Computer Vision yang menggabungkan teknologi <span style='font-weight: bold; color: #00d4ff;'>Object Detection</span> dan <span style='font-weight: bold; color: #00d4ff;'>Image Classification</span>.</p>
+        <p style='font-size: 1.3rem;'>AI Vision adalah platform Computer Vision yang menggabungkan teknologi <span style='font-weight: bold; color: #00d4ff;'>Object Detection</span> dan <span style='font-weight: bold; color: #8a2be2;'>Image Classification</span>.</p>
         <p style='margin-top: 1rem;'>Teknologi yang digunakan:</p>
         <ul>
             <li><span style='font-weight: bold; color: #00d4ff;'>YOLO (You Only Look Once):</span> Untuk deteksi masker wajah secara real-time</li>
-            <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
-            <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
+            <li><span style='font-weight: bold; color: #8a2be2;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
+            <li><span style='font-weight: bold; color: #ff00ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
         </ul>
-        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balgis Isaura</span></p>
+        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
-            <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
+            <p style='font-style: italic; color: #8a2be2;'>#ComputerVision #AI #MachineLearning</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 # ========================== FOOTER ==========================
 st.markdown("---")
-st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balgis Isaura.</p>", unsafe_allow_html=True)
+st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balqis Isaura.</p>", unsafe_allow_html=True)

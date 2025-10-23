@@ -15,31 +15,42 @@ st.set_page_config(
 )
 
 # ========================== SOUND EFFECTS FUNCTION ==========================
-def autoplay_audio(file_path: str):
-    """Fungsi untuk auto-play audio"""
-    try:
-        with open(file_path, "rb") as f:
-            data = f.read()
-            b64 = base64.b64encode(data).decode()
-            md = f"""
-                <audio autoplay="true">
-                <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
-                </audio>
-                """
-            st.markdown(md, unsafe_allow_html=True)
-    except:
-        pass  # Jika file tidak ada, skip
+def autoplay_audio_url(audio_url: str):
+    """Fungsi untuk auto-play audio dari URL"""
+    md = f"""
+        <audio autoplay="true">
+        <source src="{audio_url}" type="audio/mpeg">
+        </audio>
+        """
+    st.markdown(md, unsafe_allow_html=True)
 
-def create_sound_button(sound_name, emoji, label):
-    """Membuat tombol sound effect"""
-    col1, col2 = st.columns([1, 4])
-    with col1:
-        st.markdown(f"<p style='font-size: 2rem; text-align: center;'>{emoji}</p>", unsafe_allow_html=True)
-    with col2:
-        if st.button(label, key=f"sound_{sound_name}"):
-            # Coba mainkan sound jika file ada di folder sounds/
-            autoplay_audio(f"sounds/{sound_name}.mp3")
-            st.success(f"🔊 Playing: {label}")
+# Dictionary untuk menyimpan URL audio
+AUDIO_URLS = {
+    # Rock Sounds
+    'rock_guitar': 'https://cdn.pixabay.com/audio/2022/03/10/audio_88ef456c0d.mp3',
+    'drums_heavy': 'https://cdn.pixabay.com/audio/2022/11/25/audio_24797e0017.mp3',
+    'bass_drop': 'https://cdn.pixabay.com/audio/2022/03/24/audio_c3c6d6c54a.mp3',
+    'crowd_cheer': 'https://cdn.pixabay.com/audio/2022/03/15/audio_01d4dd815c.mp3',
+    
+    # Paper Sounds
+    'piano_melody': 'https://cdn.pixabay.com/audio/2022/03/23/audio_426608073c.mp3',
+    'wind_chimes': 'https://cdn.pixabay.com/audio/2022/03/10/audio_72319372e4.mp3',
+    'acoustic': 'https://cdn.pixabay.com/audio/2022/05/27/audio_1808fbf07a.mp3',
+    'nature_ambient': 'https://cdn.pixabay.com/audio/2022/03/09/audio_62860e3805.mp3',
+    
+    # Scissors Sounds
+    'synth_lead': 'https://cdn.pixabay.com/audio/2022/10/25/audio_25d2bbf561.mp3',
+    'electronic_beat': 'https://cdn.pixabay.com/audio/2022/08/02/audio_4d49fe079e.mp3',
+    'laser_sound': 'https://cdn.pixabay.com/audio/2022/03/24/audio_d1718ab41b.mp3',
+    'digital_beep': 'https://cdn.pixabay.com/audio/2022/03/10/audio_d2117ba3bc.mp3',
+    
+    # General Sounds
+    'success': 'https://cdn.pixabay.com/audio/2021/08/04/audio_12b0c7443c.mp3',
+    'classify': 'https://cdn.pixabay.com/audio/2022/03/24/audio_21144ab1f3.mp3',
+    'click': 'https://cdn.pixabay.com/audio/2022/03/15/audio_c2c92793d7.mp3',
+    'notification': 'https://cdn.pixabay.com/audio/2022/03/12/audio_22a1b0cfc2.mp3',
+    'error': 'https://cdn.pixabay.com/audio/2022/03/15/audio_c84758c1e5.mp3'
+}
 
 # ========================== CUSTOM STYLE ==========================
 st.markdown("""
@@ -406,7 +417,7 @@ with tabs[1]:
                             st.markdown("<div class='success-blink'>✅ DETEKSI BERHASIL!</div>", unsafe_allow_html=True)
                             
                             # Play success sound
-                            autoplay_audio("sounds/success.mp3")
+                            autoplay_audio_url(AUDIO_URLS['success'])
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
@@ -485,7 +496,7 @@ with tabs[2]:
                             st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)
                             
                             # Play classification sound
-                            autoplay_audio("sounds/classify.mp3")
+                            autoplay_audio_url(AUDIO_URLS['classify'])
                             
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
@@ -584,7 +595,7 @@ with tabs[3]:
                 """, unsafe_allow_html=True)
                 
                 if st.button(f"▶️ {sound['label']}", key=f"play_{sound['name']}_{current_classification}"):
-                    autoplay_audio(f"sounds/{sound['name']}.mp3")
+                    autoplay_audio_url(AUDIO_URLS[sound['name']])
                     st.success(f"🔊 Now Playing: {sound['label']}")
         
         st.markdown("---")
@@ -665,7 +676,7 @@ with tabs[3]:
                 """, unsafe_allow_html=True)
                 
                 if st.button(f"▶️ {sound['label']}", key=f"general_{sound['name']}"):
-                    autoplay_audio(f"sounds/{sound['name']}.mp3")
+                    autoplay_audio_url(AUDIO_URLS[sound['name']])
                     st.success(f"🔊 Now Playing: {sound['label']}")
 
 # ----------------- KONTAK -----------------

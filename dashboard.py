@@ -281,7 +281,7 @@ def clear_inactive_results(current_tab_index):
             st.session_state['classification_image_input'] = None
 
 # ========================== HORIZONTAL NAVIGATION (Tabs at Top) ==========================
-tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎮 Game RPS", "🎯 Rekomendasi", "📞 Kontak", "ℹ Tentang"])
+tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎮 Game RPS", "🎯 Keahlian Mu", "📞 Kontak", "ℹ Tentang"])
 
 # ========================== MAIN CONTENT BASED ON TABS ==========================
 
@@ -496,112 +496,215 @@ with tabs[2]:
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
-# ----------------- GAME ROCK PAPER SCISSORS (IFRAME) -----------------
+# ----------------- GAME ROCK PAPER SCISSORS (REDIRECT) -----------------
 with tabs[3]:
     st.markdown("<h2 class='section-title'>🎮 Rock Paper Scissors Game</h2>", unsafe_allow_html=True)
+    
     st.markdown("""
-    <div class='card'>
-        <p style='text-align: center;'>Main <span style='font-weight: bold; color: #00d4ff;'>Batu-Gunting-Kertas</span> online! Game interaktif langsung di browser.</p>
-        <p style='text-align: center; font-size: 0.9rem; color: #78909c;'>Powered by <a href='https://bloob.io/id/rps' target='_blank' style='color: #00d4ff; text-decoration: none;'>bloob.io</a></p>
+    <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); border-color: #00d4ff; text-align: center; padding: 3rem;'>
+        <p style='font-size: 3rem; margin: 0;'>🎮</p>
+        <p style='font-size: 2rem; margin: 1rem 0; color: #00d4ff; font-weight: bold;'>Main Batu Gunting Kertas Online!</p>
+        <p style='font-size: 1.2rem; margin: 1rem 0;'>Klik tombol di bawah untuk mulai bermain</p>
+        <br>
+        <a href='https://bloob.io/id/rps' target='_blank' style='text-decoration: none;'>
+            <button style='
+                background: linear-gradient(45deg, #00d4ff, #0091ea);
+                color: #fff;
+                border: none;
+                border-radius: 25px;
+                font-weight: 600;
+                padding: 1.5rem 3rem;
+                font-size: 1.3rem;
+                box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
+                cursor: pointer;
+                font-family: Orbitron, sans-serif;
+                transition: all 0.3s ease;
+            '
+            onmouseover='this.style.boxShadow="0 0 40px rgba(0, 212, 255, 0.9)"; this.style.transform="translateY(-3px)"'
+            onmouseout='this.style.boxShadow="0 0 30px rgba(0, 212, 255, 0.6)"; this.style.transform="translateY(0)"'
+            >
+                🚀 MAIN SEKARANG!
+            </button>
+        </a>
+        <br><br>
+        <p style='font-size: 0.9rem; color: #78909c; margin-top: 2rem;'>Game akan dibuka di tab baru</p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Embed game menggunakan iframe
-    st.markdown("""
-    <iframe src="https://bloob.io/id/rps" 
-            width="100%" 
-            height="800" 
-            class="game-iframe"
-            frameborder="0" 
-            scrolling="auto"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-    </iframe>
-    """, unsafe_allow_html=True)
-    
     st.markdown("<br>", unsafe_allow_html=True)
-    st.info("💡 **Tips:** Mainkan langsung di jendela game di atas! Klik pilihan Rock, Paper, atau Scissors untuk bermain.")
+    
+    # Info tambahan
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2rem;'>✊</p>
+            <p style='font-weight: bold;'>BATU</p>
+            <p style='font-size: 0.9rem;'>Mengalahkan Gunting</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2rem;'>✋</p>
+            <p style='font-weight: bold;'>KERTAS</p>
+            <p style='font-size: 0.9rem;'>Mengalahkan Batu</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2rem;'>✌</p>
+            <p style='font-weight: bold;'>GUNTING</p>
+            <p style='font-size: 0.9rem;'>Mengalahkan Kertas</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-# ----------------- REKOMENDASI -----------------
+# ----------------- KEAHLIAN MU -----------------
 with tabs[4]:
     clear_inactive_results(4)
-    st.markdown("<h2 class='section-title'>Rekomendasi Berdasarkan Gesture 🎯</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center;'>Rekomendasi ini didasarkan pada hasil klasifikasi gesture Anda.</p>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-title'>Keahlian AI Vision 🎯</h2>", unsafe_allow_html=True)
     
-    recommendations = {
-        'rock': {
-            'title': '✊ ROCK - Kekuatan & Ketegasan',
-            'items': [
-                {'nama': 'Action Games', 'deskripsi': 'Game penuh aksi dan tantangan yang membutuhkan ketegasan.', 'kategori': 'Gaming'},
-                {'nama': 'Strength Training', 'deskripsi': 'Program latihan kekuatan untuk membangun otot.', 'kategori': 'Fitness'}
-            ]
-        },
-        'paper': {
-            'title': '✋ PAPER - Fleksibilitas & Kreativitas',
-            'items': [
-                {'nama': 'Creative Writing', 'deskripsi': 'Kursus menulis kreatif untuk mengembangkan imajinasi.', 'kategori': 'Education'},
-                {'nama': 'Digital Art', 'deskripsi': 'Belajar seni digital dan desain grafis.', 'kategori': 'Art'}
-            ]
-        },
-        'scissors': {
-            'title': '✌ SCISSORS - Ketepatan & Strategi',
-            'items': [
-                {'nama': 'Strategy Games', 'deskripsi': 'Game strategi yang melatih pemikiran taktis.', 'kategori': 'Gaming'},
-                {'nama': 'Chess Lessons', 'deskripsi': 'Pelajari strategi catur dari master.', 'kategori': 'Education'}
-            ]
-        }
-    }
+    st.markdown("""
+    <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); border-color: #00d4ff;'>
+        <p style='font-size: 1.4rem; text-align: center;'>
+            Platform AI Vision menguasai berbagai teknologi <span style='font-weight: bold; color: #00d4ff;'>Computer Vision</span> dan <span style='font-weight: bold; color: #00d4ff;'>Deep Learning</span>
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
     
-    col_rec1, col_rec2 = st.columns(2)
+    st.markdown("---")
     
-    current_classification = st.session_state.get('classification', 'none')
+    # Keahlian Utama
+    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-size: 2rem; margin-bottom: 2rem;'>🏆 Keahlian Utama</h3>", unsafe_allow_html=True)
     
-    if current_classification in recommendations:
-        rec_data = recommendations[current_classification]
-        
-        st.markdown(f"""
-        <div class='card' style='background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); border-color: #00d4ff;'>
-            <p style='font-size: 1.8rem; text-align: center; color: #00d4ff; font-weight: bold;'>{rec_data['title']}</p>
-            <p style='font-size: 1.1rem; text-align: center;'>Berdasarkan gesture Anda, kami merekomendasikan:</p>
+    col_skill1, col_skill2 = st.columns(2)
+    
+    with col_skill1:
+        st.markdown("""
+        <div class='card' style='background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 200, 100, 0.1)); border-color: rgba(0, 255, 136, 0.3);'>
+            <p style='font-size: 3rem; text-align: center;'>🎯</p>
+            <h3 style='text-align: center; color: #00ff88;'>Object Detection</h3>
+            <p style='font-size: 1rem; text-align: center;'>Mendeteksi objek dalam gambar dengan akurasi tinggi menggunakan YOLO (You Only Look Once)</p>
+            <br>
+            <p style='font-weight: bold; color: #00d4ff;'>📊 Spesialisasi:</p>
+            <ul>
+                <li>Deteksi masker wajah real-time</li>
+                <li>Multi-object detection</li>
+                <li>Bounding box precision</li>
+                <li>Confidence scoring</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_skill2:
+        st.markdown("""
+        <div class='card' style='background: linear-gradient(135deg, rgba(255, 82, 82, 0.1), rgba(255, 23, 68, 0.1)); border-color: rgba(255, 82, 82, 0.3);'>
+            <p style='font-size: 3rem; text-align: center;'>🤖</p>
+            <h3 style='text-align: center; color: #ff5252;'>Image Classification</h3>
+            <p style='font-size: 1rem; text-align: center;'>Mengklasifikasikan gambar dengan model Deep Learning berbasis CNN</p>
+            <br>
+            <p style='font-weight: bold; color: #00d4ff;'>📊 Spesialisasi:</p>
+            <ul>
+                <li>Hand gesture recognition (Rock, Paper, Scissors)</li>
+                <li>Feature extraction</li>
+                <li>Transfer learning</li>
+                <li>Model optimization (compressed.h5)</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Teknologi yang Dikuasai
+    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-size: 2rem; margin-bottom: 2rem;'>💻 Stack Teknologi</h3>", unsafe_allow_html=True)
+    
+    col_tech1, col_tech2, col_tech3 = st.columns(3)
+    
+    with col_tech1:
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2.5rem;'>🐍</p>
+            <p style='font-weight: bold; color: #00d4ff;'>Python</p>
+            <p style='font-size: 0.9rem;'>Core programming language</p>
         </div>
         """, unsafe_allow_html=True)
         
-        with col_rec1:
-            st.markdown("### 🎮 Rekomendasi Utama")
-            for item in rec_data['items']:
-                st.markdown(f"""
-                <div class='menu-item'>
-                    <span style='font-weight: bold; color: #00d4ff;'>{item['nama']}</span>
-                    <br>
-                    <span style='font-size: 0.85rem; color: #ffd700;'>[{item['kategori']}]</span>
-                    <br>
-                    <span style='font-size: 0.9rem;'>{item['deskripsi']}</span>
-                </div>
-                """, unsafe_allow_html=True)
-        
-        with col_rec2:
-            st.markdown("### 💡 Tips & Saran")
-            tips = {
-                'rock': ['Fokus pada kekuatan mental', 'Bangun ketahanan', 'Latih konsistensi'],
-                'paper': ['Eksplorasi ide baru', 'Berpikir out of the box', 'Fleksibel dalam pendekatan'],
-                'scissors': ['Rencanakan strategi', 'Analisa sebelum bertindak', 'Fokus pada detail']
-            }
-            
-            for tip in tips.get(current_classification, []):
-                st.markdown(f"""
-                <div class='menu-item'>
-                    <span style='font-size: 1rem;'>💡 {tip}</span>
-                </div>
-                """, unsafe_allow_html=True)
-        
-    else:
         st.markdown("""
-        <div class='recommendation-alert'>
-            <p>
-                <span style='font-size: 2rem;'>✊✋✌</span>
-                <br>
-                <span style='font-weight: bold;'>Silakan lakukan Klasifikasi Gesture terlebih dahulu</span> untuk mendapatkan rekomendasi personal.
-            </p>
+        <div class='menu-item'>
+            <p style='font-size: 2.5rem;'>🧠</p>
+            <p style='font-weight: bold; color: #00d4ff;'>TensorFlow/Keras</p>
+            <p style='font-size: 0.9rem;'>Deep learning framework</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_tech2:
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2.5rem;'>👁️</p>
+            <p style='font-weight: bold; color: #00d4ff;'>YOLO</p>
+            <p style='font-size: 0.9rem;'>Real-time object detection</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2.5rem;'>🖼️</p>
+            <p style='font-weight: bold; color: #00d4ff;'>OpenCV</p>
+            <p style='font-size: 0.9rem;'>Computer vision library</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_tech3:
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2.5rem;'>⚡</p>
+            <p style='font-weight: bold; color: #00d4ff;'>Streamlit</p>
+            <p style='font-size: 0.9rem;'>Web app framework</p>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class='menu-item'>
+            <p style='font-size: 2.5rem;'>🔢</p>
+            <p style='font-weight: bold; color: #00d4ff;'>NumPy</p>
+            <p style='font-size: 0.9rem;'>Numerical computing</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("---")
+    
+    # Pencapaian
+    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-size: 2rem; margin-bottom: 2rem;'>🌟 Pencapaian</h3>", unsafe_allow_html=True)
+    
+    col_ach1, col_ach2, col_ach3 = st.columns(3)
+    
+    with col_ach1:
+        st.markdown("""
+        <div class='card' style='background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 215, 0, 0.3); text-align: center;'>
+            <p style='font-size: 3rem; margin: 0;'>🏆</p>
+            <p style='font-size: 2.5rem; margin: 0.5rem 0; color: #ffd700; font-weight: bold;'>95%+</p>
+            <p style='font-size: 1rem;'>Akurasi Klasifikasi</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_ach2:
+        st.markdown("""
+        <div class='card' style='background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 215, 0, 0.3); text-align: center;'>
+            <p style='font-size: 3rem; margin: 0;'>⚡</p>
+            <p style='font-size: 2.5rem; margin: 0.5rem 0; color: #ffd700; font-weight: bold;'>&lt;1s</p>
+            <p style='font-size: 1rem;'>Response Time</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with col_ach3:
+        st.markdown("""
+        <div class='card' style='background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 215, 0, 0.3); text-align: center;'>
+            <p style='font-size: 3rem; margin: 0;'>🎯</p>
+            <p style='font-size: 2.5rem; margin: 0.5rem 0; color: #ffd700; font-weight: bold;'>2+</p>
+            <p style='font-size: 1rem;'>AI Models</p>
         </div>
         """, unsafe_allow_html=True)
 

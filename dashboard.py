@@ -539,4 +539,4 @@ with tabs[5]:
 
 # ========================== FOOTER ==========================
 st.markdown("---")
-st.markdown
+st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balgis Isaura.</p>", unsafe_allow_html=True)

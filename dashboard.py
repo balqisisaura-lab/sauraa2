@@ -14,447 +14,224 @@ st.set_page_config(
 )
 
 # ========================== CUSTOM STYLE ==========================
-# Pilih tema berdasarkan session state
-if st.session_state['theme_mode'] == 'dark':
-    # TEMA DARK (Original)
-    st.markdown("""
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-            .stApp {
-                animation: fadeInAnimation ease 0.4s; 
-                animation-iteration-count: 1;
-                animation-fill-mode: forwards;
-            }
+        /* === Efek Transisi Fade-In Global === */
+        .stApp {
+            animation: fadeInAnimation ease 0.4s; 
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
 
-            @keyframes fadeInAnimation {
-                0% { opacity: 0; }
-                100% { opacity: 1; }
-            }
+        @keyframes fadeInAnimation {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
 
-            body, .stApp {
-                background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
-                color: #e0e0e0;
-                font-family: 'Rajdhani', sans-serif;
-                overflow-x: hidden;
-            }
+        body, .stApp {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            color: #e0e0e0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+        }
 
-            * {
-                color: #e0e0e0 !important;
-            }
+        * {
+            color: #e0e0e0 !important;
+        }
 
-            .main-title {
-                text-align: center;
-                font-size: 5rem; 
-                font-weight: 900;
-                font-family: 'Orbitron', sans-serif;
-                color: #00d4ff !important;
-                text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); 
-                margin-top: 1rem;
-                margin-bottom: 0.5rem;
-                animation: glow 2s ease-in-out infinite alternate;
-                letter-spacing: 8px; 
-            }
-            
-            @keyframes glow {
-                from { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); }
-                to { text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8); }
-            }
-            
-            .subtitle {
-                text-align: center;
-                color: #b0bec5 !important;
-                font-size: 1.5rem;
-                margin-bottom: 2rem;
-                font-style: italic;
-            }
-            
-            .section-title {
-                font-size: 2.5rem;
-                font-weight: 700;
-                color: #00d4ff !important;
-                text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
-                margin-top: 2rem;
-                text-align: center;
-                font-family: 'Orbitron', sans-serif;
-            }
-            
-            .stButton > button {
-                background: linear-gradient(45deg, #00d4ff, #0091ea);
-                color: #fff !important;
-                border-radius: 25px !important;
-                font-weight: 600 !important;
-                padding: 1rem 2rem !important;
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
-                transition: all 0.4s ease;
-                font-size: 1.1rem;
-                border: none;
-                font-family: 'Orbitron', sans-serif;
-            }
-            
-            .stButton > button:hover {
-                box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
-                transform: translateY(-2px);
-            }
-            
-            .card {
-                background: rgba(30, 50, 60, 0.8);
-                border-radius: 20px;
-                padding: 2rem;
-                box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
-                margin-bottom: 2rem;
-                border: 2px solid rgba(0, 212, 255, 0.3);
-                backdrop-filter: blur(10px);
-            }
-            
-            .menu-item {
-                background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
-                border-radius: 15px;
-                padding: 1.5rem;
-                margin: 0.5rem 0;
-                text-align: center;
-                font-weight: 600;
-                box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                font-size: 1rem;
-                border: 1px solid rgba(0, 212, 255, 0.3);
-            }
-            
-            .menu-item:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-            }
-            
-            .stFileUploader > div:first-child > div:first-child {
-                background-color: rgba(30, 50, 60, 0.6);
-                border: 3px dashed #00d4ff; 
-                border-radius: 20px; 
-                padding: 2rem 1.5rem; 
-                box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); 
-                transition: all 0.3s ease;
-            }
-            
-            .stFileUploader > div:first-child > div:first-child:hover {
-                border: 3px dashed #00ffff;
-                background-color: rgba(0, 212, 255, 0.1);
-            }
-            
-            .recommendation-alert {
-                padding: 1.5rem;
-                border: 3px solid #ffd700; 
-                border-radius: 15px;
-                background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); 
-                text-align: center;
-                margin-top: 1.5rem;
-                box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
-            }
+        .main-title {
+            text-align: center;
+            font-size: 5rem; 
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            color: #00d4ff !important;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); 
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            animation: glow 2s ease-in-out infinite alternate;
+            letter-spacing: 8px; 
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); }
+            to { text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8); }
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #b0bec5 !important;
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            font-style: italic;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00d4ff !important;
+            text-shadow: 0 0 10px rgba(0, 212, 255, 0.6);
+            margin-top: 2rem;
+            text-align: center;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .stButton > button {
+            background: linear-gradient(45deg, #00d4ff, #0091ea);
+            color: #fff !important;
+            border-radius: 25px !important;
+            font-weight: 600 !important;
+            padding: 1rem 2rem !important;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+            transition: all 0.4s ease;
+            font-size: 1.1rem;
+            border: none;
+            font-family: 'Orbitron', sans-serif;
+        }
+        
+        .stButton > button:hover {
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
+            transform: translateY(-2px);
+        }
+        
+        .card {
+            background: rgba(30, 50, 60, 0.8);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.2);
+            margin-bottom: 2rem;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .menu-item {
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 0.5rem 0;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-size: 1rem;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
+        }
+        
+        /* CUSTOM CSS FILE UPLOADER */
+        .stFileUploader > div:first-child > div:first-child {
+            background-color: rgba(30, 50, 60, 0.6);
+            border: 3px dashed #00d4ff; 
+            border-radius: 20px; 
+            padding: 2rem 1.5rem; 
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); 
+            transition: all 0.3s ease;
+        }
+        
+        .stFileUploader > div:first-child > div:first-child:hover {
+            border: 3px dashed #00ffff;
+            background-color: rgba(0, 212, 255, 0.1);
+        }
+        
+        .recommendation-alert {
+            padding: 1.5rem;
+            border: 3px solid #ffd700; 
+            border-radius: 15px;
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); 
+            text-align: center;
+            margin-top: 1.5rem;
+            box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+        }
 
-            .recommendation-alert p {
-                margin: 0;
-                color: #ffd700 !important; 
-                font-size: 1.25rem;
-                font-weight: 600;
-            }
-            
-            .footer {
-                text-align: center;
-                padding: 2rem;
-                color: #78909c !important;
-                font-size: 0.9rem;
-            }
-            
-            @keyframes blink {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.3; }
-            }
-            
-            .success-blink {
-                animation: blink 0.8s ease-in-out 3;
-                padding: 1rem;
-                border-radius: 10px;
-                background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
-                border: 2px solid #00d4ff;
-                text-align: center;
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: #00ffaa !important;
-                margin-top: 1rem;
-            }
-            
-            .orbs-container {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 9999;
-                overflow: hidden;
-            }
-            
-            .orb {
-                position: absolute;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 145, 234, 0.4));
-                box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
-                animation: fall linear forwards;
+        .recommendation-alert p {
+            margin: 0;
+            color: #ffd700 !important; 
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: #78909c !important;
+            font-size: 0.9rem;
+        }
+        
+        /* Animasi Blink untuk Success */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .success-blink {
+            animation: blink 0.8s ease-in-out 3;
+            padding: 1rem;
+            border-radius: 10px;
+            background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
+            border: 2px solid #00d4ff;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #00ffaa !important;
+            margin-top: 1rem;
+        }
+        
+        /* Animasi Glowing Orbs */
+        .orbs-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.8), rgba(0, 145, 234, 0.4));
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.5);
+            animation: fall linear forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fall {
+            0% {
                 opacity: 0;
+                transform: translateY(-100px) scale(0);
             }
-            
-            @keyframes fall {
-                0% {
-                    opacity: 0;
-                    transform: translateY(-100px) scale(0);
-                }
-                10% {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                }
-                90% {
-                    opacity: 1;
-                }
-                100% {
-                    opacity: 0;
-                    transform: translateY(100vh) scale(0.5);
-                }
+            10% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
             }
-            
-            .game-iframe {
-                border: 3px solid rgba(0, 212, 255, 0.5);
-                border-radius: 20px;
-                box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+            90% {
+                opacity: 1;
             }
-        </style>
-    """, unsafe_allow_html=True)
-else:
-    # TEMA LIGHT (Pink)
-    st.markdown("""
-        <style>
-            @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
-
-            .stApp {
-                animation: fadeInAnimation ease 0.4s; 
-                animation-iteration-count: 1;
-                animation-fill-mode: forwards;
-            }
-
-            @keyframes fadeInAnimation {
-                0% { opacity: 0; }
-                100% { opacity: 1; }
-            }
-
-            body, .stApp {
-                background: linear-gradient(135deg, #ffd1dc 0%, #ffb3d9 50%, #ff69b4 100%);
-                color: #4a0e4e;
-                font-family: 'Rajdhani', sans-serif;
-                overflow-x: hidden;
-            }
-
-            * {
-                color: #4a0e4e !important;
-            }
-
-            .main-title {
-                text-align: center;
-                font-size: 5rem; 
-                font-weight: 900;
-                font-family: 'Orbitron', sans-serif;
-                color: #ff1493 !important;
-                text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.6); 
-                margin-top: 1rem;
-                margin-bottom: 0.5rem;
-                animation: glowPink 2s ease-in-out infinite alternate;
-                letter-spacing: 8px; 
-            }
-            
-            @keyframes glowPink {
-                from { text-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.6); }
-                to { text-shadow: 0 0 30px rgba(255, 20, 147, 1), 0 0 60px rgba(255, 20, 147, 0.8); }
-            }
-            
-            .subtitle {
-                text-align: center;
-                color: #8b008b !important;
-                font-size: 1.5rem;
-                margin-bottom: 2rem;
-                font-style: italic;
-            }
-            
-            .section-title {
-                font-size: 2.5rem;
-                font-weight: 700;
-                color: #ff1493 !important;
-                text-shadow: 0 0 10px rgba(255, 20, 147, 0.6);
-                margin-top: 2rem;
-                text-align: center;
-                font-family: 'Orbitron', sans-serif;
-            }
-            
-            .stButton > button {
-                background: linear-gradient(45deg, #ff1493, #ff69b4);
-                color: #fff !important;
-                border-radius: 25px !important;
-                font-weight: 600 !important;
-                padding: 1rem 2rem !important;
-                box-shadow: 0 0 20px rgba(255, 20, 147, 0.5);
-                transition: all 0.4s ease;
-                font-size: 1.1rem;
-                border: none;
-                font-family: 'Orbitron', sans-serif;
-            }
-            
-            .stButton > button:hover {
-                box-shadow: 0 0 30px rgba(255, 20, 147, 0.8);
-                transform: translateY(-2px);
-            }
-            
-            .card {
-                background: rgba(255, 255, 255, 0.9);
-                border-radius: 20px;
-                padding: 2rem;
-                box-shadow: 0 8px 32px rgba(255, 20, 147, 0.2);
-                margin-bottom: 2rem;
-                border: 2px solid rgba(255, 20, 147, 0.3);
-                backdrop-filter: blur(10px);
-            }
-            
-            .menu-item {
-                background: linear-gradient(135deg, rgba(255, 20, 147, 0.1), rgba(255, 105, 180, 0.1));
-                border-radius: 15px;
-                padding: 1.5rem;
-                margin: 0.5rem 0;
-                text-align: center;
-                font-weight: 600;
-                box-shadow: 0 4px 15px rgba(255, 20, 147, 0.2);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-                font-size: 1rem;
-                border: 1px solid rgba(255, 20, 147, 0.3);
-            }
-            
-            .menu-item:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 6px 20px rgba(255, 20, 147, 0.4);
-            }
-            
-            .stFileUploader > div:first-child > div:first-child {
-                background-color: rgba(255, 255, 255, 0.6);
-                border: 3px dashed #ff1493; 
-                border-radius: 20px; 
-                padding: 2rem 1.5rem; 
-                box-shadow: 0 4px 15px rgba(255, 20, 147, 0.2); 
-                transition: all 0.3s ease;
-            }
-            
-            .stFileUploader > div:first-child > div:first-child:hover {
-                border: 3px dashed #ff69b4;
-                background-color: rgba(255, 20, 147, 0.1);
-            }
-            
-            .recommendation-alert {
-                padding: 1.5rem;
-                border: 3px solid #ff1493; 
-                border-radius: 15px;
-                background: linear-gradient(45deg, rgba(255, 20, 147, 0.1), rgba(255, 105, 180, 0.1)); 
-                text-align: center;
-                margin-top: 1.5rem;
-                box-shadow: 0 4px 12px rgba(255, 20, 147, 0.3);
-            }
-
-            .recommendation-alert p {
-                margin: 0;
-                color: #ff1493 !important; 
-                font-size: 1.25rem;
-                font-weight: 600;
-            }
-            
-            .footer {
-                text-align: center;
-                padding: 2rem;
-                color: #8b008b !important;
-                font-size: 0.9rem;
-            }
-            
-            @keyframes blink {
-                0%, 100% { opacity: 1; }
-                50% { opacity: 0.3; }
-            }
-            
-            .success-blink {
-                animation: blink 0.8s ease-in-out 3;
-                padding: 1rem;
-                border-radius: 10px;
-                background: linear-gradient(45deg, rgba(255, 20, 147, 0.2), rgba(255, 105, 180, 0.2));
-                border: 2px solid #ff1493;
-                text-align: center;
-                font-size: 1.2rem;
-                font-weight: bold;
-                color: #ff1493 !important;
-                margin-top: 1rem;
-            }
-            
-            .orbs-container {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                pointer-events: none;
-                z-index: 9999;
-                overflow: hidden;
-            }
-            
-            .orb {
-                position: absolute;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(255, 20, 147, 0.8), rgba(255, 105, 180, 0.4));
-                box-shadow: 0 0 20px rgba(255, 20, 147, 0.8), 0 0 40px rgba(255, 20, 147, 0.5);
-                animation: fall linear forwards;
+            100% {
                 opacity: 0;
+                transform: translateY(100vh) scale(0.5);
             }
-            
-            @keyframes fall {
-                0% {
-                    opacity: 0;
-                    transform: translateY(-100px) scale(0);
-                }
-                10% {
-                    opacity: 1;
-                    transform: translateY(0) scale(1);
-                }
-                90% {
-                    opacity: 1;
-                }
-                100% {
-                    opacity: 0;
-                    transform: translateY(100vh) scale(0.5);
-                }
-            }
-            
-            .game-iframe {
-                border: 3px solid rgba(255, 20, 147, 0.5);
-                border-radius: 20px;
-                box-shadow: 0 8px 32px rgba(255, 20, 147, 0.3);
-            }
-        </style>
-    """, unsafe_allow_html=True)
+        }
+        
+        /* Style untuk iframe */
+        .game-iframe {
+            border: 3px solid rgba(0, 212, 255, 0.5);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # ========================== HEADER ==========================
-# Theme Toggle Button
-col_header1, col_header2, col_header3 = st.columns([1, 3, 1])
-
-with col_header3:
-    if st.session_state['theme_mode'] == 'dark':
-        if st.button("🌸 Light Mode", key="theme_toggle", use_container_width=True):
-            st.session_state['theme_mode'] = 'light'
-            st.rerun()
-    else:
-        if st.button("🌙 Dark Mode", key="theme_toggle", use_container_width=True):
-            st.session_state['theme_mode'] = 'dark'
-            st.rerun()
-
 st.markdown("<h1 class='main-title'>AI VISION</h1>", unsafe_allow_html=True)
 st.markdown("<p class='subtitle'>Deteksi Masker Wajah & Klasifikasi Gesture Tangan dengan Kecerdasan Buatan</p>", unsafe_allow_html=True)
-st.markdown("---")Kecerdasan Buatan</p>", unsafe_allow_html=True)
 st.markdown("---")
 
 # ========================== INITIALIZE SESSION STATE ==========================
@@ -472,10 +249,6 @@ if 'last_yolo_uploader' not in st.session_state:
     st.session_state['last_yolo_uploader'] = None
 if 'last_classify_uploader' not in st.session_state:
     st.session_state['last_classify_uploader'] = None
-
-# Dark/Light Mode State
-if 'theme_mode' not in st.session_state:
-    st.session_state['theme_mode'] = 'dark'  # default dark
 
 # ========================== UTILITY FUNCTIONS (Load Models) ==========================
 @st.cache_resource
@@ -723,215 +496,112 @@ with tabs[2]:
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
-# ----------------- GAME ROCK PAPER SCISSORS (REDIRECT) -----------------
+# ----------------- GAME ROCK PAPER SCISSORS (IFRAME) -----------------
 with tabs[3]:
     st.markdown("<h2 class='section-title'>🎮 Rock Paper Scissors Game</h2>", unsafe_allow_html=True)
-    
     st.markdown("""
-    <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); border-color: #00d4ff; text-align: center; padding: 3rem;'>
-        <p style='font-size: 3rem; margin: 0;'>🎮</p>
-        <p style='font-size: 2rem; margin: 1rem 0; color: #00d4ff; font-weight: bold;'>Main Batu Gunting Kertas Online!</p>
-        <p style='font-size: 1.2rem; margin: 1rem 0;'>Klik tombol di bawah untuk mulai bermain</p>
-        <br>
-        <a href='https://bloob.io/id/rps' target='_blank' style='text-decoration: none;'>
-            <button style='
-                background: linear-gradient(45deg, #00d4ff, #0091ea);
-                color: #fff;
-                border: none;
-                border-radius: 25px;
-                font-weight: 600;
-                padding: 1.5rem 3rem;
-                font-size: 1.3rem;
-                box-shadow: 0 0 30px rgba(0, 212, 255, 0.6);
-                cursor: pointer;
-                font-family: Orbitron, sans-serif;
-                transition: all 0.3s ease;
-            '
-            onmouseover='this.style.boxShadow="0 0 40px rgba(0, 212, 255, 0.9)"; this.style.transform="translateY(-3px)"'
-            onmouseout='this.style.boxShadow="0 0 30px rgba(0, 212, 255, 0.6)"; this.style.transform="translateY(0)"'
-            >
-                🚀 MAIN SEKARANG!
-            </button>
-        </a>
-        <br><br>
-        <p style='font-size: 0.9rem; color: #78909c; margin-top: 2rem;'>Game akan dibuka di tab baru</p>
+    <div class='card'>
+        <p style='text-align: center;'>Main <span style='font-weight: bold; color: #00d4ff;'>Batu-Gunting-Kertas</span> online! Game interaktif langsung di browser.</p>
+        <p style='text-align: center; font-size: 0.9rem; color: #78909c;'>Powered by <a href='https://bloob.io/id/rps' target='_blank' style='color: #00d4ff; text-decoration: none;'>bloob.io</a></p>
     </div>
+    """, unsafe_allow_html=True)
+    
+    # Embed game menggunakan iframe
+    st.markdown("""
+    <iframe src="https://bloob.io/id/rps" 
+            width="100%" 
+            height="800" 
+            class="game-iframe"
+            frameborder="0" 
+            scrolling="auto"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+    </iframe>
     """, unsafe_allow_html=True)
     
     st.markdown("<br>", unsafe_allow_html=True)
-    
-    # Info tambahan
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2rem;'>✊</p>
-            <p style='font-weight: bold;'>BATU</p>
-            <p style='font-size: 0.9rem;'>Mengalahkan Gunting</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col2:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2rem;'>✋</p>
-            <p style='font-weight: bold;'>KERTAS</p>
-            <p style='font-size: 0.9rem;'>Mengalahkan Batu</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col3:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2rem;'>✌</p>
-            <p style='font-weight: bold;'>GUNTING</p>
-            <p style='font-size: 0.9rem;'>Mengalahkan Kertas</p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.info("💡 **Tips:** Mainkan langsung di jendela game di atas! Klik pilihan Rock, Paper, atau Scissors untuk bermain.")
 
-# ----------------- KEAHLIAN MU -----------------
+# ----------------- REKOMENDASI -----------------
 with tabs[4]:
     clear_inactive_results(4)
-    st.markdown("<h2 class='section-title'>Keahlian AI Vision 🎯</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 class='section-title'>Rekomendasi Berdasarkan Gesture 🎯</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center;'>Rekomendasi ini didasarkan pada hasil klasifikasi gesture Anda.</p>", unsafe_allow_html=True)
     
-    st.markdown("""
-    <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); border-color: #00d4ff;'>
-        <p style='font-size: 1.4rem; text-align: center;'>
-            Platform AI Vision menguasai berbagai teknologi <span style='font-weight: bold; color: #00d4ff;'>Computer Vision</span> dan <span style='font-weight: bold; color: #00d4ff;'>Deep Learning</span>
-        </p>
-    </div>
-    """, unsafe_allow_html=True)
+    recommendations = {
+        'rock': {
+            'title': '✊ ROCK - Kekuatan & Ketegasan',
+            'items': [
+                {'nama': 'Action Games', 'deskripsi': 'Game penuh aksi dan tantangan yang membutuhkan ketegasan.', 'kategori': 'Gaming'},
+                {'nama': 'Strength Training', 'deskripsi': 'Program latihan kekuatan untuk membangun otot.', 'kategori': 'Fitness'}
+            ]
+        },
+        'paper': {
+            'title': '✋ PAPER - Fleksibilitas & Kreativitas',
+            'items': [
+                {'nama': 'Creative Writing', 'deskripsi': 'Kursus menulis kreatif untuk mengembangkan imajinasi.', 'kategori': 'Education'},
+                {'nama': 'Digital Art', 'deskripsi': 'Belajar seni digital dan desain grafis.', 'kategori': 'Art'}
+            ]
+        },
+        'scissors': {
+            'title': '✌ SCISSORS - Ketepatan & Strategi',
+            'items': [
+                {'nama': 'Strategy Games', 'deskripsi': 'Game strategi yang melatih pemikiran taktis.', 'kategori': 'Gaming'},
+                {'nama': 'Chess Lessons', 'deskripsi': 'Pelajari strategi catur dari master.', 'kategori': 'Education'}
+            ]
+        }
+    }
     
-    st.markdown("---")
+    col_rec1, col_rec2 = st.columns(2)
     
-    # Keahlian Utama
-    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-size: 2rem; margin-bottom: 2rem;'>🏆 Keahlian Utama</h3>", unsafe_allow_html=True)
+    current_classification = st.session_state.get('classification', 'none')
     
-    col_skill1, col_skill2 = st.columns(2)
-    
-    with col_skill1:
-        st.markdown("""
-        <div class='card' style='background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 200, 100, 0.1)); border-color: rgba(0, 255, 136, 0.3);'>
-            <p style='font-size: 3rem; text-align: center;'>🎯</p>
-            <h3 style='text-align: center; color: #00ff88;'>Object Detection</h3>
-            <p style='font-size: 1rem; text-align: center;'>Mendeteksi objek dalam gambar dengan akurasi tinggi menggunakan YOLO (You Only Look Once)</p>
-            <br>
-            <p style='font-weight: bold; color: #00d4ff;'>📊 Spesialisasi:</p>
-            <ul>
-                <li>Deteksi masker wajah real-time</li>
-                <li>Multi-object detection</li>
-                <li>Bounding box precision</li>
-                <li>Confidence scoring</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col_skill2:
-        st.markdown("""
-        <div class='card' style='background: linear-gradient(135deg, rgba(255, 82, 82, 0.1), rgba(255, 23, 68, 0.1)); border-color: rgba(255, 82, 82, 0.3);'>
-            <p style='font-size: 3rem; text-align: center;'>🤖</p>
-            <h3 style='text-align: center; color: #ff5252;'>Image Classification</h3>
-            <p style='font-size: 1rem; text-align: center;'>Mengklasifikasikan gambar dengan model Deep Learning berbasis CNN</p>
-            <br>
-            <p style='font-weight: bold; color: #00d4ff;'>📊 Spesialisasi:</p>
-            <ul>
-                <li>Hand gesture recognition (Rock, Paper, Scissors)</li>
-                <li>Feature extraction</li>
-                <li>Transfer learning</li>
-                <li>Model optimization (compressed.h5)</li>
-            </ul>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    # Teknologi yang Dikuasai
-    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-size: 2rem; margin-bottom: 2rem;'>💻 Stack Teknologi</h3>", unsafe_allow_html=True)
-    
-    col_tech1, col_tech2, col_tech3 = st.columns(3)
-    
-    with col_tech1:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2.5rem;'>🐍</p>
-            <p style='font-weight: bold; color: #00d4ff;'>Python</p>
-            <p style='font-size: 0.9rem;'>Core programming language</p>
+    if current_classification in recommendations:
+        rec_data = recommendations[current_classification]
+        
+        st.markdown(f"""
+        <div class='card' style='background: linear-gradient(45deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); border-color: #00d4ff;'>
+            <p style='font-size: 1.8rem; text-align: center; color: #00d4ff; font-weight: bold;'>{rec_data['title']}</p>
+            <p style='font-size: 1.1rem; text-align: center;'>Berdasarkan gesture Anda, kami merekomendasikan:</p>
         </div>
         """, unsafe_allow_html=True)
         
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2.5rem;'>🧠</p>
-            <p style='font-weight: bold; color: #00d4ff;'>TensorFlow/Keras</p>
-            <p style='font-size: 0.9rem;'>Deep learning framework</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col_tech2:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2.5rem;'>👁️</p>
-            <p style='font-weight: bold; color: #00d4ff;'>YOLO</p>
-            <p style='font-size: 0.9rem;'>Real-time object detection</p>
-        </div>
-        """, unsafe_allow_html=True)
+        with col_rec1:
+            st.markdown("### 🎮 Rekomendasi Utama")
+            for item in rec_data['items']:
+                st.markdown(f"""
+                <div class='menu-item'>
+                    <span style='font-weight: bold; color: #00d4ff;'>{item['nama']}</span>
+                    <br>
+                    <span style='font-size: 0.85rem; color: #ffd700;'>[{item['kategori']}]</span>
+                    <br>
+                    <span style='font-size: 0.9rem;'>{item['deskripsi']}</span>
+                </div>
+                """, unsafe_allow_html=True)
         
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2.5rem;'>🖼️</p>
-            <p style='font-weight: bold; color: #00d4ff;'>OpenCV</p>
-            <p style='font-size: 0.9rem;'>Computer vision library</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col_tech3:
-        st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2.5rem;'>⚡</p>
-            <p style='font-weight: bold; color: #00d4ff;'>Streamlit</p>
-            <p style='font-size: 0.9rem;'>Web app framework</p>
-        </div>
-        """, unsafe_allow_html=True)
+        with col_rec2:
+            st.markdown("### 💡 Tips & Saran")
+            tips = {
+                'rock': ['Fokus pada kekuatan mental', 'Bangun ketahanan', 'Latih konsistensi'],
+                'paper': ['Eksplorasi ide baru', 'Berpikir out of the box', 'Fleksibel dalam pendekatan'],
+                'scissors': ['Rencanakan strategi', 'Analisa sebelum bertindak', 'Fokus pada detail']
+            }
+            
+            for tip in tips.get(current_classification, []):
+                st.markdown(f"""
+                <div class='menu-item'>
+                    <span style='font-size: 1rem;'>💡 {tip}</span>
+                </div>
+                """, unsafe_allow_html=True)
         
+    else:
         st.markdown("""
-        <div class='menu-item'>
-            <p style='font-size: 2.5rem;'>🔢</p>
-            <p style='font-weight: bold; color: #00d4ff;'>NumPy</p>
-            <p style='font-size: 0.9rem;'>Numerical computing</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    st.markdown("---")
-    
-    # Pencapaian
-    st.markdown("<h3 style='text-align: center; color: #00d4ff; font-size: 2rem; margin-bottom: 2rem;'>🌟 Pencapaian</h3>", unsafe_allow_html=True)
-    
-    col_ach1, col_ach2, col_ach3 = st.columns(3)
-    
-    with col_ach1:
-        st.markdown("""
-        <div class='card' style='background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 215, 0, 0.3); text-align: center;'>
-            <p style='font-size: 3rem; margin: 0;'>🏆</p>
-            <p style='font-size: 2.5rem; margin: 0.5rem 0; color: #ffd700; font-weight: bold;'>95%+</p>
-            <p style='font-size: 1rem;'>Akurasi Klasifikasi</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col_ach2:
-        st.markdown("""
-        <div class='card' style='background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 215, 0, 0.3); text-align: center;'>
-            <p style='font-size: 3rem; margin: 0;'>⚡</p>
-            <p style='font-size: 2.5rem; margin: 0.5rem 0; color: #ffd700; font-weight: bold;'>&lt;1s</p>
-            <p style='font-size: 1rem;'>Response Time</p>
-        </div>
-        """, unsafe_allow_html=True)
-    
-    with col_ach3:
-        st.markdown("""
-        <div class='card' style='background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); border-color: rgba(255, 215, 0, 0.3); text-align: center;'>
-            <p style='font-size: 3rem; margin: 0;'>🎯</p>
-            <p style='font-size: 2.5rem; margin: 0.5rem 0; color: #ffd700; font-weight: bold;'>2+</p>
-            <p style='font-size: 1rem;'>AI Models</p>
+        <div class='recommendation-alert'>
+            <p>
+                <span style='font-size: 2rem;'>✊✋✌</span>
+                <br>
+                <span style='font-weight: bold;'>Silakan lakukan Klasifikasi Gesture terlebih dahulu</span> untuk mendapatkan rekomendasi personal.
+            </p>
         </div>
         """, unsafe_allow_html=True)
 

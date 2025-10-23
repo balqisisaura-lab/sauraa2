@@ -219,13 +219,6 @@ st.markdown("""
                 transform: translateY(100vh) scale(0.5);
             }
         }
-        
-        /* Style untuk iframe */
-        .game-iframe {
-            border: 3px solid rgba(0, 212, 255, 0.5);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 212, 255, 0.3);
-        }
     </style>
 """, unsafe_allow_html=True)
 
@@ -281,7 +274,7 @@ def clear_inactive_results(current_tab_index):
             st.session_state['classification_image_input'] = None
 
 # ========================== HORIZONTAL NAVIGATION (Tabs at Top) ==========================
-tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎮 Game RPS", "🎯 Keahlian Mu", "📞 Kontak", "ℹ Tentang"])
+tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎯 Rekomendasi", "📞 Kontak", "ℹ Tentang"])
 
 # ========================== MAIN CONTENT BASED ON TABS ==========================
 
@@ -371,25 +364,6 @@ with tabs[1]:
                             result_img_rgb = Image.fromarray(result_img[..., ::-1])
                             
                             st.session_state['detection_result_img'] = result_img_rgb
-                            
-                            # Animasi Glowing Orbs
-                            st.markdown("""
-                            <div class='orbs-container' id='orbs-detection'></div>
-                            <script>
-                                const container = document.getElementById('orbs-detection');
-                                for(let i = 0; i < 25; i++) {
-                                    const orb = document.createElement('div');
-                                    orb.className = 'orb';
-                                    orb.style.left = Math.random() * 100 + '%';
-                                    orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
-                                    orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                                    orb.style.animationDelay = (Math.random() * 0.5) + 's';
-                                    container.appendChild(orb);
-                                }
-                                setTimeout(() => container.remove(), 4000);
-                            </script>
-                            """, unsafe_allow_html=True)
-                            
                             st.markdown("<div class='success-blink'>✅ DETEKSI BERHASIL!</div>", unsafe_allow_html=True)
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
@@ -428,7 +402,11 @@ with tabs[2]:
 
             if uploaded_file_class:
                 image_pil = Image.open(uploaded_file_class)
+                
+                # Convert ke RGB (3 channel)
                 image_rgb = image_pil.convert('RGB')
+                
+                # Resize ke 128x128 sesuai yang diharapkan model
                 image_class_resized = image_rgb.resize((128, 128))
                 
                 st.session_state['classification_image_input'] = image_class_resized
@@ -438,34 +416,30 @@ with tabs[2]:
                     with st.spinner("⏳ Mengklasifikasikan gesture dengan AI..."):
                         try:
                             img_array = np.array(image_class_resized)
+                            
+                            # Normalisasi pixel values ke [0, 1]
                             img_array = img_array / 255.0
+                            
+                            # Expand dimensions untuk batch (1, 128, 128, 3)
                             preprocessed_img = np.expand_dims(img_array, axis=0)
+                            
+                            # Prediksi
                             predictions = classification_model.predict(preprocessed_img)
+                            
+                            # Class names untuk Rock Paper Scissors
                             class_names = ['Rock', 'Paper', 'Scissors']
+                            
+                            # Dapatkan index dengan confidence tertinggi
                             predicted_class_idx = np.argmax(predictions[0])
                             confidence = predictions[0][predicted_class_idx] * 100
+                            
                             final_result = class_names[predicted_class_idx]
                             
+                            # Simpan ke session state
                             st.session_state['classification_final_result'] = final_result
                             st.session_state['classification'] = final_result.lower()
                             
-                            st.markdown("""
-                            <div class='orbs-container' id='orbs-classification'></div>
-                            <script>
-                                const container = document.getElementById('orbs-classification');
-                                for(let i = 0; i < 25; i++) {
-                                    const orb = document.createElement('div');
-                                    orb.className = 'orb';
-                                    orb.style.left = Math.random() * 100 + '%';
-                                    orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
-                                    orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                                    orb.style.animationDelay = (Math.random() * 0.5) + 's';
-                                    container.appendChild(orb);
-                                }
-                                setTimeout(() => container.remove(), 4000);
-                            </script>
-                            """, unsafe_allow_html=True)
-                            
+                            # Notifikasi sukses dengan animasi blink
                             st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)
                             
                         except Exception as e:
@@ -477,6 +451,7 @@ with tabs[2]:
                 
                 st.markdown("### 🎯 Hasil Klasifikasi AI")
                 
+                # Icon untuk setiap gesture
                 gesture_icons = {
                     'Rock': '✊',
                     'Paper': '✋',
@@ -496,35 +471,9 @@ with tabs[2]:
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
-# ----------------- GAME ROCK PAPER SCISSORS (IFRAME) -----------------
-with tabs[3]:
-    st.markdown("<h2 class='section-title'>🎮 Rock Paper Scissors Game</h2>", unsafe_allow_html=True)
-    st.markdown("""
-    <div class='card'>
-        <p style='text-align: center;'>Main <span style='font-weight: bold; color: #00d4ff;'>Batu-Gunting-Kertas</span> online! Game interaktif langsung di browser.</p>
-        <p style='text-align: center; font-size: 0.9rem; color: #78909c;'>Powered by <a href='https://bloob.io/id/rps' target='_blank' style='color: #00d4ff; text-decoration: none;'>bloob.io</a></p>
-    </div>
-    """, unsafe_allow_html=True)
-    
-    # Embed game menggunakan iframe
-    st.markdown("""
-    <iframe src="https://bloob.io/id/rps" 
-            width="100%" 
-            height="800" 
-            class="game-iframe"
-            frameborder="0" 
-            scrolling="auto"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-    </iframe>
-    """, unsafe_allow_html=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.info("💡 **Tips:** Mainkan langsung di jendela game di atas! Klik pilihan Rock, Paper, atau Scissors untuk bermain.")
-
 # ----------------- REKOMENDASI -----------------
-with tabs[4]:
-    clear_inactive_results(4)
+with tabs[3]:
+    clear_inactive_results(3)
     st.markdown("<h2 class='section-title'>Rekomendasi Berdasarkan Gesture 🎯</h2>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center;'>Rekomendasi ini didasarkan pada hasil klasifikasi gesture Anda.</p>", unsafe_allow_html=True)
     
@@ -606,24 +555,24 @@ with tabs[4]:
         """, unsafe_allow_html=True)
 
 # ----------------- KONTAK -----------------
-with tabs[5]:
-    clear_inactive_results(5)
+with tabs[4]:
+    clear_inactive_results(4)
     st.markdown("<h2 class='section-title'>Hubungi Kami 📞</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
         <p style='font-size: 1.2rem; text-align: center;'>Punya pertanyaan atau feedback? Hubungi tim kami!</p>
         <div style='margin-top: 1.5rem;'>
-            <p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> USA</p>
+            <p><span style='font-weight: bold; color: #00d4ff;'>📍 Alamat:</span> Jl. AI Technology No. 42, Tech City</p>
             <p><span style='font-weight: bold; color: #00d4ff;'>📞 Telepon:</span> (021) 555-VISION</p>
             <p><span style='font-weight: bold; color: #00d4ff;'>📧 Email:</span> <a href='mailto:contact@aivision.ai' style='color: #00d4ff !important; text-decoration: none;'>contact@aivision.ai</a></p>
-            <p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online tapi jangan spam</p>
+            <p><span style='font-weight: bold; color: #00d4ff;'>🕒 Support:</span> 24/7 Online</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
 # ----------------- TENTANG -----------------
-with tabs[6]:
-    clear_inactive_results(6)
+with tabs[5]:
+    clear_inactive_results(5)
     st.markdown("<h2 class='section-title'>Tentang AI Vision ℹ</h2>", unsafe_allow_html=True)
     st.markdown("""
     <div class='card'>
@@ -634,7 +583,7 @@ with tabs[6]:
             <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
         </ul>
-        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
+        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balgis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
             <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
         </div>
@@ -643,4 +592,4 @@ with tabs[6]:
 
 # ========================== FOOTER ==========================
 st.markdown("---")
-st.markdown("<p class='footer'>© 2025 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balqis Isaura.</p>", unsafe_allow_html=True)
+st.markdown("<p class='footer'>© 2024 AI Vision. Dibuat dengan 🤖 dan ❤ oleh Balqis Isaura.</p>", unsafe_allow_html=True)

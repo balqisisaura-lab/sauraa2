@@ -574,7 +574,7 @@ with tabs[0]:
         <div class='menu-item'>
             <p style='font-size: 3rem;'>✊✋✌</p>
             <span style='font-weight: bold; color: #00d4ff;'>Klasifikasi Gesture</span>
-            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Identifikasi gesture tangan: Rock, Paper, atau Scissors dengan akurasi tinggi.</p>
+            <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Identifikasi gesture tangan: Rock, Paper, atau Scissors.</p>
         </div>
         """, unsafe_allow_html=True)
 

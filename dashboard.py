@@ -258,6 +258,8 @@ if 'game_result' not in st.session_state:
     st.session_state['game_result'] = None
 if 'last_game_uploader' not in st.session_state:
     st.session_state['last_game_uploader'] = None
+if 'game_player_image' not in st.session_state:
+    st.session_state['game_player_image'] = None
 
 # ========================== UTILITY FUNCTIONS (Load Models) ==========================
 @st.cache_resource
@@ -445,11 +447,7 @@ with tabs[2]:
 
             if uploaded_file_class:
                 image_pil = Image.open(uploaded_file_class)
-                
-                # Convert ke RGB (3 channel)
                 image_rgb = image_pil.convert('RGB')
-                
-                # Resize ke 128x128 sesuai yang diharapkan model
                 image_class_resized = image_rgb.resize((128, 128))
                 
                 st.session_state['classification_image_input'] = image_class_resized
@@ -459,30 +457,17 @@ with tabs[2]:
                     with st.spinner("⏳ Mengklasifikasikan gesture dengan AI..."):
                         try:
                             img_array = np.array(image_class_resized)
-                            
-                            # Normalisasi pixel values ke [0, 1]
                             img_array = img_array / 255.0
-                            
-                            # Expand dimensions untuk batch (1, 128, 128, 3)
                             preprocessed_img = np.expand_dims(img_array, axis=0)
-                            
-                            # Prediksi
                             predictions = classification_model.predict(preprocessed_img)
-                            
-                            # Class names untuk Rock Paper Scissors
                             class_names = ['Rock', 'Paper', 'Scissors']
-                            
-                            # Dapatkan index dengan confidence tertinggi
                             predicted_class_idx = np.argmax(predictions[0])
                             confidence = predictions[0][predicted_class_idx] * 100
-                            
                             final_result = class_names[predicted_class_idx]
                             
-                            # Simpan ke session state
                             st.session_state['classification_final_result'] = final_result
                             st.session_state['classification'] = final_result.lower()
                             
-                            # Animasi Glowing Orbs
                             st.markdown("""
                             <div class='orbs-container' id='orbs-classification'></div>
                             <script>
@@ -500,7 +485,6 @@ with tabs[2]:
                             </script>
                             """, unsafe_allow_html=True)
                             
-                            # Notifikasi sukses dengan animasi blink
                             st.markdown("<div class='success-blink'>✨ KLASIFIKASI BERHASIL!</div>", unsafe_allow_html=True)
                             
                         except Exception as e:
@@ -512,7 +496,6 @@ with tabs[2]:
                 
                 st.markdown("### 🎯 Hasil Klasifikasi AI")
                 
-                # Icon untuk setiap gesture
                 gesture_icons = {
                     'Rock': '✊',
                     'Paper': '✋',
@@ -532,7 +515,7 @@ with tabs[2]:
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
-# ----------------- GAME ROCK PAPER SCISSORS -----------------
+# ----------------- GAME ROCK PAPER SCISSORS (FIXED) -----------------
 with tabs[3]:
     clear_inactive_results(3)
     st.markdown("<h2 class='section-title'>🎮 Rock Paper Scissors Game</h2>", unsafe_allow_html=True)
@@ -577,105 +560,139 @@ with tabs[3]:
         
         st.markdown("---")
         
-        col_game_input, col_game_vs, col_game_ai = st.columns([2, 1, 2])
-        
-        with col_game_input:
-            st.markdown("### 👤 PLAYER")
-            uploaded_game_file = st.file_uploader("Upload Gesture Kamu", type=["jpg", "jpeg", "png"], key="game_uploader")
+        # Upload Section
+        col_upload_center = st.columns([1, 2, 1])[1]
+        with col_upload_center:
+            uploaded_game_file = st.file_uploader("📸 Upload Gesture Kamu", type=["jpg", "jpeg", "png"], key="game_uploader")
             
             if st.session_state.get('last_game_uploader') != uploaded_game_file:
                 st.session_state['game_player_gesture'] = None
                 st.session_state['game_ai_gesture'] = None
                 st.session_state['game_result'] = None
+                st.session_state['game_player_image'] = None
                 st.session_state['last_game_uploader'] = uploaded_game_file
+        
+        st.markdown("<br>", unsafe_allow_html=True)
+        
+        # Main Game Area
+        col_game_input, col_game_vs, col_game_ai = st.columns([2, 1, 2])
+        
+        with col_game_input:
+            st.markdown("### 👤 PLAYER")
             
             if uploaded_game_file:
                 image_pil = Image.open(uploaded_game_file)
                 image_rgb = image_pil.convert('RGB')
                 image_resized = image_rgb.resize((128, 128))
                 
+                # Simpan image untuk ditampilkan nanti
+                st.session_state['game_player_image'] = image_resized
+                
+                # Tampilkan preview image
                 st.image(image_resized, caption="Gesture Kamu", use_container_width=True)
                 
-                if st.button("⚔️ MAIN!", type="primary", key="play_game_btn"):
-                    with st.spinner("🎲 AI sedang memilih..."):
-                        try:
-                            # Prediksi gesture player
-                            img_array = np.array(image_resized) / 255.0
-                            preprocessed_img = np.expand_dims(img_array, axis=0)
-                            predictions = game_model.predict(preprocessed_img)
-                            class_names = ['Rock', 'Paper', 'Scissors']
-                            predicted_class_idx = np.argmax(predictions[0])
-                            player_gesture = class_names[predicted_class_idx]
-                            
-                            # AI random pilih gesture
-                            ai_gesture = np.random.choice(class_names)
-                            
-                            # Tentukan pemenang
-                            if player_gesture == ai_gesture:
-                                result = "SERI"
-                                st.session_state['game_score_draw'] += 1
-                                result_color = "#ffd700"
-                                result_icon = "🤝"
-                            elif (player_gesture == "Rock" and ai_gesture == "Scissors") or \
-                                 (player_gesture == "Paper" and ai_gesture == "Rock") or \
-                                 (player_gesture == "Scissors" and ai_gesture == "Paper"):
-                                result = "KAMU MENANG"
-                                st.session_state['game_score_win'] += 1
-                                result_color = "#00ff88"
-                                result_icon = "🎉"
-                            else:
-                                result = "AI MENANG"
-                                st.session_state['game_score_lose'] += 1
-                                result_color = "#ff5252"
-                                result_icon = "😢"
-                            
-                            # Simpan hasil
-                            st.session_state['game_player_gesture'] = player_gesture
-                            st.session_state['game_ai_gesture'] = ai_gesture
-                            st.session_state['game_result'] = {
-                                'text': result,
-                                'color': result_color,
-                                'icon': result_icon
-                            }
-                            
-                            # Animasi Glowing Orbs
-                            st.markdown("""
-                            <div class='orbs-container' id='orbs-game'></div>
-                            <script>
-                                const container = document.getElementById('orbs-game');
-                                for(let i = 0; i < 30; i++) {
-                                    const orb = document.createElement('div');
-                                    orb.className = 'orb';
-                                    orb.style.left = Math.random() * 100 + '%';
-                                    orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
-                                    orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
-                                    orb.style.animationDelay = (Math.random() * 0.5) + 's';
-                                    container.appendChild(orb);
+                # Tampilkan hasil klasifikasi jika sudah ada
+                if st.session_state.get('game_player_gesture'):
+                    gesture_icons = {'Rock': '✊', 'Paper': '✋', 'Scissors': '✌'}
+                    player_gesture = st.session_state['game_player_gesture']
+                    icon = gesture_icons.get(player_gesture, '🤖')
+                    
+                    st.markdown(f"""
+                    <div class='card' style='background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 200, 100, 0.2)); margin-top: 1rem; padding: 1.5rem;'>
+                        <p style='font-size: 4rem; margin: 0; text-align: center;'>{icon}</p>
+                        <p style='font-size: 1.8rem; margin: 0.5rem 0 0 0; text-align: center; color: #00ff88 !important; font-weight: bold;'>{player_gesture}</p>
+                    </div>
+                    """, unsafe_allow_html=True)
+                
+                # Tombol Main
+                if not st.session_state.get('game_player_gesture'):
+                    if st.button("⚔️ MAIN!", type="primary", key="play_game_btn", use_container_width=True):
+                        with st.spinner("🎲 AI sedang berpikir..."):
+                            try:
+                                # Prediksi gesture player
+                                img_array = np.array(image_resized) / 255.0
+                                preprocessed_img = np.expand_dims(img_array, axis=0)
+                                predictions = game_model.predict(preprocessed_img)
+                                class_names = ['Rock', 'Paper', 'Scissors']
+                                predicted_class_idx = np.argmax(predictions[0])
+                                player_gesture = class_names[predicted_class_idx]
+                                
+                                # AI random pilih gesture
+                                ai_gesture = np.random.choice(class_names)
+                                
+                                # Tentukan pemenang
+                                if player_gesture == ai_gesture:
+                                    result = "SERI 🤝"
+                                    st.session_state['game_score_draw'] += 1
+                                    result_color = "#ffd700"
+                                    result_icon = "🤝"
+                                elif (player_gesture == "Rock" and ai_gesture == "Scissors") or \
+                                     (player_gesture == "Paper" and ai_gesture == "Rock") or \
+                                     (player_gesture == "Scissors" and ai_gesture == "Paper"):
+                                    result = "KAMU MENANG! 🎉"
+                                    st.session_state['game_score_win'] += 1
+                                    result_color = "#00ff88"
+                                    result_icon = "🎉"
+                                else:
+                                    result = "AI MENANG! 🤖"
+                                    st.session_state['game_score_lose'] += 1
+                                    result_color = "#ff5252"
+                                    result_icon = "😢"
+                                
+                                # Simpan hasil
+                                st.session_state['game_player_gesture'] = player_gesture
+                                st.session_state['game_ai_gesture'] = ai_gesture
+                                st.session_state['game_result'] = {
+                                    'text': result,
+                                    'color': result_color,
+                                    'icon': result_icon
                                 }
-                                setTimeout(() => container.remove(), 4000);
-                            </script>
-                            """, unsafe_allow_html=True)
-                            
-                            st.rerun()
-                            
-                        except Exception as e:
-                            st.error(f"❌ Terjadi kesalahan: {e}")
+                                
+                                # Animasi Glowing Orbs
+                                st.markdown("""
+                                <div class='orbs-container' id='orbs-game'></div>
+                                <script>
+                                    const container = document.getElementById('orbs-game');
+                                    for(let i = 0; i < 30; i++) {
+                                        const orb = document.createElement('div');
+                                        orb.className = 'orb';
+                                        orb.style.left = Math.random() * 100 + '%';
+                                        orb.style.width = orb.style.height = (Math.random() * 15 + 10) + 'px';
+                                        orb.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                                        orb.style.animationDelay = (Math.random() * 0.5) + 's';
+                                        container.appendChild(orb);
+                                    }
+                                    setTimeout(() => container.remove(), 4000);
+                                </script>
+                                """, unsafe_allow_html=True)
+                                
+                                st.rerun()
+                                
+                            except Exception as e:
+                                st.error(f"❌ Terjadi kesalahan: {e}")
+            else:
+                st.markdown("""
+                <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
+                    <p style='font-size: 3rem; margin: 0;'>📸</p>
+                    <p style='font-size: 1.2rem; margin: 1rem 0 0 0; text-align: center;'>Upload gesture untuk mulai bermain</p>
+                </div>
+                """, unsafe_allow_html=True)
         
         with col_game_vs:
-            st.markdown("<br><br>", unsafe_allow_html=True)
+            st.markdown("<br><br><br>", unsafe_allow_html=True)
             if st.session_state.get('game_result'):
                 result_data = st.session_state['game_result']
                 st.markdown(f"""
-                <div style='text-align: center; margin-top: 3rem;'>
-                    <p style='font-size: 3rem;'>{result_data['icon']}</p>
-                    <p style='font-size: 1.5rem; font-weight: bold; color: {result_data['color']} !important;'>{result_data['text']}</p>
+                <div style='text-align: center; margin-top: 2rem;'>
+                    <p style='font-size: 4rem; margin: 0;'>{result_data['icon']}</p>
+                    <p style='font-size: 1.3rem; margin: 0.5rem 0 0 0; font-weight: bold; color: {result_data['color']} !important;'>{result_data['text']}</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown("""
-                <div style='text-align: center; margin-top: 3rem;'>
-                    <p style='font-size: 3rem;'>⚔️</p>
-                    <p style='font-size: 1.2rem; color: #00d4ff !important; font-weight: bold;'>VS</p>
+                <div style='text-align: center; margin-top: 2rem;'>
+                    <p style='font-size: 4rem; margin: 0;'>⚔️</p>
+                    <p style='font-size: 1.5rem; margin: 0.5rem 0 0 0; color: #00d4ff !important; font-weight: bold;'>VS</p>
                 </div>
                 """, unsafe_allow_html=True)
         
@@ -687,24 +704,35 @@ with tabs[3]:
                 icon = gesture_icons.get(ai_gesture, '🤖')
                 
                 st.markdown(f"""
-                <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 145, 234, 0.2)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
+                <div class='card' style='background: linear-gradient(135deg, rgba(255, 82, 82, 0.2), rgba(255, 23, 68, 0.2)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem;'>
                     <p style='font-size: 5rem; margin: 0;'>{icon}</p>
-                    <p style='font-size: 1.8rem; margin: 0; color: #00d4ff !important; font-weight: bold;'>{ai_gesture}</p>
+                    <p style='font-size: 1.8rem; margin: 1rem 0 0 0; color: #ff5252 !important; font-weight: bold;'>{ai_gesture}</p>
                 </div>
                 """, unsafe_allow_html=True)
             else:
                 st.markdown("""
-                <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); min-height: 200px; display: flex; align-items: center; justify-content: center;'>
-                    <p style='font-size: 3rem; margin: 0;'>❓</p>
+                <div class='card' style='background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1)); min-height: 200px; display: flex; align-items: center; justify-content: center; flex-direction: column;'>
+                    <p style='font-size: 4rem; margin: 0;'>❓</p>
+                    <p style='font-size: 1.2rem; margin: 1rem 0 0 0;'>Menunggu...</p>
                 </div>
                 """, unsafe_allow_html=True)
         
         st.markdown("---")
         
-        # Reset button
-        col_reset1, col_reset2, col_reset3 = st.columns([1, 1, 1])
-        with col_reset2:
-            if st.button("🔄 Reset Skor", type="secondary", key="reset_score"):
+        # Action Buttons
+        col_btn1, col_btn2, col_btn3 = st.columns([1, 1, 1])
+        
+        with col_btn1:
+            if st.session_state.get('game_player_gesture'):
+                if st.button("🔄 Main Lagi", type="primary", key="play_again", use_container_width=True):
+                    st.session_state['game_player_gesture'] = None
+                    st.session_state['game_ai_gesture'] = None
+                    st.session_state['game_result'] = None
+                    st.session_state['last_game_uploader'] = None
+                    st.rerun()
+        
+        with col_btn3:
+            if st.button("🔄 Reset Skor", type="secondary", key="reset_score", use_container_width=True):
                 st.session_state['game_score_win'] = 0
                 st.session_state['game_score_lose'] = 0
                 st.session_state['game_score_draw'] = 0
@@ -828,7 +856,7 @@ with tabs[6]:
             <li><span style='font-weight: bold; color: #00d4ff;'>Deep Learning (H5 Model):</span> Untuk klasifikasi gesture tangan (Rock, Paper, Scissors)</li>
             <li><span style='font-weight: bold; color: #00d4ff;'>Streamlit:</span> Framework untuk antarmuka web yang interaktif</li>
         </ul>
-        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balgis Isaura</span></p>
+        <p style='margin-top: 1.5rem;'>Dikembangkan oleh <span style='font-weight: bold; color: #00d4ff;'>Balqis Isaura</span></p>
         <div style='text-align: center; margin-top: 2rem;'>
             <p style='font-style: italic; color: #00d4ff;'>#ComputerVision #AI #MachineLearning</p>
         </div>

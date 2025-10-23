@@ -3,7 +3,7 @@ from ultralytics import YOLO
 import tensorflow as tf
 from PIL import Image
 import numpy as np
-import os 
+import os
 from io import BytesIO
 
 # ========================== CONFIG PAGE ==========================
@@ -18,11 +18,13 @@ st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-        /* === Efek Transisi Fade-In Global === */
+        /* === GLOBAL FADE-IN EFFECT === */
         .stApp {
-            animation: fadeInAnimation ease 0.4s; 
+            animation: fadeInAnimation ease 0.6s;
             animation-iteration-count: 1;
             animation-fill-mode: forwards;
+            position: relative;
+            overflow: hidden;
         }
 
         @keyframes fadeInAnimation {
@@ -30,6 +32,28 @@ st.markdown("""
             100% { opacity: 1; }
         }
 
+        /* === BACKGROUND ANIMATION === */
+        .stApp::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-image: url("images/e503f2e2-f7ef-4d7d-8b60-0910d68f1e57.png");
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+            opacity: 0.25;
+            animation: moveBackground 25s ease-in-out infinite alternate;
+            filter: brightness(1.2) saturate(1.3);
+        }
+
+        @keyframes moveBackground {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 100%; }
+        }
+
+        /* === BASE THEME === */
         body, .stApp {
             background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             color: #e0e0e0;
@@ -41,24 +65,25 @@ st.markdown("""
             color: #e0e0e0 !important;
         }
 
+        /* === TITLE === */
         .main-title {
             text-align: center;
             font-size: 5rem; 
             font-weight: 900;
             font-family: 'Orbitron', sans-serif;
             color: #00d4ff !important;
-            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); 
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6);
             margin-top: 1rem;
             margin-bottom: 0.5rem;
             animation: glow 2s ease-in-out infinite alternate;
-            letter-spacing: 8px; 
+            letter-spacing: 8px;
         }
-        
+
         @keyframes glow {
             from { text-shadow: 0 0 20px rgba(0, 212, 255, 0.8), 0 0 40px rgba(0, 212, 255, 0.6); }
-            to { text-shadow: 0 0 30px rgba(0, 212, 255, 1), 0 0 60px rgba(0, 212, 255, 0.8); }
+            to { text-shadow: 0 0 35px rgba(0, 212, 255, 1), 0 0 70px rgba(0, 212, 255, 0.9); }
         }
-        
+
         .subtitle {
             text-align: center;
             color: #b0bec5 !important;
@@ -66,7 +91,8 @@ st.markdown("""
             margin-bottom: 2rem;
             font-style: italic;
         }
-        
+
+        /* === SECTION TITLES === */
         .section-title {
             font-size: 2.5rem;
             font-weight: 700;
@@ -76,7 +102,8 @@ st.markdown("""
             text-align: center;
             font-family: 'Orbitron', sans-serif;
         }
-        
+
+        /* === BUTTONS === */
         .stButton > button {
             background: linear-gradient(45deg, #00d4ff, #0091ea);
             color: #fff !important;
@@ -89,12 +116,13 @@ st.markdown("""
             border: none;
             font-family: 'Orbitron', sans-serif;
         }
-        
+
         .stButton > button:hover {
             box-shadow: 0 0 30px rgba(0, 212, 255, 0.8);
             transform: translateY(-2px);
         }
-        
+
+        /* === CARDS === */
         .card {
             background: rgba(30, 50, 60, 0.8);
             border-radius: 20px;
@@ -104,7 +132,8 @@ st.markdown("""
             border: 2px solid rgba(0, 212, 255, 0.3);
             backdrop-filter: blur(10px);
         }
-        
+
+        /* === MENU ITEMS === */
         .menu-item {
             background: linear-gradient(135deg, rgba(0, 212, 255, 0.1), rgba(0, 145, 234, 0.1));
             border-radius: 15px;
@@ -117,32 +146,33 @@ st.markdown("""
             font-size: 1rem;
             border: 1px solid rgba(0, 212, 255, 0.3);
         }
-        
+
         .menu-item:hover {
             transform: translateY(-5px);
             box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
         }
-        
-        /* CUSTOM CSS FILE UPLOADER */
+
+        /* === FILE UPLOADER === */
         .stFileUploader > div:first-child > div:first-child {
             background-color: rgba(30, 50, 60, 0.6);
-            border: 3px dashed #00d4ff; 
-            border-radius: 20px; 
-            padding: 2rem 1.5rem; 
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2); 
+            border: 3px dashed #00d4ff;
+            border-radius: 20px;
+            padding: 2rem 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
             transition: all 0.3s ease;
         }
-        
+
         .stFileUploader > div:first-child > div:first-child:hover {
             border: 3px dashed #00ffff;
             background-color: rgba(0, 212, 255, 0.1);
         }
-        
+
+        /* === RECOMMENDATION ALERT === */
         .recommendation-alert {
             padding: 1.5rem;
-            border: 3px solid #ffd700; 
+            border: 3px solid #ffd700;
             border-radius: 15px;
-            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1)); 
+            background: linear-gradient(45deg, rgba(255, 215, 0, 0.1), rgba(255, 193, 7, 0.1));
             text-align: center;
             margin-top: 1.5rem;
             box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
@@ -150,11 +180,12 @@ st.markdown("""
 
         .recommendation-alert p {
             margin: 0;
-            color: #ffd700 !important; 
+            color: #ffd700 !important;
             font-size: 1.25rem;
             font-weight: 600;
         }
-        
+
+        /* === FOOTER === */
         .footer {
             text-align: center;
             padding: 2rem;
@@ -184,10 +215,6 @@ if 'last_yolo_uploader' not in st.session_state:
     st.session_state['last_yolo_uploader'] = None
 if 'last_classify_uploader' not in st.session_state:
     st.session_state['last_classify_uploader'] = None
-
-# State untuk navigasi
-if 'current_page' not in st.session_state:
-    st.session_state['current_page'] = 'home'
 
 # ========================== UTILITY FUNCTIONS (Load Models) ==========================
 @st.cache_resource
@@ -320,7 +347,7 @@ with tabs[1]:
             else:
                 st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold;'>HASIL DETEKSI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
     else:
-        st.warning(f"⚠️ Model YOLO tidak dapat dimuat dari '{YOLO_MODEL_PATH}'.")
+        st.warning(f"⚠ Model YOLO tidak dapat dimuat dari '{YOLO_MODEL_PATH}'.")
 
 # ----------------- KLASIFIKASI GESTURE -----------------
 with tabs[2]:
@@ -411,7 +438,7 @@ with tabs[2]:
                 
                 icon = gesture_icons.get(final_result, '🤖')
                 
-                st.success(f"{icon} Gesture terdeteksi: **{final_result}**")
+                st.success(f"{icon} Gesture terdeteksi: *{final_result}*")
                 
                 st.markdown("---")
                 st.markdown(f"<p style='font-size: 3rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
@@ -420,7 +447,7 @@ with tabs[2]:
                 st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold;'>HASIL KLASIFIKASI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
 
     else:
-        st.warning(f"⚠️ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
+        st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
 # ----------------- REKOMENDASI -----------------
 with tabs[3]:

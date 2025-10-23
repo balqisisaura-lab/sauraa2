@@ -126,7 +126,7 @@ st.markdown("""
             position: relative;
         }
 
-        /* Animated Background Particles */
+        /* Animated Background Particles - LEBIH KELIATAN */
         .stApp::before {
             content: '';
             position: fixed;
@@ -135,12 +135,16 @@ st.markdown("""
             width: 100%;
             height: 100%;
             background-image: 
-                radial-gradient(2px 2px at 20% 30%, rgba(0, 212, 255, 0.4), transparent),
-                radial-gradient(2px 2px at 60% 70%, rgba(138, 43, 226, 0.4), transparent),
-                radial-gradient(1px 1px at 50% 50%, rgba(0, 212, 255, 0.3), transparent),
-                radial-gradient(1px 1px at 80% 10%, rgba(255, 0, 255, 0.3), transparent),
-                radial-gradient(2px 2px at 90% 60%, rgba(0, 212, 255, 0.4), transparent),
-                radial-gradient(1px 1px at 33% 80%, rgba(138, 43, 226, 0.3), transparent);
+                radial-gradient(4px 4px at 20% 30%, rgba(0, 212, 255, 0.9), transparent),
+                radial-gradient(3px 3px at 60% 70%, rgba(138, 43, 226, 0.8), transparent),
+                radial-gradient(5px 5px at 50% 50%, rgba(0, 212, 255, 0.7), transparent),
+                radial-gradient(3px 3px at 80% 10%, rgba(255, 0, 255, 0.8), transparent),
+                radial-gradient(4px 4px at 90% 60%, rgba(0, 212, 255, 0.9), transparent),
+                radial-gradient(3px 3px at 33% 80%, rgba(138, 43, 226, 0.7), transparent),
+                radial-gradient(5px 5px at 15% 15%, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(4px 4px at 75% 85%, rgba(0, 212, 255, 0.8), transparent),
+                radial-gradient(3px 3px at 45% 25%, rgba(255, 0, 255, 0.7), transparent),
+                radial-gradient(5px 5px at 85% 45%, rgba(138, 43, 226, 0.9), transparent);
             background-size: 200% 200%;
             animation: particleFloat 20s ease-in-out infinite;
             pointer-events: none;
@@ -149,24 +153,24 @@ st.markdown("""
 
         @keyframes particleFloat {
             0%, 100% { 
-                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%, 33% 80%;
+                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%, 33% 80%, 15% 15%, 75% 85%, 45% 25%, 85% 45%;
                 opacity: 1;
             }
             25% { 
-                background-position: 100% 50%, 0% 50%, 25% 75%, 60% 30%, 70% 80%, 50% 60%;
-                opacity: 0.8;
+                background-position: 100% 50%, 0% 50%, 25% 75%, 60% 30%, 70% 80%, 50% 60%, 40% 40%, 60% 70%, 30% 50%, 70% 30%;
+                opacity: 0.9;
             }
             50% { 
-                background-position: 50% 100%, 50% 0%, 75% 25%, 40% 50%, 50% 40%, 70% 40%;
+                background-position: 50% 100%, 50% 0%, 75% 25%, 40% 50%, 50% 40%, 70% 40%, 80% 80%, 30% 30%, 60% 70%, 40% 60%;
                 opacity: 1;
             }
             75% { 
-                background-position: 0% 50%, 100% 50%, 60% 60%, 20% 70%, 30% 20%, 40% 70%;
-                opacity: 0.8;
+                background-position: 0% 50%, 100% 50%, 60% 60%, 20% 70%, 30% 20%, 40% 70%, 20% 60%, 80% 50%, 50% 40%, 60% 80%;
+                opacity: 0.9;
             }
         }
 
-        /* Falling Glitter Effect */
+        /* Falling Glitter Effect - LEBIH BESAR & TERANG */
         .stApp::after {
             content: '';
             position: fixed;
@@ -175,21 +179,31 @@ st.markdown("""
             width: 100%;
             height: 150%;
             background-image: 
-                radial-gradient(1px 1px at 10% 10%, rgba(0, 212, 255, 0.6), transparent),
-                radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.4), transparent),
-                radial-gradient(1px 1px at 30% 50%, rgba(0, 212, 255, 0.5), transparent),
-                radial-gradient(1px 1px at 40% 20%, rgba(138, 43, 226, 0.5), transparent),
-                radial-gradient(1px 1px at 50% 40%, rgba(255, 255, 255, 0.3), transparent),
-                radial-gradient(1px 1px at 60% 60%, rgba(0, 212, 255, 0.4), transparent),
-                radial-gradient(1px 1px at 70% 30%, rgba(255, 0, 255, 0.4), transparent),
-                radial-gradient(1px 1px at 80% 50%, rgba(255, 255, 255, 0.5), transparent),
-                radial-gradient(1px 1px at 90% 70%, rgba(0, 212, 255, 0.6), transparent),
-                radial-gradient(1px 1px at 15% 80%, rgba(138, 43, 226, 0.4), transparent);
+                radial-gradient(3px 3px at 10% 10%, rgba(0, 212, 255, 1), transparent),
+                radial-gradient(4px 4px at 20% 30%, rgba(255, 255, 255, 0.9), transparent),
+                radial-gradient(3px 3px at 30% 50%, rgba(0, 212, 255, 0.9), transparent),
+                radial-gradient(5px 5px at 40% 20%, rgba(138, 43, 226, 0.9), transparent),
+                radial-gradient(3px 3px at 50% 40%, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(4px 4px at 60% 60%, rgba(0, 212, 255, 0.9), transparent),
+                radial-gradient(3px 3px at 70% 30%, rgba(255, 0, 255, 0.9), transparent),
+                radial-gradient(5px 5px at 80% 50%, rgba(255, 255, 255, 1), transparent),
+                radial-gradient(4px 4px at 90% 70%, rgba(0, 212, 255, 1), transparent),
+                radial-gradient(3px 3px at 15% 80%, rgba(138, 43, 226, 0.9), transparent),
+                radial-gradient(4px 4px at 25% 60%, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(3px 3px at 35% 40%, rgba(0, 212, 255, 0.9), transparent),
+                radial-gradient(5px 5px at 45% 70%, rgba(255, 0, 255, 0.9), transparent),
+                radial-gradient(3px 3px at 55% 20%, rgba(138, 43, 226, 0.8), transparent),
+                radial-gradient(4px 4px at 65% 80%, rgba(255, 255, 255, 0.9), transparent),
+                radial-gradient(3px 3px at 75% 45%, rgba(0, 212, 255, 1), transparent),
+                radial-gradient(5px 5px at 85% 65%, rgba(255, 0, 255, 0.9), transparent),
+                radial-gradient(4px 4px at 95% 35%, rgba(255, 255, 255, 1), transparent),
+                radial-gradient(3px 3px at 5% 55%, rgba(0, 212, 255, 0.8), transparent),
+                radial-gradient(4px 4px at 12% 25%, rgba(138, 43, 226, 0.9), transparent);
             background-size: 100% 100%;
-            animation: glitterFall 15s linear infinite;
+            animation: glitterFall 12s linear infinite;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.6;
+            opacity: 1;
         }
 
         @keyframes glitterFall {
@@ -205,15 +219,15 @@ st.markdown("""
         @keyframes floatOrb {
             0%, 100% {
                 transform: translate(0, 0) scale(1);
-                opacity: 0.3;
+                opacity: 0.6;
             }
             33% {
-                transform: translate(30px, -50px) scale(1.1);
-                opacity: 0.5;
+                transform: translate(30px, -50px) scale(1.2);
+                opacity: 0.8;
             }
             66% {
                 transform: translate(-20px, -30px) scale(0.9);
-                opacity: 0.4;
+                opacity: 0.7;
             }
         }
 

@@ -123,6 +123,104 @@ st.markdown("""
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background Particles */
+        .stApp::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, rgba(0, 212, 255, 0.4), transparent),
+                radial-gradient(2px 2px at 60% 70%, rgba(138, 43, 226, 0.4), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(0, 212, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 80% 10%, rgba(255, 0, 255, 0.3), transparent),
+                radial-gradient(2px 2px at 90% 60%, rgba(0, 212, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 33% 80%, rgba(138, 43, 226, 0.3), transparent);
+            background-size: 200% 200%;
+            animation: particleFloat 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes particleFloat {
+            0%, 100% { 
+                background-position: 0% 0%, 100% 100%, 50% 50%, 80% 10%, 90% 60%, 33% 80%;
+                opacity: 1;
+            }
+            25% { 
+                background-position: 100% 50%, 0% 50%, 25% 75%, 60% 30%, 70% 80%, 50% 60%;
+                opacity: 0.8;
+            }
+            50% { 
+                background-position: 50% 100%, 50% 0%, 75% 25%, 40% 50%, 50% 40%, 70% 40%;
+                opacity: 1;
+            }
+            75% { 
+                background-position: 0% 50%, 100% 50%, 60% 60%, 20% 70%, 30% 20%, 40% 70%;
+                opacity: 0.8;
+            }
+        }
+
+        /* Falling Glitter Effect */
+        .stApp::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 150%;
+            background-image: 
+                radial-gradient(1px 1px at 10% 10%, rgba(0, 212, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 20% 30%, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 30% 50%, rgba(0, 212, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 40% 20%, rgba(138, 43, 226, 0.5), transparent),
+                radial-gradient(1px 1px at 50% 40%, rgba(255, 255, 255, 0.3), transparent),
+                radial-gradient(1px 1px at 60% 60%, rgba(0, 212, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 70% 30%, rgba(255, 0, 255, 0.4), transparent),
+                radial-gradient(1px 1px at 80% 50%, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 90% 70%, rgba(0, 212, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 15% 80%, rgba(138, 43, 226, 0.4), transparent);
+            background-size: 100% 100%;
+            animation: glitterFall 15s linear infinite;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.6;
+        }
+
+        @keyframes glitterFall {
+            0% {
+                transform: translateY(-50%);
+            }
+            100% {
+                transform: translateY(100%);
+            }
+        }
+
+        /* Floating Orbs */
+        @keyframes floatOrb {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            33% {
+                transform: translate(30px, -50px) scale(1.1);
+                opacity: 0.5;
+            }
+            66% {
+                transform: translate(-20px, -30px) scale(0.9);
+                opacity: 0.4;
+            }
+        }
+
+        /* Make sure content stays above background */
+        .stApp > div {
+            position: relative;
+            z-index: 1;
         }
 
         * {

@@ -18,11 +18,11 @@ st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@600&display=swap');
 
-        /* === Efek Transisi Fade-In Global === */
         .stApp {
             animation: fadeInAnimation ease 0.4s; 
             animation-iteration-count: 1;
             animation-fill-mode: forwards;
+            position: relative;
         }
 
         @keyframes fadeInAnimation {
@@ -35,10 +35,8 @@ st.markdown("""
             color: #e0e0e0;
             font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
-            position: relative;
         }
 
-        /* === Hologram Background Effect === */
         .stApp::before {
             content: '';
             position: fixed;
@@ -71,7 +69,6 @@ st.markdown("""
             100% { transform: translateY(20px); }
         }
 
-        /* === Floating Particles Effect === */
         .stApp::after {
             content: '';
             position: fixed;
@@ -96,7 +93,6 @@ st.markdown("""
             75% { transform: translate(5px, 5px); }
         }
 
-        /* Ensure content stays above effects */
         .main > div {
             position: relative;
             z-index: 1;
@@ -188,7 +184,6 @@ st.markdown("""
             box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
         }
         
-        /* CUSTOM CSS FILE UPLOADER */
         .stFileUploader > div:first-child > div:first-child {
             background-color: rgba(30, 50, 60, 0.6);
             border: 3px dashed #00d4ff; 
@@ -250,7 +245,7 @@ if 'last_yolo_uploader' not in st.session_state:
 if 'last_classify_uploader' not in st.session_state:
     st.session_state['last_classify_uploader'] = None
 
-# ========================== UTILITY FUNCTIONS (Load Models) ==========================
+# ========================== UTILITY FUNCTIONS ==========================
 @st.cache_resource
 def load_yolo_model(path):
     try:
@@ -269,7 +264,7 @@ def load_classification_model(path):
         st.error(f"Gagal memuat model Klasifikasi H5 dari '{path}'. Error: {e}")
         return None
 
-# ========================== KONTROL STATE SAAT BERPINDAH TAB ==========================
+# ========================== KONTROL STATE ==========================
 def clear_inactive_results(current_tab_index):
     if current_tab_index != 1 and st.session_state.get('detection_result_img') is not None:
         st.session_state['detection_result_img'] = None
@@ -280,10 +275,8 @@ def clear_inactive_results(current_tab_index):
         if st.session_state.get('classification_image_input') is not None:
             st.session_state['classification_image_input'] = None
 
-# ========================== HORIZONTAL NAVIGATION (Tabs at Top) ==========================
+# ========================== TABS ==========================
 tabs = st.tabs(["🏠 Beranda", "😷 Deteksi Masker", "✊✋✌ Klasifikasi Gesture", "🎯 Rekomendasi", "📞 Kontak", "ℹ Tentang"])
-
-# ========================== MAIN CONTENT BASED ON TABS ==========================
 
 # ----------------- BERANDA -----------------
 with tabs[0]:
@@ -305,9 +298,9 @@ with tabs[0]:
 
     st.markdown("<h3 style='text-align: center; color: #00d4ff; font-family: Orbitron, sans-serif; font-size: 2rem; margin-bottom: 1.5rem;'>Fitur Utama</h3>", unsafe_allow_html=True)
     
-    col_feat1, col_feat2, col_feat3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
     
-    with col_feat1:
+    with col1:
         st.markdown("""
         <div class='menu-item'>
             <p style='font-size: 3rem;'>😷</p>
@@ -316,7 +309,7 @@ with tabs[0]:
         </div>
         """, unsafe_allow_html=True)
 
-    with col_feat2:
+    with col2:
         st.markdown("""
         <div class='menu-item'>
             <p style='font-size: 3rem;'>✊✋✌</p>
@@ -325,7 +318,7 @@ with tabs[0]:
         </div>
         """, unsafe_allow_html=True)
 
-    with col_feat3:
+    with col3:
         st.markdown("""
         <div class='menu-item'>
             <p style='font-size: 3rem;'>🎯</p>
@@ -333,8 +326,6 @@ with tabs[0]:
             <p style='font-size: 0.9rem; margin-top: 0.5rem;'>Dapatkan saran berdasarkan hasil klasifikasi gesture Anda.</p>
         </div>
         """, unsafe_allow_html=True)
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
 
 # ----------------- DETEKSI MASKER -----------------
 with tabs[1]:
@@ -350,9 +341,9 @@ with tabs[1]:
     yolo_model = load_yolo_model(YOLO_MODEL_PATH)
     
     if yolo_model:
-        col_input_deteksi, col_output_deteksi = st.columns(2) 
+        col_input, col_output = st.columns(2) 
 
-        with col_input_deteksi:
+        with col_input:
             uploaded_file_deteksi = st.file_uploader("Upload Gambar Wajah (.jpg, .jpeg, .png)", type=["jpg", "jpeg", "png"], key="yolo_uploader")
             
             if st.session_state.get('last_yolo_uploader') != uploaded_file_deteksi:
@@ -371,11 +362,11 @@ with tabs[1]:
                             result_img_rgb = Image.fromarray(result_img[..., ::-1])
                             
                             st.session_state['detection_result_img'] = result_img_rgb
-                            st.success("✅ Deteksi berhasil! Hasil telah ditampilkan.")
+                            st.success("✅ Deteksi berhasil!")
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
-        with col_output_deteksi:
+        with col_output:
             if st.session_state.get('detection_result_img') is not None:
                 st.image(st.session_state['detection_result_img'], caption="Hasil Deteksi YOLO", use_container_width=True)
             else:
@@ -397,9 +388,9 @@ with tabs[2]:
     classification_model = load_classification_model(H5_MODEL_PATH)
     
     if classification_model:
-        col_class_input, col_class_output = st.columns(2)
+        col_input, col_output = st.columns(2)
 
-        with col_class_input:
+        with col_input:
             uploaded_file_class = st.file_uploader("Upload Gambar Gesture (.jpg, .jpeg, .png)", type=["jpg", "jpeg", "png"], key="classify_uploader")
 
             if st.session_state.get('last_classify_uploader') != uploaded_file_class:
@@ -409,11 +400,7 @@ with tabs[2]:
 
             if uploaded_file_class:
                 image_pil = Image.open(uploaded_file_class)
-                
-                # Convert ke RGB (3 channel)
                 image_rgb = image_pil.convert('RGB')
-                
-                # Resize ke 128x128 sesuai yang diharapkan model
                 image_class_resized = image_rgb.resize((128, 128))
                 
                 st.session_state['classification_image_input'] = image_class_resized
@@ -423,30 +410,17 @@ with tabs[2]:
                     with st.spinner("⏳ Mengklasifikasikan gesture dengan AI..."):
                         try:
                             img_array = np.array(image_class_resized)
-                            
-                            # Normalisasi pixel values ke [0, 1]
                             img_array = img_array / 255.0
-                            
-                            # Expand dimensions untuk batch (1, 128, 128, 3)
                             preprocessed_img = np.expand_dims(img_array, axis=0)
                             
-                            # Prediksi
                             predictions = classification_model.predict(preprocessed_img)
-                            
-                            # Class names untuk Rock Paper Scissors
                             class_names = ['Rock', 'Paper', 'Scissors']
-                            
-                            # Dapatkan index dengan confidence tertinggi
                             predicted_class_idx = np.argmax(predictions[0])
-                            confidence = predictions[0][predicted_class_idx] * 100
-                            
                             final_result = class_names[predicted_class_idx]
                             
-                            # Simpan ke session state
                             st.session_state['classification_final_result'] = final_result
                             st.session_state['classification'] = final_result.lower()
                             
-                            # Efek visual
                             if final_result == 'Rock':
                                 st.balloons()
                             elif final_result == 'Paper':
@@ -457,29 +431,22 @@ with tabs[2]:
                         except Exception as e:
                             st.error(f"❌ Terjadi kesalahan: {e}")
 
-        with col_class_output:
+        with col_output:
             if st.session_state.get('classification_final_result') is not None:
                 final_result = st.session_state['classification_final_result']
                 
                 st.markdown("### 🎯 Hasil Klasifikasi AI")
                 
-                # Icon untuk setiap gesture
-                gesture_icons = {
-                    'Rock': '✊',
-                    'Paper': '✋',
-                    'Scissors': '✌'
-                }
-                
+                gesture_icons = {'Rock': '✊', 'Paper': '✋', 'Scissors': '✌'}
                 icon = gesture_icons.get(final_result, '🤖')
                 
-                st.success(f"{icon} Gesture terdeteksi: *{final_result}*")
+                st.success(f"{icon} Gesture terdeteksi: **{final_result}**")
                 
                 st.markdown("---")
                 st.markdown(f"<p style='font-size: 3rem; text-align: center;'>{icon}</p>", unsafe_allow_html=True)
                 st.markdown(f"<p style='font-size: 2rem; text-align: center; font-weight: bold; color: #00d4ff;'>{final_result}</p>", unsafe_allow_html=True)
             else:
                 st.markdown("<div style='height: 300px; border: 2px dashed #00d4ff; border-radius: 15px; text-align: center; padding-top: 130px; color: #00d4ff; font-weight: bold;'>HASIL KLASIFIKASI AKAN MUNCUL DI SINI</div>", unsafe_allow_html=True)
-
     else:
         st.warning(f"⚠ Model Klasifikasi tidak dapat dimuat dari '{H5_MODEL_PATH}'.")
 
@@ -513,8 +480,7 @@ with tabs[3]:
         }
     }
     
-    col_rec1, col_rec2 = st.columns(2)
-    
+    col1, col2 = st.columns(2)
     current_classification = st.session_state.get('classification', 'none')
     
     if current_classification in recommendations:
@@ -527,7 +493,7 @@ with tabs[3]:
         </div>
         """, unsafe_allow_html=True)
         
-        with col_rec1:
+        with col1:
             st.markdown("### 🎮 Rekomendasi Utama")
             for item in rec_data['items']:
                 st.markdown(f"""
@@ -540,7 +506,7 @@ with tabs[3]:
                 </div>
                 """, unsafe_allow_html=True)
         
-        with col_rec2:
+        with col2:
             st.markdown("### 💡 Tips & Saran")
             tips = {
                 'rock': ['Fokus pada kekuatan mental', 'Bangun ketahanan', 'Latih konsistensi'],
@@ -554,7 +520,6 @@ with tabs[3]:
                     <span style='font-size: 1rem;'>💡 {tip}</span>
                 </div>
                 """, unsafe_allow_html=True)
-        
     else:
         st.markdown("""
         <div class='recommendation-alert'>
